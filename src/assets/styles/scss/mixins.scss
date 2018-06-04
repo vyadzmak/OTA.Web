@@ -1,0 +1,43 @@
+
+@mixin centerer() {
+  position: absolute !important;
+  top: 50vh;
+  left: 50vw;
+  transform: translate(-50%, -50%);
+}
+
+@function strip-unit($number) {
+  @if type-of($number) == 'number' and not unitless($number) {
+    @return $number / ($number * 0 + 1);
+  }
+
+  @return $number;
+}
+// Responsive text mixin
+@mixin responsiveText ($minSize: $font-size, $maxSize: 28px, $minWidth: 420px, $maxWidth: 980px) {
+
+
+$mxS: strip-unit($maxSize);
+$mnS: strip-unit($minSize);
+$mxW: strip-unit($maxWidth);
+$mnW: strip-unit($minWidth);
+
+  font-size: calc( #{$minSize} + (#{$mxS} - #{$mnS}) * (100vw - #{$minWidth}) / (#{$mxW} - #{$mnW}));
+
+  @media screen and (max-width: $minWidth ){
+      font-size: $minSize;
+  }
+
+  @media screen and (min-width: $maxWidth ){
+      font-size: $maxSize;
+  }
+
+}
+
+@mixin lineClamp($lines:1, $height:false){
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  height: if($height, $height, $lines+1em);
+}

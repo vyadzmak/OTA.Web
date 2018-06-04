@@ -1,0 +1,70 @@
+@import './roboto/roboto';
+@import './material-icons/index';
+@import './material-design-icons/materialdesignicons';
+@import './fontawesome/fa-brands.scss';
+@import './fontawesome/fa-regular.scss';
+@import './fontawesome/fa-solid.scss';
+@import './fontawesome/fontawesome.scss';
+@import "~vue-modal-dialog/src/modal";
+@import './mixins.scss';
+
+.spinner-position {
+  z-index:1900;
+  @include centerer;
+}
+
+.overlay {
+  z-index: 2 !important
+}
+
+.v-card-form {
+    padding: 10px 20px;
+  }
+
+.modal--active > div > {
+  .v-menu__content--select, .v-menu__content, .v-dialog__content {
+    z-index: 1095 !important;
+  }
+}
+
+.modal--xlg {/* this is used for modal windows of "vue-modal-dialog": "^0.2.2" npm library */
+  width:900px;
+}
+
+.modal--full-width {/* this is used for modal windows of "vue-modal-dialog": "^0.2.2" npm library */
+  width:100%;
+}
+
+.v-datatable tbody td, .v-toolbar__content .v-toolbar__title {
+  cursor: default;
+}
+
+.vue-form-generator {
+  >fieldset {
+ border: none;
+  }
+}
+
+.field-wrap>.input-group {
+  padding-top: 0;
+}
+
+.vue-form-generator .form-group {
+  &.field-vselect,
+  &.field-vtext,
+  &.field-vcheckbox{
+    margin-bottom: 0;
+  }
+}
+
+.card-top-action{
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+a:hover{
+  .v-card.hover-card{
+  background-color: rgba(16, 175, 134, 0.42);
+  }
+}
