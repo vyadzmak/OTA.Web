@@ -6,6 +6,7 @@ import Product from '@/components/product/Product.vue'
 import Administration from '@/components/administration/Administration.vue'
 
 import adminChildren from './adminChildren'
+import productChildren from './productChildren'
 
 const dashboard = {
   path: '/',
@@ -33,7 +34,11 @@ const dashboard = {
   {
     path: 'product',
     name: 'product',
-    component: Product
+    component: Product,
+    redirect: to => {
+      return {name: 'product.general'}
+    },
+    children: productChildren
   },
   {
     path: 'administration',

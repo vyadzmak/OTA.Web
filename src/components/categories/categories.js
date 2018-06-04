@@ -1,24 +1,24 @@
 
 export default {
-  name: 'catalogs',
+  name: 'categories',
   data () {
     return {
-      msg: 'Каталоги',
+      msg: 'Настройка каталогов',
       items: [1, 2, 3, 4, 5, 6],
-      level: 0
+      level: 0,
+      backbutton: false
     }
   },
   methods: {
     goToRoute (number) {
       this.level++
-      if (this.level > 2) {
-        this.$store.commit('catalogBack', false)
-        this.$router.push({name: 'product'})
-      }
       let vm = this
       this.items = _.map(vm.items, item => {
         return item + number % 10 * Math.pow(10, vm.level)
       })
+    },
+    backbuttonCallback () {
+      this.backbutton = true
     }
   },
   computed: {
@@ -44,6 +44,7 @@ export default {
           return item % Math.pow(10, vm.level)
         })
         this.level--
+        this.backbutton = false
         next(false)
       }
     } else {

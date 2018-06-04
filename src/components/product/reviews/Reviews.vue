@@ -2,10 +2,6 @@
   <div>
     <v-card>
       <v-card-title>
-        <v-btn
-          color="success"
-          dark
-          @click.stop="showUpdateModal({})">Добавить настройку</v-btn>
         <v-spacer/>
         <v-text-field
           v-model="search"

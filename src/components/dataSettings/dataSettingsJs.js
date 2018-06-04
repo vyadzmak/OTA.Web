@@ -6,8 +6,6 @@ export default {
       msg: 'Настройки данных',
       items: [{id: 1, icon: 'mdi-source-merge', name: 'Настройка категорий товаров'},
         {id: 2, icon: 'mdi-format-list-numbers', name: 'Настройка брендов'},
-        {id: 3, icon: 'mdi-format-list-numbers', name: 'Настройка партнеров'},
-        {id: 4, icon: 'mdi-format-list-numbers', name: 'Настройка акций'},
         {id: 5, icon: 'mdi-format-list-numbers', name: 'Настройка скидок'},
         {id: 6, icon: 'mdi-format-list-numbers', name: 'Пользовательское соглашение'},
         {id: 7, icon: 'mdi-format-list-numbers', name: 'Настройка валют'},

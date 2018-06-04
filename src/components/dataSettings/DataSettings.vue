@@ -19,12 +19,11 @@
             class="text-xs-center"
           >
             <img
-              :src="'static/p'+index+'.png'"
+              :src="'static/p'+(item.id-1)+'.png'"
               width="150px">
           </v-card-text>
           <v-card-text
             class="text-xs-center">
-
             <div
               class="headline category-name"
               v-text="item.name"/>

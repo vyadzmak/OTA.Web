@@ -34,7 +34,8 @@ router.requireAuth = function (to, userRoleId) {
       'administration', 'administration.log', 'administration.clients',
       'administration.users', 'administration.settings', 'administration.general',
       'dataSettings',
-      'catalogs', 'products']
+      'catalogs',
+      'product', 'product.general', 'product.gallery', 'product.recommendation', 'product.reviews']
       break
     case 2:userRoutes = ['dashboard', 'dataSettings', 'catalogs']
       break
