@@ -16,26 +16,23 @@ export default {
       this.items = _.map(vm.items, item => {
         return item + number % 10 * Math.pow(10, vm.level)
       })
-    },
-    backbuttonCallback () {
-      this.backbutton = true
     }
   },
   computed: {
     userData () {
       return this.$store.getters.userData
     },
-    catalogBack () {
-      return this.$store.getters.catalogBack
+    categoryBack () {
+      return this.$store.getters.categoryBack
     }
   },
   created () {
-    this.$store.commit('catalogBack', true)
+    this.$store.commit('categoryBack', true)
   },
   mounted () {
   },
   beforeRouteLeave (to, from, next) {
-    if (this.catalogBack) {
+    if (this.categoryBack) {
       if (this.items[0] < 10) {
         next()
       } else {
@@ -44,7 +41,6 @@ export default {
           return item % Math.pow(10, vm.level)
         })
         this.level--
-        this.backbutton = false
         next(false)
       }
     } else {

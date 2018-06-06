@@ -1,4 +1,3 @@
-import { ModalService } from 'vue-modal-dialog'
 
 export default {
   name: 'questionDialog',
@@ -9,10 +8,10 @@ export default {
   },
   methods: {
     submit: function () {
-      ModalService.submit() // resolve .open() promise
+      this.$emit('dialog-close', true)
     },
     cancel: function () {
-      ModalService.cancel() // reject .open() promise
+      this.$emit('dialog-close', false)
     }
   }
 }

@@ -3,7 +3,6 @@ export default {
   name: 'administration',
   data () {
     return {
-      msg: 'Настройки данных',
       items: [
         {id: 1, icon: 'mdi-file-chart', name: 'Общее', route: '/administration/general'},
         {id: 2, icon: 'mdi-account-multiple', name: 'Пользователи', route: '/administration/users/'},

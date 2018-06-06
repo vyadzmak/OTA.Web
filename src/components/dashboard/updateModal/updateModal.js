@@ -1,10 +1,15 @@
-import { ModalService } from 'vue-modal-dialog'
-
+import {baseUrl} from '../../../httpClient/index'
 export default {
   name: 'dialogHeader',
   props: ['data'],
   data () {
     return {
+      options: {
+        acceptedFileTypes: ['.jpg', '.jpeg', '.png'],
+        url: baseUrl + 'upload',
+        autoProcessQueue: true,
+        uploadMultiple: false
+      },
       valid: false,
       newPassword: '',
       repeatPassword: '',
@@ -16,6 +21,14 @@ export default {
       passwordRepeatRules: [
         (v) => !!v || 'Введите пароль',
         (v) => v === this.newPassword || 'Пароли не совпадают'
+      ],
+      fNameRules: [
+        (v) => !!v || 'Имя должно быть заполнено',
+        (v) => (v && v.length <= 270) || 'Не более 270 символов'
+      ],
+      lNameRules: [
+        (v) => !!v || 'Фамилия должна быть заполнена',
+        (v) => (v && v.length <= 270) || 'Не более 270 символов'
       ]
     }
   },
@@ -28,11 +41,11 @@ export default {
     submit: function () {
       if (this.$refs.form.validate()) {
         this.updateUser.login_data.password = this.newPassword
-        ModalService.submit(this.updateUser) // resolve .open() promise
+        this.$emit('dialog-close', true, this.updateUser)
       }
     },
     cancel: function () {
-      ModalService.cancel(this.updateUser) // reject .open() promise
+      this.$emit('dialog-close', false)
     },
     clear: function () {
       this.$refs.form.reset()
@@ -45,6 +58,11 @@ export default {
         passwd += chars.charAt(c)
       }
       this.newPassword = passwd
+    },
+    updateAvatar (...args) {
+      args.forEach(val => {
+        console.log(val)// update avatar in modal window and maybe in store
+      })
     }
   }
 }

@@ -24,7 +24,7 @@
             <div><v-btn icon><v-icon color="error">mdi-delete-variant</v-icon></v-btn></div>
           </div>
           <v-card-media
-            :src="'/static/p'+props.item%8+'.png'"
+            src="/static/p2.png"
             height="200px"/>
         </v-card>
       </v-flex>
@@ -122,6 +122,7 @@
   </v-container>
 </template>
 
-<script src="./gallery.js"></script>
+<script src="./slider.js"></script>
 
-<style scoped></style>
+<style scoped lang="scss">
+</style>

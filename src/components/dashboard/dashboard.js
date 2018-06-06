@@ -1,6 +1,5 @@
 import questionDialog from '../questionDialog/QuestionDialog.vue'
-import updateModal from './updateModal/UpdateModal.vue'
-import { ModalService } from 'vue-modal-dialog'
+import updateDialog from './updateModal/UpdateModal.vue'
 
 export default {
   name: 'dashboard',
@@ -13,7 +12,12 @@ export default {
       right: true,
       rightDrawer: false,
       title: 'Online Trade Assistant',
-      fab: false
+      fab: false,
+      updateDialog: updateDialog,
+      dialog: false,
+      questionDialog: questionDialog,
+      questionDialogShow: false,
+      dialogData: null
     }
   },
   computed: {
@@ -33,7 +37,7 @@ export default {
           title: 'Заявки',
           path: '/bids',
           visible: this.$router.requireAuth({name: 'bids'}, this.userData.user_role_id),
-          isActive: this.isActive(['bids'])
+          isActive: this.isActive(['bids', 'bids.active', 'bids.inbox', 'bids.history', 'bids.details'])
         },
         { icon: 'dashboard',
           title: 'Каталог',
@@ -45,7 +49,7 @@ export default {
           title: 'Настройки данных',
           path: '/dataSettings',
           visible: this.$router.requireAuth({name: 'dataSettings'}, this.userData.user_role_id),
-          isActive: this.isActive(['dataSettings'])
+          isActive: this.isActive(['dataSettings', 'categories', 'brands', 'partners', 'userAgreement', 'currencies', 'units', 'display'])
         }
       ]
     },
@@ -58,52 +62,41 @@ export default {
     }
   },
   methods: {
-    logOut: function () {
-      let modalConfig = {
-        size: 'md',
-        data: {
-          message: 'Вы действительно хотите выйти?',
-          title: 'Выход',
-          isClosable: true
-        }
+    logOut () {
+      this.dialogData = {
+        message: 'Вы действительно хотите выйти?',
+        title: 'Выход',
+        isClosable: true
       }
-      ModalService.open(questionDialog, modalConfig).then(
-        modalSubmit => {
-          this.$store.dispatch('logout', null)
-          this.$router.push({path: '/login'})
-        },
-        modalCancel => {}
-      ).catch(
-        err => {
-          console.log(err)
-        }
-      )
+      this.questionDialogShow = true
+    },
+    logOutDialog (confirmed) {
+      this.questionDialogShow = false
+      if (confirmed) {
+        this.$store.dispatch('logout', null)
+        this.$router.push({path: '/login'})
+      }
     },
     isActive (names) {
       return _.includes(names, this.$route.name)
     },
     showUpdateModal: function () {
-      let item = _.cloneDeep(this.userData)
-      let isUpdate = true
-      let modalConfig = {
-        size: 'lg',
-        data: {
-          title: (isUpdate ? 'Обновление' : 'Добавление') + ' пользователя',
-          isClosable: true,
-          item: isUpdate ? Object.assign({}, item) : item
-        }
+      this.dialogData = {
+        title: 'Обновление пользователя',
+        isClosable: true,
+        item: _.cloneDeep(this.userData)
       }
-      ModalService.open(updateModal, modalConfig).then(
-        modalSubmit => {
-          // this.updateItem(modalSubmit, isUpdate)
-        },
-        modalCancel => { console.log(modalCancel) }
-      ).catch(err => { console.log(err) })
+      this.dialog = true
     },
-    goToMessages: function (item) { console.log(item) },
-    goToNotifications: function (item) { console.log(item) },
+    profileDialog (confirmed, data) {
+      this.dialog = false
+      if (confirmed) {
+        console.log(data)
+      }
+    },
     goToRoute (path) {
       this.$store.commit('catalogBack', path === '/catalogs')
+      this.$store.commit('categoryBack', path === '/categories')
       this.$router.push({path})
     }
   }

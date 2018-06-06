@@ -5,8 +5,17 @@ import Catalogs from '@/components/catalogs/Catalogs.vue'
 import Product from '@/components/product/Product.vue'
 import Administration from '@/components/administration/Administration.vue'
 
+import Categories from '@/components/dataSettings/categories/Categories.vue'
+import Brands from '@/components/dataSettings/brands/Brands.vue'
+import Partners from '@/components/dataSettings/partners/Partners.vue'
+import UserAgreement from '@/components/dataSettings/userAgreement/UserAgreement.vue'
+import Currencies from '@/components/dataSettings/currencies/Currencies.vue'
+import Units from '@/components/dataSettings/units/Units.vue'
+import Display from '@/components/dataSettings/display/Display.vue'
+
 import adminChildren from './adminChildren'
 import productChildren from './productChildren'
+import bidsChildren from './bidsChildren'
 
 const dashboard = {
   path: '/',
@@ -19,7 +28,11 @@ const dashboard = {
   children: [ {
     path: 'bids',
     name: 'bids',
-    component: Bids
+    component: Bids,
+    redirect: to => {
+      return {name: 'bids.inbox'}
+    },
+    children: bidsChildren
   },
   {
     path: 'dataSettings',
@@ -27,9 +40,44 @@ const dashboard = {
     component: DataSettings
   },
   {
+    path: 'categories',
+    name: 'categories',
+    component: Categories
+  },
+  {
+    path: 'brands',
+    name: 'brands',
+    component: Brands
+  },
+  {
+    path: 'partners',
+    name: 'partners',
+    component: Partners
+  },
+  {
+    path: 'userAgreement',
+    name: 'userAgreement',
+    component: UserAgreement
+  },
+  {
+    path: 'units',
+    name: 'units',
+    component: Units
+  },
+  {
+    path: 'currencies',
+    name: 'currencies',
+    component: Currencies
+  },
+  {
     path: 'catalogs',
     name: 'catalogs',
     component: Catalogs
+  },
+  {
+    path: 'display',
+    name: 'display',
+    component: Display
   },
   {
     path: 'product',

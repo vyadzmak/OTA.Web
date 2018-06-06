@@ -42,14 +42,16 @@ const store = new Vuex.Store({
     loading: 0,
     snackbarOptions: {snackbar: false},
     updateProperty: null,
-    catalogBack: true
+    catalogBack: true,
+    categoryBack: true
   },
   // getters
   getters: {
     snackbarOptions: state => state.snackbarOptions,
     updateProperty: state => state.updateProperty,
     loading: state => state.loading,
-    catalogBack: state => state.catalogBack
+    catalogBack: state => state.catalogBack,
+    categoryBack: state => state.categoryBack
   },
   mutations,
   plugins: [localStorage, sessionStorage],

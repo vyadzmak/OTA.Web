@@ -1,9 +1,9 @@
-import questionDialog from '../../questionDialog/QuestionDialog.vue'
+import questionDialog from '../../../questionDialog/QuestionDialog.vue'
 import { ModalService } from 'vue-modal-dialog'
-import {baseUrl} from '../../../httpClient/index'
+import {baseUrl} from '../../../../httpClient/index'
 
 export default {
-  name: 'gallery',
+  name: 'slider',
   data () {
     return {
       valid: false,

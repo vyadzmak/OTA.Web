@@ -119,14 +119,30 @@
               <v-list-tile-action><v-icon>mdi-account</v-icon></v-list-tile-action>
               <v-list-tile-content>Редактировать профиль</v-list-tile-content>
             </v-list-tile>
-            <v-list-tile>
-              <v-list-tile-action><v-icon>mdi-settings</v-icon></v-list-tile-action>
-              <v-list-tile-content>Настройки</v-list-tile-content>
-            </v-list-tile>
+            <v-dialog
+              v-model="dialog"
+              scrollable
+              max-width="500px">
+              <component
+                v-if="dialog"
+                :is="updateDialog"
+                :data="dialogData"
+                @dialog-close="profileDialog"/>
+            </v-dialog>
             <v-list-tile @click="logOut()">
               <v-list-tile-action><v-icon>mdi-logout</v-icon></v-list-tile-action>
               <v-list-tile-title>Выход</v-list-tile-title>
             </v-list-tile>
+            <v-dialog
+              v-model="questionDialogShow"
+              scrollable
+              max-width="300px">
+              <component
+                v-if="questionDialogShow"
+                :is="questionDialog"
+                :data="dialogData"
+                @dialog-close="logOutDialog"/>
+            </v-dialog>
           </v-list>
         </v-card>
       </v-menu>

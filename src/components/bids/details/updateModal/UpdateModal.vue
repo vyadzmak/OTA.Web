@@ -9,12 +9,22 @@
         dark
         @click="cancel"><v-icon>clear</v-icon></v-btn>
     </v-card-title>
-    <v-form class="v-card-form">
-      <!-- <vue-form-generator
-        v-if="formSchema.fields"
-        :schema="formSchema"
-        :model="updateItem"
-        :options="formOptions"/> -->
+    <v-form
+      ref="form"
+      v-model="valid"
+      class="v-card-form">
+      <v-text-field
+        v-model="data.item.SettingName"
+        :rules="sNameRules"
+        label="Имя параметра"
+        required
+      />
+      <v-text-field
+        v-model="data.item.SettingValue"
+        :rules="sValueRules"
+        label="Значение параметра"
+        required
+      />
       <v-card-actions>
         <v-spacer/>
         <v-btn @click="clear">Очистить</v-btn>
@@ -30,9 +40,8 @@
       </v-card-actions>
     </v-form>
   </v-card>
-
 </template>
 
-<script src="./updateModalJs.js"></script>
+<script src="./updateModal.js"></script>
 
 <style scoped></style>

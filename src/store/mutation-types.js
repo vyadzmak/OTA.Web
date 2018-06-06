@@ -4,6 +4,7 @@ let types = {
   showSnackbar: 'showSnackbar',
   setUpdateProperty: 'setUpdateProperty',
   catalogBack: 'catalogBack',
+  categoryBack: 'categoryBack',
 
   // USERDATA
   USER_DATA: 'USER_DATA',

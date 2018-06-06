@@ -30,10 +30,12 @@ router.requireAuth = function (to, userRoleId) {
   let userRoutes = []
   switch (userRoleId) {
     case 1: userRoutes = [
-      'dashboard', 'bids',
+      'dashboard',
+      'bids', 'bids.inbox', 'bids.active', 'bids.history', 'bids.details',
       'administration', 'administration.log', 'administration.clients',
       'administration.users', 'administration.settings', 'administration.general',
       'dataSettings',
+      'categories', 'brands', 'partners', 'userAgreement', 'currencies', 'units', 'display',
       'catalogs',
       'product', 'product.general', 'product.gallery', 'product.recommendation', 'product.reviews']
       break

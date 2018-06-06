@@ -13,7 +13,8 @@
         xs12
         sm6
         md3
-        lg3>
+        lg3
+        @click="goToSetting(item.path)">
         <v-card class="hover-card">
           <v-card-text
             class="text-xs-center"

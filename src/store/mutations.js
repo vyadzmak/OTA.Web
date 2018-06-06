@@ -19,3 +19,7 @@ export const setUpdateProperty = (state, payload) => {
 export const catalogBack = (state, payload) => {
   state.catalogBack = payload
 }
+
+export const categoryBack = (state, payload) => {
+  state.catalogBack = payload
+}
