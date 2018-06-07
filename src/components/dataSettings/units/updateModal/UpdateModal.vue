@@ -14,15 +14,21 @@
       v-model="valid"
       class="v-card-form">
       <v-text-field
-        v-model="data.item.SettingName"
-        :rules="sNameRules"
-        label="Имя параметра"
+        v-model="data.item.name"
+        :rules="nameRules"
+        label="Имя"
         required
       />
       <v-text-field
-        v-model="data.item.SettingValue"
-        :rules="sValueRules"
-        label="Значение параметра"
+        v-model="data.item.display_value"
+        :rules="sNameRules"
+        label="Отображаемое значение"
+        required
+      />
+      <v-text-field
+        v-model="data.item.system_name"
+        :rules="sNameRules"
+        label="Системное имя"
         required
       />
       <v-card-actions>

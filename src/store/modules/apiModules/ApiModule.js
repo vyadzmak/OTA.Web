@@ -5,14 +5,14 @@ class ApiModule {
     this.namespaced = true
     this.state = {
       items: [],
-      item: {'hello': 'hello'}
+      item: null
     }
     this.mutations = mutations
     this.getters = {
       items: state => state.items,
       item: state => state.item
     }
-    this.actions = getActions(link)
+    this.actions = getActions(link)()
   }
 }
 

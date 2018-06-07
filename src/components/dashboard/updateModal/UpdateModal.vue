@@ -28,8 +28,7 @@
       </vue-transmit>
       <v-form
         ref="form"
-        v-model="valid"
-        class="v-card-form">
+        v-model="valid">
         <v-text-field
           v-model="updateUser.login_data.login"
           label="Логин"

@@ -12,7 +12,7 @@
         sm6
         md3
         lg3
-        @click="addItem(item)">
+        @click="openDialog()">
         <v-card
           height="100%"
           class="hover-card">
@@ -20,6 +20,25 @@
             class="text-xs-center py-5 grey--text"
           ><div class="display-3 pt-3">Добавить</div>
             <div><v-icon color="grey">fas fa-plus fa-7x</v-icon></div>
+            <v-dialog
+              v-model="dialog"
+              max-width="500px">
+              <component
+                v-if="dialog"
+                :is="dialogComponent"
+                :data="dialogData"
+                @dialog-close="dialogClose"/>
+            </v-dialog>
+            <v-dialog
+              v-model="qDialog"
+              scrollable
+              max-width="300px">
+              <component
+                v-if="qDialog"
+                :is="qDialogComponent"
+                :data="dialogData"
+                @dialog-close="qDialogClose"/>
+            </v-dialog>
         </v-card-text></v-card>
       </v-flex>
       <v-flex
@@ -37,7 +56,9 @@
           >
             <div class="card-top-action">
               <div><v-btn icon><v-icon color="info">mdi-pen</v-icon></v-btn></div>
-              <div><v-btn icon><v-icon color="error">mdi-delete-variant</v-icon></v-btn></div>
+              <div><v-btn
+                icon
+                @click.stop="openQDialog()"><v-icon color="error">mdi-delete-variant</v-icon></v-btn></div>
             </div>
             <img
               width="150px"

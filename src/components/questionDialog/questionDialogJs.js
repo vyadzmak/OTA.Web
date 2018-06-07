@@ -8,7 +8,7 @@ export default {
   },
   methods: {
     submit: function () {
-      this.$emit('dialog-close', true)
+      this.$emit('dialog-close', true, this.data.data)
     },
     cancel: function () {
       this.$emit('dialog-close', false)

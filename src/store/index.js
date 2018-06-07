@@ -3,9 +3,6 @@ import Vuex from 'vuex'
 import VuexPersistedState from 'vuex-persistedstate'
 import * as mutations from './mutations'
 import loginUser from './modules/loginUser/loginUser'
-import entities from './modules/entities/entities'
-import factories from './modules/factories/factories'
-import catalogs from './modules/catalogs/catalogs'
 import apiModules from './modules/apiModules/apiModules'
 import ApiModule from './modules/apiModules/ApiModule'
 
@@ -16,9 +13,6 @@ apiModules.forEach(element => {
 })
 
 importedModules.loginUser = loginUser
-importedModules.catalogs = catalogs
-importedModules.factories = factories
-importedModules.entities = entities
 
 Vue.use(Vuex)
 

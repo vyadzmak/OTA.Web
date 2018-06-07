@@ -30,6 +30,7 @@
                     :rules="emailRules"
                     :disabled="controlsDisabled"
                     prepend-icon="person"
+                    browser-autocomplete
                     label="Логин"
                     class="input-group--focused"
                     autofocus
@@ -43,6 +44,7 @@
                     :disabled="controlsDisabled"
                     :rules="passwordRules"
                     prepend-icon="lock"
+                    browser-autocomplete
                     label="Пароль"
                     type="password"
                     class="input-group--focused"

@@ -2,10 +2,6 @@
   <div>
     <v-card>
       <v-card-title>
-        <v-btn
-          color="error"
-          dark
-          @click.stop="showDeleteModal({})">Очистить лог</v-btn>
         <v-spacer/>
         <v-text-field
           v-model="search"
@@ -16,9 +12,9 @@
         />
       </v-card-title>
       <v-data-table
-        ref = "logDataTable"
+        ref = "dataTable"
         :headers="headers"
-        :items="logs"
+        :items="items"
         :search="search"
         :rows-per-page-items="tableRowsShown"
         :rows-per-page-text="rowsPerPageText"
