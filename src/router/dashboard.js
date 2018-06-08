@@ -7,6 +7,7 @@ import Administration from '@/components/administration/Administration.vue'
 
 import Categories from '@/components/dataSettings/categories/Categories.vue'
 import Brands from '@/components/dataSettings/brands/Brands.vue'
+import Brand from '@/components/dataSettings/brands/brand/Brand.vue'
 import Partners from '@/components/dataSettings/partners/Partners.vue'
 import UserAgreement from '@/components/dataSettings/userAgreement/UserAgreement.vue'
 import Currencies from '@/components/dataSettings/currencies/Currencies.vue'
@@ -15,6 +16,7 @@ import Display from '@/components/dataSettings/display/Display.vue'
 
 import adminChildren from './adminChildren'
 import productChildren from './productChildren'
+import brandChildren from './brandChildren'
 import bidsChildren from './bidsChildren'
 
 const dashboard = {
@@ -48,6 +50,15 @@ const dashboard = {
     path: 'brands',
     name: 'brands',
     component: Brands
+  },
+  {
+    path: 'brand',
+    name: 'brand',
+    component: Brand,
+    redirect: to => {
+      return {name: 'brand.general'}
+    },
+    children: brandChildren
   },
   {
     path: 'partners',

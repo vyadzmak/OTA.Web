@@ -1,34 +1,20 @@
+import {mapGetters} from 'vuex'
 import questionDialog from '../../questionDialog/QuestionDialog.vue'
 import addDialogComponent from './addDialog/addDialog.vue'
 
 export default {
-  name: 'brands',
+  name: 'brandsCatalog',
   data () {
     return {
       dialog: false,
       dialogComponent: addDialogComponent,
       dialogData: null,
       qDialog: false,
-      qDialogComponent: questionDialog,
-      items: [1, 2, 3, 4, 5, 6],
-      level: 0
+      qDialogComponent: questionDialog
     }
   },
   methods: {
-    openDialog () {
-      this.dialogData = {
-        isClosable: true,
-        title: 'Добавление бренда'
-      }
-      this.dialog = true
-    },
-    dialogClose (confirmed, data) {
-      this.dialog = false
-      if (confirmed) {
-        this.items.push(this.items.length + 1)
-      }
-    },
-    openQDialog (itemId) {
+    openQDialog: function (itemId) {
       this.dialogData = {
         message: 'Вы действительно хотите удалить бренд?',
         title: 'Удаление',
@@ -37,16 +23,46 @@ export default {
       }
       this.qDialog = true
     },
+    openDialog (item) {
+      let isUpdate = true
+      if (!item) {
+        isUpdate = false
+        item = {
+          name: '',
+          short_description: '',
+          description: ''
+        }
+      }
+      this.dialogData = {
+        title: (isUpdate ? 'Обновление' : 'Добавление') + ' бренда',
+        isClosable: true,
+        item: isUpdate ? _.cloneDeep(item) : item,
+        isUpdate
+      }
+      this.dialog = true
+    },
+    dialogClose (confirmed, item, isUpdate) {
+      if (confirmed) {
+        this.$store.dispatch('brandsCatalog/updateItem', {item, isUpdate})
+      }
+      this.dialog = false
+    },
     qDialogClose (confirmed, data) {
+      if (confirmed) {
+        this.$store.dispatch('brandsCatalog/deleteItem', data)
+      }
       this.qDialog = false
+    },
+    goTo (item) {
+      this.$store.commit('brandsCatalog/item', item)
+      this.$router.push({name: 'brand'})
     }
   },
   computed: {
-    userData () {
-      return this.$store.getters.userData
-    }
+    ...mapGetters({userData: 'userData', items: 'brandsCatalog/items'})
   },
   created () {
+    this.$store.dispatch('brandsCatalog/getItems')
   },
   mounted () {
   }

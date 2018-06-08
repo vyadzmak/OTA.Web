@@ -46,6 +46,7 @@ export default function getActions (link) {
         .then(response => {
           if (response.status === 201) {
             commit('update', response.data)
+            commit('item', response.data)
             commit('showSnackbar', {text: (isUpdate ? 'Обновление' : 'Добавление') + ' данных прошло успешно', snackbar: true, context: 'success'}, { root: true })
             commit('showSpinner', false, { root: true })
           } else {
@@ -71,7 +72,7 @@ export default function getActions (link) {
         })
         .catch(e => {
           commit('showSpinner', false, { root: true })
-          commit('showSnackbar', {text: 'Удаление конструктора не удалось. Обратитесь к администратору', snackbar: true, context: 'error'}, { root: true })
+          commit('showSnackbar', {text: 'Удаление данных не удалось. Обратитесь к администратору', snackbar: true, context: 'error'}, { root: true })
         })
     }
     return {getItems, getItem, updateItem, deleteItem}

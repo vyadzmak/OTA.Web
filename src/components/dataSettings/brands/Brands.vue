@@ -49,7 +49,7 @@
         sm6
         md3
         lg3
-        @click="goToRoute(item)">
+        @click="goTo(item)">
         <v-card class="hover-card">
           <v-card-text
             class="text-xs-center"
@@ -58,22 +58,19 @@
               <div><v-btn icon><v-icon color="info">mdi-pen</v-icon></v-btn></div>
               <div><v-btn
                 icon
-                @click.stop="openQDialog()"><v-icon color="error">mdi-delete-variant</v-icon></v-btn></div>
+                @click.stop="openQDialog(item.id)"><v-icon color="error">mdi-delete-variant</v-icon></v-btn></div>
             </div>
             <img
-              width="150px"
-              src="@/assets/img/p52.png">
+              :key="index+'img'"
+              :src="item.default_image_data_brands.thumb_file_path"
+              alt="BRAND LOGO"
+              width="150px">
           </v-card-text>
           <v-card-text
             class="text-xs-center">
 
             <div
-              v-show="index%2===0"
-              class="headline product-name">Kangaroo</div>
-            <div
-              v-show="index%2!==0"
-              class="headline product-name">Top western road trips</div>
-            <div class="grey--text">1,000 miles of  {{ item }}</div>
+              class="headline product-name">{{ item.name }}</div>
         </v-card-text></v-card>
       </v-flex>
     </v-layout>

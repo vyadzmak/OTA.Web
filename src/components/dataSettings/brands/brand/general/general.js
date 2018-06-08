@@ -1,9 +1,9 @@
+import {mapGetters} from 'vuex'
 export default {
-  name: 'dialogHeader',
-  props: ['data'],
+  name: 'generalBrand',
   data () {
     return {
-      valid: false,
+      item: {},
       sNameRules: [
         (v) => !!v || 'Наименование должно быть заполнено',
         (v) => (v && v.length <= 270) || 'Не более 270 символов'
@@ -12,17 +12,19 @@ export default {
       descRules: [(v) => (v.length <= 1000) || 'Не более 1000 символов']
     }
   },
+  computed: {
+    ...mapGetters({userData: 'userData'})
+  },
   methods: {
-    submit: function () {
+    updateItem () {
       if (this.$refs.form.validate()) {
-        this.$emit('dialog-close', true, this.data.item, this.data.isUpdate)
+        this.$store.dispatch('brandsCatalog/updateItem', {item: this.item, isUpdate: true})
       }
-    },
-    cancel: function () {
-      this.$emit('dialog-close', false)
-    },
-    clear: function () {
-      this.$refs.form.reset()
     }
+  },
+  created () {
+    this.item = _.cloneDeep(_.get(this.$store, 'getters.brandsCatalog/item', {}))
+  },
+  mounted () {
   }
 }

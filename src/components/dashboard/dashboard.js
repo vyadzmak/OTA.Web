@@ -1,5 +1,7 @@
 import questionDialog from '../questionDialog/QuestionDialog.vue'
 import updateDialog from './updateModal/UpdateModal.vue'
+import {admin as adminRoutes, bids as bidRoutes,
+  settings as settingRoutes, catalog as catalogRoutes} from '@/router/routerNames'
 
 export default {
   name: 'dashboard',
@@ -29,27 +31,26 @@ export default {
         { icon: 'mdi-worker',
           title: 'Администрирование',
           path: '/administration',
-          visible: this.$router.requireAuth({name: 'administration'}, this.userData.user_role_id),
-          isActive: this.isActive(['administration', 'administration.log', 'administration.clients',
-            'administration.users', 'administration.settings', 'administration.general'])
+          visible: _.includes(this.userData.user_role_data.user_role_route_access, 'administration'),
+          isActive: this.isActive(adminRoutes)
         },
         { icon: 'mdi-book',
           title: 'Заявки',
           path: '/bids',
-          visible: this.$router.requireAuth({name: 'bids'}, this.userData.user_role_id),
-          isActive: this.isActive(['bids', 'bids.active', 'bids.inbox', 'bids.history', 'bids.details'])
+          visible: _.includes(this.userData.user_role_data.user_role_route_access, 'bids'),
+          isActive: this.isActive(bidRoutes)
         },
         { icon: 'dashboard',
           title: 'Каталог',
           path: '/catalogs',
-          visible: this.$router.requireAuth({name: 'catalogs'}, this.userData.user_role_id),
-          isActive: this.isActive(['catalogs'])
+          visible: _.includes(this.userData.user_role_data.user_role_route_access, 'catalogs'),
+          isActive: this.isActive(catalogRoutes)
         },
         { icon: 'fas fa-cogs',
           title: 'Настройки данных',
           path: '/dataSettings',
-          visible: this.$router.requireAuth({name: 'dataSettings'}, this.userData.user_role_id),
-          isActive: this.isActive(['dataSettings', 'categories', 'brands', 'partners', 'userAgreement', 'currencies', 'units', 'display'])
+          visible: _.includes(this.userData.user_role_data.user_role_route_access, 'dataSettings'),
+          isActive: this.isActive(settingRoutes)
         }
       ]
     },

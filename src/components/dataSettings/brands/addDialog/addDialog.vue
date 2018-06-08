@@ -14,16 +14,16 @@
         ref="form"
         v-model="valid">
         <v-text-field
-          v-model="name"
+          v-model="data.item.name"
           :rules="sNameRules"
           required
           label="Наименование"/>
         <v-textarea
-          v-model="shortDescription"
+          v-model="data.item.short_description"
           :rules="sDescRules"
           label="Краткое описание"/>
         <v-textarea
-          v-model="description"
+          v-model="data.item.description"
           :rules="descRules"
           label="Описание"/>
       </v-form>

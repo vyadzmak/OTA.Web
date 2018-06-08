@@ -25,32 +25,10 @@ const router = new Router({
   routes: routes
 })
 
-router.requireAuth = function (to, userRoleId) {
-  let found = false
-  let userRoutes = []
-  switch (userRoleId) {
-    case 1: userRoutes = [
-      'dashboard',
-      'bids', 'bids.inbox', 'bids.active', 'bids.history', 'bids.details',
-      'administration', 'administration.log', 'administration.clients',
-      'administration.users', 'administration.settings', 'administration.general',
-      'dataSettings',
-      'categories', 'brands', 'partners', 'userAgreement', 'currencies', 'units', 'display',
-      'catalogs',
-      'product', 'product.general', 'product.gallery', 'product.recommendation', 'product.reviews']
-      break
-    case 2:userRoutes = ['dashboard', 'dataSettings', 'catalogs']
-      break
-    default: break
-  }
-  found = _.includes(userRoutes, to.name)
-  return found
-}
-
 router.beforeEach((to, from, next) => {
-  let userRoleId = _.get(store, 'state.loginUser.userData.user_role_id')
-  if (userRoleId) {
-    if (router.requireAuth(to, userRoleId)) {
+  let routes = _.get(store, 'state.loginUser.userData.user_role_data.user_role_route_access', null)
+  if (routes) {
+    if (_.includes(routes, to.name)) {
       next()
     } else {
       next({path: '/'})
