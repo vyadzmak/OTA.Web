@@ -1,6 +1,6 @@
-import questionDialog from '../../../questionDialog/QuestionDialog.vue'
+import questionDialog from '@/components/questionDialog/QuestionDialog.vue'
 import { ModalService } from 'vue-modal-dialog'
-import {baseUrl} from '../../../../httpClient/index'
+import {baseUrl} from '@/httpClient/index'
 
 export default {
   name: 'slider',
@@ -13,7 +13,7 @@ export default {
       showProgress: false,
       options: {
         acceptedFileTypes: ['.jpg', '.jpeg', '.png'],
-        url: baseUrl + 'upload',
+        url: baseUrl + 'uploadFiles',
         clickable: false,
         autoProcessQueue: false,
         maxConcurrentUploads: 300,

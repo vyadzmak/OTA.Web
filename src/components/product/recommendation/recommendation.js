@@ -1,4 +1,4 @@
-import questionDialog from '../../questionDialog/QuestionDialog.vue'
+import questionDialog from '@/components/questionDialog/QuestionDialog.vue'
 import { ModalService } from 'vue-modal-dialog'
 
 export default {

@@ -27,11 +27,11 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   let routes = _.get(store, 'state.loginUser.userData.user_role_data.user_role_route_access', null)
-  if (routes) {
+  if (routes && routes.length > 0) {
     if (_.includes(routes, to.name)) {
       next()
     } else {
-      next({path: '/'})
+      next({name: routes[0]})
     }
   } else {
     if (to.name === 'Login') {

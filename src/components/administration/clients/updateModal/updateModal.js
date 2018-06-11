@@ -1,4 +1,4 @@
-import { ModalService } from 'vue-modal-dialog'
+import {mapGetters} from 'vuex'
 
 export default {
   name: 'dialogHeader',
@@ -6,32 +6,26 @@ export default {
   data () {
     return {
       valid: false,
+      sNameRules: [
+        (v) => (v && v.length <= 25) || 'Не более 25 символов'
+      ],
       nameRules: [
-        (v) => !!v || 'Наименование должно быть заполнено',
-        (v) => (v && v.length <= 270) || 'Не более 270 символов'
-      ],
-      addressRules: [
-        (v) => !!v || 'Адрес должен быть заполнен',
-        (v) => (v && v.length <= 270) || 'Не более 270 символов'
-      ],
-      regRules: [
-        (v) => !!v || 'Регистрационный номер должен быть заполнен'
+        (v) => !!v || 'Имя параметра должно быть заполнено',
+        (v) => (v && v.length <= 70) || 'Не более 70 символов'
       ]
     }
   },
   computed: {
-    clientTypeItems () {
-      return this.$store.state.updateProperty
-    }
+    ...mapGetters({clientTypes: 'clientTypes/items'})
   },
   methods: {
     submit: function () {
       if (this.$refs.form.validate()) {
-        ModalService.submit(this.data.item) // resolve .open() promise
+        this.$emit('dialog-close', true, this.data.item, this.data.isUpdate)
       }
     },
     cancel: function () {
-      ModalService.cancel(this.data.item) // reject .open() promise
+      this.$emit('dialog-close', false)
     },
     clear: function () {
       this.$refs.form.reset()

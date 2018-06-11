@@ -12,8 +12,9 @@ export const login = ({ commit, getters }, {login, password, rememberMe}) => {
         commit(types.showSpinner, false)
         let responseData = response.data
         let savedUser = responseData.user_data
-        savedUser.user_role_data = responseData.user_role_data
-        savedUser.user_role_data.user_role_route_access = getRoutes(savedUser.user_role_data.user_role_route_access.length > 0 ? savedUser.user_role_data.user_role_route_access : {})
+        savedUser.user_role_data = responseData.user_data.user_role_data
+        savedUser.client_data = responseData.user_data.client_data
+        savedUser.user_role_data.user_role_route_access = getRoutes(savedUser.user_role_data.user_role_route_access.length > 0 ? savedUser.user_role_data.user_role_route_access[0] : {})
         savedUser.login_data = {
           login: responseData.login,
           password: responseData.password,

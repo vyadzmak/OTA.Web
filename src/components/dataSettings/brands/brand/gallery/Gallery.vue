@@ -24,7 +24,7 @@
             <div><v-btn icon><v-icon color="error">mdi-delete-variant</v-icon></v-btn></div>
           </div>
           <v-card-media
-            :src="'/static/p'+props.item%8+'.png'"
+            :src="props.item.thumb_file_path"
             height="200px"/>
         </v-card>
       </v-flex>

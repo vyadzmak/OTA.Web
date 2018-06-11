@@ -1,178 +1,82 @@
-import questionDialog from '../../questionDialog/QuestionDialog.vue'
+import {mapGetters} from 'vuex'
+import questionDialog from '@/components/questionDialog/QuestionDialog.vue'
 import updateModal from './updateModal/UpdateModal.vue'
-import { ModalService } from 'vue-modal-dialog'
 
 export default {
-  name: 'companies',
+  name: 'currencies',
   data () {
     return {
-      companies: [],
-      errors: [],
       search: '',
       headers: [
-        { text: 'ID', align: 'left', value: 'id' },
-        { text: 'Наименование', align: 'left', value: 'name' },
-        { text: 'Регистрационный номер', align: 'left', value: 'registration_number' },
-        { text: 'Дата регистрации', align: 'left', value: 'registration_date' },
-        { text: 'Тип компании', align: 'left', value: 'client_type.name' },
+        { text: 'Id', align: 'left', value: 'id' },
+        { text: 'Имя', align: 'left', value: 'name' },
+        { text: 'Адрес', align: 'left', value: 'client_addresses_data[0].address' },
+        { text: 'Email', align: 'left', value: 'client_info_data[0].email' },
+        { text: 'Телефон', align: 'left', value: 'client_info_data[0].phone_number' },
         {sortable: false},
         {sortable: false}
       ],
       tableRowsShown: [10, 20, 50, 100, {text: 'Все', value: -1}],
       rowsPerPageText: 'Строк на странице',
       noDataText: 'Нет данных',
-      noResultsText: 'Поиск не дал результатов'
+      noResultsText: 'Поиск не дал результатов',
+      dialogData: null,
+      dialog: false,
+      dialogComponent: updateModal,
+      qDialog: false,
+      qDialogComponent: questionDialog
     }
   },
   computed: {
-    userData: function () {
-      return this.$store.getters.userData
-    }
+    ...mapGetters({items: 'clients/items', userData: 'userData'})
   },
   methods: {
-    goToUsers: function (userId) {
-      this.$router.push({name: 'Users', params: {id: userId}})
-    },
-    showDeleteModal: function (itemId) {
-      let modalConfig = {
-        size: 'md',
-        data: {
-          message: 'Вы действительно хотите удалить компанию?',
-          title: 'Удаление компании',
-          isClosable: true
-        }
+    openQDialog: function (itemId) {
+      this.dialogData = {
+        message: 'Вы действительно хотите удалить клиента?',
+        title: 'Удаление',
+        isClosable: true,
+        data: itemId
       }
-      ModalService.open(questionDialog, modalConfig).then(
-        modalSubmit => { this.deleteItem(itemId) },
-        modalCancel => {}
-      ).catch(
-        err => {
-          console.log(err)
-        }
-      )
+      this.qDialog = true
     },
-    showUpdateModal: function (item) {
+    openDialog: async function (item) {
       let isUpdate = true
-      this.getClientTypes()
-      if (!item.id) {
+      if (!item) {
         isUpdate = false
-        item = {name: '',
-          registration_number: '',
-          lock_state: false,
+        item = {
+          name: '',
           client_type_id: null,
-          employees: [],
-          bdate: null
+          lock_state: false,
+          registration_number: ''
         }
       }
-      let modalConfig = {
-        size: 'lg',
-        data: {
-          title: (isUpdate ? 'Обновление' : 'Добавление') + ' компании',
-          isClosable: true,
-          item: isUpdate ? Object.assign({}, item) : item
-        }
+      await this.$store.dispatch('clientTypes/getItems')
+      this.dialogData = {
+        title: (isUpdate ? 'Обновление' : 'Добавление') + ' клиента',
+        isClosable: true,
+        item: isUpdate ? _.cloneDeep(item) : item,
+        isUpdate
       }
-      ModalService.open(updateModal, modalConfig).then(
-        modalSubmit => {
-          this.updateItem(modalSubmit, isUpdate)
-        },
-        modalCancel => { console.log(modalCancel) }
-      ).catch(
-        err => {
-          console.log(err)
-        }
-      )
+      this.dialog = true
     },
-    deleteItem: function (itemId) {
-      this.$store.commit('showSpinner', true)
-      this.$http.delete('client', {params: {id: itemId}})
-        .then(response => {
-        // if (response.data && response.data !== 'Error') {
-          this.companies.splice(this.companies.findIndex((element, index, array) => {
-            if (element.id === itemId) {
-              return true
-            }
-          }), 1)
-          this.$store.commit('showSnackbar', {text: 'Удаление клиента прошло успешно', snackbar: true, context: 'success'})
-          // } else {
-          //   this.$store.commit('showSnackbar', {text: 'Удаление клиентов компании не удалось. Обратитесь к администратору', snackbar: true, context: 'error'})
-          // }
-          this.$store.commit('showSpinner', false)
-        })
-        .catch(e => {
-          this.errors.push(e)
-          this.$store.commit('showSpinner', false)
-          this.$store.commit('showSnackbar', {text: 'Удаление клиентов компании не удалось. Обратитесь к администратору', snackbar: true, context: 'error'})
-        })
+    dialogClose (confirmed, item, isUpdate) {
+      if (confirmed) {
+        this.$store.dispatch('clients/updateItem', {item, isUpdate})
+      }
+      this.dialog = false
     },
-    updateItem: function (item, isUpdate) {
-      this.$store.commit('showSpinner', true)
-      this.$http({method: isUpdate ? 'put' : 'post',
-        url: isUpdate ? 'client/' + item.id : 'clients',
-        data: item,
-        config: { contentType: 'application/json' }
-      })
-        .then(response => {
-          let responseData = response.data ? (response.data !== 'Error' ? response.data : null) : null
-          if (responseData) {
-            if (isUpdate) {
-              this.companies.splice(this.companies.findIndex((element, index, array) => {
-                if (element.id === item.id) {
-                  return true
-                }
-              }), 1)
-            }
-            this.companies.push(responseData)
-            this.$store.commit('showSnackbar', {text: (isUpdate ? 'Обновление' : 'Добавление') + ' компании прошло успешно', snackbar: true, context: 'success'})
-          } else {
-            this.$store.commit('showSnackbar', {text: (isUpdate ? 'Обновление' : 'Добавление') + ' компании не удалось', snackbar: true, context: 'error'})
-          }
-          this.$store.commit('showSpinner', false)
-        })
-        .catch(e => {
-          this.errors.push(e)
-          this.$store.commit('showSpinner', false)
-          this.$store.commit('showSnackbar', {text: (isUpdate ? 'Обновление' : 'Добавление') + ' компании не удалось. Обратитесь к администратору', snackbar: true, context: 'error'})
-        })
-    },
-    getClientTypes () {
-      this.$store.commit('showSpinner', true)
-      this.$http.get('clientTypes')
-        .then(response => {
-          if (response.data && response.data !== 'Error') {
-            this.$store.commit('showSpinner', false)
-            this.$store.commit('setUpdateProperty', response.data)
-          } else {
-            this.$store.commit('showSnackbar', {text: 'Не удалось загрузить типы клиента', snackbar: true, context: 'error'})
-          }
-          return []
-        })
-        .catch(e => {
-          this.errors.push(e)
-          this.$store.commit('showSpinner', false)
-          this.$store.commit('showSnackbar', {text: 'Не удалось загрузить типы клиента', snackbar: true, context: 'error'})
-          return []
-        })
+    qDialogClose (confirmed, data) {
+      if (confirmed) {
+        this.$store.dispatch('clients/deleteItem', data)
+      }
+      this.qDialog = false
     }
   },
   created () {
-    this.$store.commit('showSpinner', true)
-    this.$http.get('clients')
-      .then(response => {
-        this.$store.commit('showSpinner', false)
-        if (response.data) {
-          this.companies = response.data
-        } else {
-          this.$store.commit('showSnackbar', {text: 'Загрузка клиентов компании не удалась. Обратитесь к администратору', snackbar: true, context: 'error'})
-        }
-      })
-      .catch(e => {
-        this.errors.push(e)
-        this.$store.commit('showSpinner', false)
-        this.$store.commit('showSnackbar', {text: 'Загрузка клиентов компании не удалась. Обратитесь к администратору', snackbar: true, context: 'error'})
-      })
+    this.$store.dispatch('clients/routeAdminClients', {'user_id': this.userData.id})
   },
   mounted () {
-    this.$refs.companiesDataTable.defaultPagination.descending = true
+    this.$refs.dataTable.defaultPagination.descending = true
   }
 }

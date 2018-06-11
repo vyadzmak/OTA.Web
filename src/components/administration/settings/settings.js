@@ -1,5 +1,5 @@
 import {mapGetters} from 'vuex'
-import questionDialog from '../../questionDialog/QuestionDialog.vue'
+import questionDialog from '@/components/questionDialog/QuestionDialog.vue'
 import updateModal from './updateModal/UpdateModal.vue'
 
 export default {
@@ -72,7 +72,7 @@ export default {
     }
   },
   created () {
-    this.$store.dispatch('settings/getItems')
+    this.$store.dispatch('settings/routeAdminSettings', {user_id: this.userData.id})
   },
   mounted () {
     this.$refs.dataTable.defaultPagination.descending = true

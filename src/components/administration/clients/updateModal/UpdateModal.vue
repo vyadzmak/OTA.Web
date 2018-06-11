@@ -16,28 +16,23 @@
       <v-text-field
         v-model="data.item.name"
         :rules="nameRules"
-        label="Наименование клиента"
+        label="Имя"
         required
       />
       <v-text-field
         v-model="data.item.registration_number"
-        :rules="regRules"
+        :rules="sNameRules"
         label="Регистрационный номер"
-        required
       />
       <v-select
         v-model="data.item.client_type_id"
-        :items="clientTypeItems"
-        :rules="[(v) => !!v || 'Выберите тип организации']"
-        label="Тип организации"
-        item-text="name"
+        :items="clientTypes"
+        :rules="[(v) => !!v || 'Имя параметра должно быть заполнено']"
         item-value="id"
+        item-text="title"
+        label="Тип клиента"
         required
       />
-      <v-switch
-        :label="`Статус: ${data.item.lock_state?'заблокирован':'активный'}`"
-        v-model="data.item.lock_state"
-        color="error"/>
       <v-card-actions>
         <v-spacer/>
         <v-btn @click="clear">Очистить</v-btn>

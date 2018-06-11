@@ -1,4 +1,4 @@
-import {baseUrl} from '../../../httpClient/index'
+import {baseUrl} from '@/httpClient/index'
 export default {
   name: 'dialogHeader',
   props: ['data'],
@@ -6,7 +6,7 @@ export default {
     return {
       options: {
         acceptedFileTypes: ['.jpg', '.jpeg', '.png'],
-        url: baseUrl + 'upload',
+        url: baseUrl + 'uploadFiles',
         autoProcessQueue: true,
         uploadMultiple: false
       },

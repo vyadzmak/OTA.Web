@@ -12,11 +12,11 @@ export default {
   },
   computed: {
     ...mapGetters({userData: 'userData'}),
-    items: {get () {
-      let result = this.$store.getters['adminSettings/items']
-      this.settings = _.cloneDeep(_.get(result, '[0]', {}))
+    item () {
+      let result = this.$store.getters['adminSettings/item']
+      this.settings = result ? _.cloneDeep(result) : {}
       return result
-    }}
+    }
   },
   methods: {
     updateItem () {
@@ -26,11 +26,12 @@ export default {
     }
   },
   created () {
-    this.$store.dispatch('adminSettings/getItems')
+    this.$store.dispatch('adminSettings/routeAdminGeneral', {'user_id': this.userData.id})
   },
   mounted () {
   },
   beforeDestroy () {
     this.$store.commit('adminSettings/items', [])
+    this.$store.commit('adminSettings/item', null)
   }
 }

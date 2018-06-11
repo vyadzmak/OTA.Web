@@ -1,13 +1,13 @@
 export default [
-  {link: 'adminSettings'},
-  {link: 'attachments'},
+  {link: 'adminSettings', additional: [{link: 'routeAdminGeneral', requestParams: ['user_id']}]},
+  {link: 'attachments', additional: [{link: 'attachmentsInfo', requestParams: ['attachments_ids']}]},
   {link: 'brandsCatalog'},
   {link: 'clientAddresses'},
   {link: 'clientInfo'},
   {link: 'clientTypes'},
-  {link: 'clients'},
+  {link: 'clients', additional: [{link: 'routeAdminClients', requestParams: ['user_id']}]},
   {link: 'currencyCatalog'},
-  {link: 'log'},
+  {link: 'log', additional: [{link: 'routeAdminLogs', requestParams: ['user_id']}]},
   {link: 'orderPositionStates'},
   {link: 'orderPositions'},
   {link: 'orderStates'},
@@ -16,5 +16,5 @@ export default [
   {link: 'productCategories'},
   {link: 'products'},
   {link: 'unitCatalog'},
-  {link: 'settings'}
+  {link: 'settings', additional: [{link: 'routeAdminSettings', requestParams: ['user_id']}]}
 ]

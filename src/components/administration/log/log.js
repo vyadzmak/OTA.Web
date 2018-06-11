@@ -24,7 +24,7 @@ export default {
   methods: {
   },
   created () {
-    this.$store.dispatch('log/getItems')
+    this.$store.dispatch('log/routeAdminLogs', {item: this.settings, isUpdate: true})
   },
   mounted () {
     this.$refs.dataTable.defaultPagination.descending = true

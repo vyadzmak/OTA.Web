@@ -1,4 +1,4 @@
-import questionDialog from '../questionDialog/QuestionDialog.vue'
+import questionDialog from '@/components/questionDialog/QuestionDialog.vue'
 import updateDialog from './updateModal/UpdateModal.vue'
 import {admin as adminRoutes, bids as bidRoutes,
   settings as settingRoutes, catalog as catalogRoutes} from '@/router/routerNames'

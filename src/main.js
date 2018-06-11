@@ -2,7 +2,6 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import Vuetify from 'vuetify'
-import lodash from 'lodash'
 import VueLodash from 'vue-lodash'
 import VueTransmit from 'vue-transmit'
 import Vue2Filters from 'vue2-filters'
@@ -39,7 +38,7 @@ Vue.use(Vuetify, {theme: {
   success: '#44bd32',
   warning: '#ff793f'
 }})
-Vue.use(VueLodash, lodash)
+Vue.use(VueLodash, { name: 'ldsh' })
 Vue.use(VueModalDialog)
 Vue.use(VueTransmit)
 Vue.use(Vue2Filters)

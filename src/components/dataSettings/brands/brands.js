@@ -1,5 +1,5 @@
 import {mapGetters} from 'vuex'
-import questionDialog from '../../questionDialog/QuestionDialog.vue'
+import questionDialog from '@/components/questionDialog/QuestionDialog.vue'
 import addDialogComponent from './addDialog/addDialog.vue'
 
 export default {

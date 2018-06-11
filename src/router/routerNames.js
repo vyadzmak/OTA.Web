@@ -10,18 +10,19 @@ export const catalog = ['catalogs',
   'product', 'product.general', 'product.gallery', 'product.recommendation', 'product.reviews']
 
 export const getRoutes = function (types) {
-  let names = ['dashboard']
-  if (types.admin_route_access) {
-    names.concat(admin)
-  }
-  if (types.data_settings_route_access) {
-    names.concat(settings)
+  let names = []
+  if (types.requests_route_access) {
+    names = names.concat(bids)
   }
   if (types.catalog_route_access) {
-    names.concat(catalog)
+    names = names.concat(catalog)
   }
-  if (types.requests_route_access) {
-    names.concat(bids)
+  if (types.admin_route_access) {
+    names = names.concat(admin)
   }
+  if (types.data_settings_route_access) {
+    names = names.concat(settings)
+  }
+  names.push('dashboard')
   return names
 }
