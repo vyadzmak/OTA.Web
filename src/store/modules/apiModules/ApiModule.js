@@ -1,7 +1,7 @@
 import mutations from './mutations'
 import getActions from './actions'
 class ApiModule {
-  constructor (link, additional) {
+  constructor ({link, additional, requestParams}) {
     this.namespaced = true
     this.state = {
       items: [],
@@ -12,7 +12,7 @@ class ApiModule {
       items: state => state.items,
       item: state => state.item
     }
-    this.actions = getActions(link, additional)()
+    this.actions = getActions({link, additional, requestParams})()
   }
 }
 

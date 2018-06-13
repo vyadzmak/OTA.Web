@@ -3,6 +3,25 @@
     pa-2
     fluid
     grid-list-md>
+    <v-dialog
+      v-model="dialog"
+      max-width="500px">
+      <component
+        v-if="dialog"
+        :is="dialogComponent"
+        :data="dialogData"
+        @dialog-close="dialogClose"/>
+    </v-dialog>
+    <v-dialog
+      v-model="qDialog"
+      scrollable
+      max-width="300px">
+      <component
+        v-if="qDialog"
+        :is="qDialogComponent"
+        :data="dialogData"
+        @dialog-close="qDialogClose"/>
+    </v-dialog>
     <v-layout
       row
       wrap>
@@ -12,7 +31,7 @@
         sm6
         md3
         lg3
-        @click="addItem(item)">
+        @click="openDialog()">
         <v-card
           height="100%"
           class="hover-card">
@@ -30,29 +49,34 @@
         sm6
         md3
         lg3
-        @click="goToRoute(item)">
+        @click="getNext(item)">
         <v-card class="hover-card">
-          <v-card-text
-            class="text-xs-center"
-          >
+          <v-card-text class="text-xs-center">
             <div class="card-top-action">
-              <div><v-btn icon><v-icon color="info">mdi-pen</v-icon></v-btn></div>
-              <div><v-btn icon><v-icon color="error">mdi-delete-variant</v-icon></v-btn></div>
+              <div><v-btn
+                icon
+                @click.stop="goTo(item)"><v-icon color="info">mdi-pen</v-icon></v-btn></div>
+              <div><v-btn
+                icon
+                @click.stop="openQDialog(item.id)"><v-icon color="error">mdi-delete-variant</v-icon></v-btn></div>
             </div>
-            <img
-              width="150px"
-              src="@/assets/img/p52.png">
+            <v-card-media
+              :key="index+'img'"
+              :src="item.default_image_id?item.default_image_data.thumb_file_path:userData.no_image_url"
+              height="150px"
+              contain/>
           </v-card-text>
           <v-card-text
             class="text-xs-center">
 
             <div
-              v-show="index%2===0"
-              class="headline product-name">Kangaroo</div>
+              class="headline product-name"
+              v-text="item.name"/>
             <div
-              v-show="index%2!==0"
-              class="headline product-name">Top western road trips</div>
-            <div class="grey--text">1,000 miles of  {{ item }}</div>
+              class="grey--text"
+              v-text="item.internal_categories_count>0?
+                `Категорий `+item.internal_categories_count:
+              `Товаров `+(item.internal_products_count||0)"/>
         </v-card-text></v-card>
       </v-flex>
     </v-layout>

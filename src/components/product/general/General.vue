@@ -2,39 +2,104 @@
   <div>
     <v-card>
       <v-card-text>
-        <v-layout
-          row
-          wrap>
-          <v-flex
-            lg6
-            md6
-            sm12
-            pa-1>
-            <v-text-field label="Наименование"/>
-            <v-text-field label="Артикул"/>
-            <v-textarea label="Краткое описание"/>
-            <v-textarea label="Полное описание"/>
-          </v-flex>
-          <v-flex
-            lg6
-            md6
-            sm12
-            pa-1>
-            <v-select label="Бренд"/>
-            <v-select label="Партнерский товар"/>
-            <v-text-field label="Стоимость"/>
-            <v-select label="Валюта"/>
-            <v-text-field label="Вес/Объем/Штук"/>
-            <v-select label="Единица измерения"/>
-            <v-checkbox label="Акционный товар"/>
-            <v-textarea label="Текст акции"/>
-            <v-checkbox label="Скидка"/>
-            <v-text-field label="Сумму с учетом скидки"/>
-            <v-checkbox label="Нет в наличии"/>
-            <v-checkbox label="Не отображать в каталоге"/>
-          </v-flex>
-        </v-layout>
+        <v-form ref="form">
+          <v-layout
+            row
+            wrap>
+            <v-flex
+              lg6
+              md6
+              sm12
+              pa-1>
+              <v-text-field
+                v-model="item.name"
+                :rules="sNameRules"
+                required
+                label="Наименование"/>
+              <v-text-field
+                v-model="item.product_code"
+                :rules="[(v)=> (v.length <= 32) || 'Не более 32 символов']"
+                label="Артикул"/>
+              <v-textarea
+                v-model="item.short_description"
+                :rules="sDescRules"
+                label="Краткое описание"/>
+              <v-textarea
+                v-model="item.full_description"
+                :rules="descRules"
+                label="Полное описание"/>
+            </v-flex>
+            <v-flex
+              lg6
+              md6
+              sm12
+              pa-1>
+              <v-select
+                v-model="item.brand_id"
+                :items="brandTypes"
+                item-value="id"
+                item-text="name"
+                label="Бренд"
+              />
+              <v-select
+                v-model="item.partner_id"
+                :items="partnerTypes"
+                item-value="id"
+                item-text="name"
+                label="Партнерский товар"
+              />
+              <v-text-field
+                v-model="item.amount"
+                :rules="numRules"
+                required
+                label="Стоимость"/>
+              <v-select
+                v-model="item.currency_id"
+                :items="currencyTypes"
+                :rules="[(v) => !!v || 'Выберите валюту']"
+                item-value="id"
+                item-text="name"
+                label="Валюта"
+                required />
+              <v-text-field
+                v-model="item.unit_value"
+                :rules="[(v) => (!isNaN(parseFloat(v)) && isFinite(v)) || 'Введите число']"
+                label="Вес/Объем/Штук"/>
+              <v-select
+                v-model="item.unit_id"
+                :items="unitTypes"
+                item-value="id"
+                item-text="name"
+                label="Единица измерения" />
+              <v-checkbox
+                v-model="item.is_stock_product"
+                label="Акционный товар"/>
+              <v-textarea
+                v-model="item.stock_text"
+                :rules="[(v)=> (v.length <= 150) || 'Не более 150 символов']"
+                label="Текст акции"/>
+              <v-checkbox
+                v-model="item.is_discount_product"
+                label="Скидка"/>
+              <v-text-field
+                v-model="item.discount_amount"
+                :rules="[(v) => (!isNaN(parseFloat(v)) && isFinite(v)) || 'Введите число']"
+                label="Сумму с учетом скидки"/>
+              <v-checkbox
+                v-model="item.not_available"
+                label="Нет в наличии"/>
+              <v-checkbox
+                v-model="item.not_show_in_catalog"
+                label="Не отображать в каталоге"/>
+            </v-flex>
+          </v-layout>
+        </v-form>
       </v-card-text>
+      <v-card-actions><v-btn
+        dark
+        color="success"
+        @click="updateItem()"
+      >Обновить</v-btn></v-card-actions>
     </v-card>
   </div>
 </template>

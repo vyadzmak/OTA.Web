@@ -34,7 +34,8 @@ export default {
       this.dialogData = {
         message: 'Вы действительно хотите удалить еденицу измерения?',
         title: 'Удаление',
-        isClosable: true
+        isClosable: true,
+        data: itemId
       }
       this.qDialog = true
     },
@@ -52,7 +53,8 @@ export default {
       this.dialogData = {
         title: (isUpdate ? 'Обновление' : 'Добавление') + ' еденицы измерения',
         isClosable: true,
-        item: isUpdate ? _.cloneDeep(item) : item
+        item: isUpdate ? _.cloneDeep(item) : item,
+        isUpdate
       }
       this.dialog = true
     },

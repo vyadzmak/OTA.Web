@@ -60,11 +60,11 @@
                 icon
                 @click.stop="openQDialog(item.id)"><v-icon color="error">mdi-delete-variant</v-icon></v-btn></div>
             </div>
-            <img
+            <v-card-media
               :key="index+'img'"
-              :src="item.default_image_data_brands.thumb_file_path"
-              alt="BRAND LOGO"
-              width="150px">
+              :src="item.default_image_id?item.default_image_data_brands.thumb_file_path:userData.no_image_url"
+              height="150px"
+              contain/>
           </v-card-text>
           <v-card-text
             class="text-xs-center">

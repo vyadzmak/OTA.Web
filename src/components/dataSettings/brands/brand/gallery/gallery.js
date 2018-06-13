@@ -23,7 +23,10 @@ export default {
       rowsPerPageItems: [4, 8, 12],
       pagination: {
         rowsPerPage: 4
-      }
+      },
+      dialogData: null,
+      qDialog: false,
+      qDialogComponent: questionDialog
     }
   },
   computed: {
@@ -39,11 +42,22 @@ export default {
       }
       this.qDialog = true
     },
-    qDialogClose (confirmed, data) {
+    qDialogClose: async function (confirmed, data) {
       if (confirmed) {
-        this.$store.dispatch('attachments/deleteItem', data)
+        let updateItem = _.cloneDeep(this.item)
+        updateItem.images.splice(updateItem.images.indexOf(data), 1)
+        if (updateItem.default_image_id === data) {
+          updateItem.default_image_id = _.get(updateItem.images, '[0]', 0)
+        }
+        await this.$store.dispatch('brandsCatalog/updateItem', {item: updateItem, isUpdate: true})
+        await this.$store.dispatch('attachments/deleteItem', data)
       }
       this.qDialog = false
+    },
+    updateImage (itemId) {
+      let updateItem = _.cloneDeep(this.item)
+      updateItem.default_image_id = itemId
+      this.$store.dispatch('brandsCatalog/updateItem', {item: updateItem, isUpdate: true})
     },
     uploadFiles (file) {
       this.$refs.uploader.processQueue()
@@ -62,22 +76,26 @@ export default {
       this.$store.commit('showSpinner', true)
       formData.append('user_id', this.userData.id)
     },
-    completeSend (files) {
+    completeSend: async function (files) {
+      this.showProgress = false
+      this.$refs.uploader.removeAllFiles()
+      this.filesCount = 0
       let text = 'Загрузка файлов успешно завершена'
       let context = 'success'
       if (files && files.length > 0 && files[0].xhr.status === 200) {
         let updateItem = _.cloneDeep(this.item)
-        updateItem.images = updateItem.images.concat(JSON.parse(files[0].xhr.response))
-        this.$store.commit('brandsCatalog/item', updateItem)
-        this.$store.dispatch('brandsCatalog/updateItem', {item: updateItem, isUpdate: true})
-        this.$store.dispatch('attachments/attachmentsInfo', {attachments_ids: this.item.images.join()})
+        let imagesArray = JSON.parse(files[0].xhr.response)
+        if (updateItem.default_image_id === 0) {
+          updateItem.default_image_id = imagesArray[0]
+        }
+        updateItem.images = updateItem.images.concat(imagesArray)
+        await this.$store.dispatch('brandsCatalog/updateItem', {item: updateItem, isUpdate: true})
+        await this.$store.dispatch('attachments/attachmentsInfo', {attachments_ids: updateItem.images.join()})
       } else {
         text = 'Загрузка файлов не удалась. Обратитесь к администратору'
         context = 'error'
       }
       this.$store.commit('showSnackbar', {text, snackbar: true, context})
-      this.data.isClosable = true
-      this.showProgress = false
     },
     totalProgressChanged (file) {
       this.totalProgress = file.totalProgress
@@ -97,5 +115,8 @@ export default {
     }
   },
   mounted () {
+  },
+  beforeDestroy () {
+    this.$store.commit('attachments/items', [])
   }
 }

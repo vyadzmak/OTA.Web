@@ -20,15 +20,30 @@
       >
         <v-card>
           <div class="card-top-action">
-            <div><v-btn icon><v-icon color="info">mdi-pen</v-icon></v-btn></div>
-            <div><v-btn icon><v-icon color="error">mdi-delete-variant</v-icon></v-btn></div>
+            <div><v-btn
+              icon
+              @click="updateImage(props.item.id)"><v-icon color="info">mdi-pen</v-icon></v-btn></div>
+            <div><v-btn
+              icon
+              @click="openQDialog(props.item.id)"><v-icon color="error">mdi-delete-variant</v-icon></v-btn></div>
           </div>
           <v-card-media
             :src="props.item.thumb_file_path"
-            height="200px"/>
+            height="200px"
+            contain/>
         </v-card>
       </v-flex>
     </v-data-iterator>
+    <v-dialog
+      v-model="qDialog"
+      scrollable
+      max-width="300px">
+      <component
+        v-if="qDialog"
+        :is="qDialogComponent"
+        :data="dialogData"
+        @dialog-close="qDialogClose"/>
+    </v-dialog>
     <v-btn
       v-show="filesCount>0"
       block

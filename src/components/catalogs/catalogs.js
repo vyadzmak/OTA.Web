@@ -1,49 +1,116 @@
+import {mapGetters} from 'vuex'
+import questionDialog from '@/components/questionDialog/QuestionDialog.vue'
+import addDialogComponent from './addDialog/addDialog.vue'
 
 export default {
   name: 'catalogs',
   data () {
     return {
       msg: 'Каталоги',
-      items: [1, 2, 3, 4, 5, 6],
-      level: 0
+      categoryIds: [-1],
+      productsShown: false,
+      dialog: false,
+      dialogComponent: addDialogComponent,
+      dialogData: null,
+      qDialog: false,
+      qDialogComponent: questionDialog
     }
   },
   methods: {
-    goToRoute (number) {
-      this.level++
-      if (this.level > 2) {
-        this.$store.commit('catalogBack', false)
-        this.$router.push({name: 'product'})
+    getNext (item) {
+      if (item.internal_categories_count > 0) {
+        this.categoryIds.push(item.id)
+        this.getCategories(item.id)
+      } else if (item.internal_products_count > 0) {
+        this.productsShown = true
+        this.$store.dispatch('products/productsByProductCategory', {user_id: this.userData.id, category_id: item.id})
       }
-      let vm = this
-      this.items = _.map(vm.items, item => {
-        return item + number % 10 * Math.pow(10, vm.level)
-      })
+    },
+    goTo (item) {
+      this.$store.commit('catalogBack', false)
+      this.$store.commit('products/item', item)
+      this.$router.push({name: 'product'})
+    },
+    getCategories (categoryId) {
+      this.$store.dispatch('productCategories/productsCategoriesByProductCategory', {user_id: this.userData.id, category_id: categoryId})
+    },
+    openQDialog: function (itemId) {
+      this.dialogData = {
+        message: 'Вы действительно хотите удалить продукт?',
+        title: 'Удаление',
+        isClosable: true,
+        data: itemId
+      }
+      this.qDialog = true
+    },
+    openDialog: async function (item) {
+      let isUpdate = true
+      if (!item) {
+        isUpdate = false
+        item = {
+          name: '',
+          short_description: '',
+          full_description: '',
+          user_creator_id: this.userData.id,
+          category_id: this.categoryTail,
+          amount: 0,
+          currency_id: null
+        }
+      }
+      await this.$store.dispatch('currencyCatalog/getItems')
+      this.dialogData = {
+        title: (isUpdate ? 'Обновление' : 'Добавление') + ' продукта',
+        isClosable: true,
+        item: isUpdate ? _.cloneDeep(item) : item,
+        isUpdate
+      }
+      this.dialog = true
+    },
+    dialogClose (confirmed, item, isUpdate) {
+      if (confirmed) {
+        this.$store.dispatch('products/updateItem', {item, isUpdate})
+      }
+      this.dialog = false
+    },
+    qDialogClose (confirmed, data) {
+      if (confirmed) {
+        this.$store.dispatch('products/deleteItem', data)
+      }
+      this.qDialog = false
     }
   },
   computed: {
-    userData () {
-      return this.$store.getters.userData
-    },
-    catalogBack () {
-      return this.$store.getters.catalogBack
+    ...mapGetters({userData: 'userData',
+      items: 'productCategories/items',
+      products: 'products/items',
+      catalogBack: 'catalogBack'}),
+    categoryTail () {
+      return _.last(this.categoryIds)
     }
   },
   created () {
     this.$store.commit('catalogBack', true)
+    this.$store.commit('products/items', [])
+    this.getCategories(-1)
   },
   mounted () {
   },
+  beforeDestroy () {
+    this.$store.commit('products/items', [])
+    this.$store.commit('productCategories/items', [])
+  },
   beforeRouteLeave (to, from, next) {
     if (this.catalogBack) {
-      if (this.items[0] < 10) {
+      if (!this.categoryTail || this.categoryTail < 0) {
         next()
       } else {
-        let vm = this
-        this.items = _.map(vm.items, item => {
-          return item % Math.pow(10, vm.level)
-        })
-        this.level--
+        if (this.productsShown) {
+          this.productsShown = false
+          this.$store.commit('products/items', [])
+        } else {
+          this.categoryIds.splice(this.categoryIds.length - 1, 1)
+          this.getCategories(this.categoryTail)
+        }
         next(false)
       }
     } else {

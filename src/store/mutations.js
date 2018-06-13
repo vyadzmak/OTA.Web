@@ -21,5 +21,5 @@ export const catalogBack = (state, payload) => {
 }
 
 export const categoryBack = (state, payload) => {
-  state.catalogBack = payload
+  state.categoryBack = payload
 }

@@ -2,7 +2,7 @@ export const admin = ['administration', 'administration.log', 'administration.cl
   'administration.users', 'administration.settings', 'administration.general']
 export const bids = ['bids', 'bids.inbox', 'bids.active', 'bids.history', 'bids.details']
 export const settings = ['dataSettings',
-  'categories',
+  'categories', 'category', 'category.general', 'category.gallery',
   'brands', 'brand', 'brand.general', 'brand.gallery',
   'partners', 'partner', 'partner.general', 'partner.gallery',
   'userAgreement', 'currencies', 'units', 'display']

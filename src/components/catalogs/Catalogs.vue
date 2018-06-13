@@ -3,17 +3,36 @@
     pa-2
     fluid
     grid-list-md>
+    <v-dialog
+      v-model="dialog"
+      max-width="500px"
+      scrollable>
+      <component
+        v-if="dialog"
+        :is="dialogComponent"
+        :data="dialogData"
+        @dialog-close="dialogClose"/>
+    </v-dialog>
+    <v-dialog
+      v-model="qDialog"
+      max-width="300px">
+      <component
+        v-if="qDialog"
+        :is="qDialogComponent"
+        :data="dialogData"
+        @dialog-close="qDialogClose"/>
+    </v-dialog>
     <v-layout
       row
       wrap>
       <v-flex
-        v-show="level>=2"
+        v-show="productsShown"
         tag="a"
         xs12
         sm6
         md3
         lg3
-        @click="addItem(item)">
+        @click="openDialog()">
         <v-card
           height="100%"
           class="hover-card">
@@ -25,67 +44,65 @@
       </v-flex>
       <v-flex
         v-for="(item, index) in items"
-        v-show="level<2"
-        :key="index"
+        v-show="!productsShown"
+        :key="index+'-item'"
         tag="a"
         xs12
         sm6
         md3
         lg3
-        @click="goToRoute(item)">
+        @click="getNext(item)">
         <v-card class="hover-card">
-          <v-card-text
-            class="text-xs-center"
-          >
-            <div class="card-top-action">
-              <div><v-btn icon><v-icon color="info">mdi-pen</v-icon></v-btn></div>
-              <div><v-btn icon><v-icon color="error">mdi-delete-variant</v-icon></v-btn></div>
-            </div>
-            <img
-              width="150px"
-              src="@/assets/img/p52.png">
+          <v-card-text class="text-xs-center">
+            <v-card-media
+              :key="index+'img'"
+              :src="item.default_image_id?item.default_image_data.thumb_file_path:userData.no_image_url"
+              height="150px"
+              contain/>
           </v-card-text>
-          <v-card-text
-            class="text-xs-center">
-
+          <v-card-text class="text-xs-center">
             <div
-              v-show="index%2===0"
-              class="headline product-name">Kangaroo</div>
+              class="headline product-name"
+              v-text="item.name"/>
             <div
-              v-show="index%2!==0"
-              class="headline product-name">Top western road trips</div>
-            <div class="grey--text">1,000 miles of  {{ item }}</div>
+              class="grey--text"
+              v-text="item.internal_categories_count>0?
+                `Категорий `+item.internal_categories_count:
+              `Товаров `+(item.internal_products_count||0)"/>
         </v-card-text></v-card>
       </v-flex>
       <v-flex
-        v-for="(item, index) in items"
-        v-show="level>=2"
-        :key="index"
+        v-for="(item, index) in products"
+        :key="index+'-prod'"
         tag="a"
         xs12
         sm6
         md3
         lg3
-        @click="goToRoute(item)">
+        @click="goTo(item)">
         <v-card class="hover-card">
-          <v-card-text
-            class="text-xs-center"
-          >
-            <img
-              width="150px"
-              src="@/assets/img/p52.png">
+          <v-card-text class="text-xs-center">
+            <div class="card-top-action">
+              <div><v-btn
+                icon
+                @click.stop="goTo(item)"><v-icon color="info">mdi-pen</v-icon></v-btn></div>
+              <div><v-btn
+                icon
+                @click.stop="openQDialog(item.id)"><v-icon color="error">mdi-delete-variant</v-icon></v-btn></div>
+            </div>
+            <v-card-media
+              :key="index+'img'"
+              :src="item.default_image_id?item.default_image_data.thumb_file_path:userData.no_image_url"
+              height="150px"
+              contain/>
           </v-card-text>
-          <v-card-text
-            class="text-xs-center">
-
+          <v-card-text class="text-xs-center">
             <div
-              v-show="index%2===0"
-              class="headline product-name">Лимон 1 кг., фасовка 0.2 - 0.4 кг</div>
+              class="headline product-name"
+              v-text="item.name"/>
             <div
-              v-show="index%2!==0"
-              class="headline product-name">Ананас 1 кг.</div>
-            <div class="grey--text">Артикул:  {{ item }}</div>
-            <div class="grey--text product-description"><span>{{ index%2!==0?'Состав клетчатка 1.2 г на 100 г продукта.':'Состав клетчатка 1.2 г на 100 г продукта. Состав клетчатка 1.2 г на 100 г продукта. Состав клетчатка 1.2 г на 100 г продукта. Состав клетчатка 1.2 г на 100 г продукта. Состав клетчатка 1.2 г на 100 г продукта.' }}</span></div>
+              class="grey--text product-description"
+              v-text="item.short_description"/>
         </v-card-text></v-card>
       </v-flex>
     </v-layout>

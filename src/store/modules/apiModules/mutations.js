@@ -18,7 +18,7 @@ const mutations = {
   delete (state, id) {
     let index = _.findIndex(state.items, {id: id})
     if (index > -1) {
-      state.items.splice(index)
+      state.items.splice(index, 1)
     }
   },
 

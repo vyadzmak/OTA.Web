@@ -30,7 +30,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({userData: 'userData', item: 'products/item', items: 'attachments/items'})
+    ...mapGetters({userData: 'userData', item: 'productCategories/item', items: 'attachments/items'})
   },
   methods: {
     openQDialog: function (itemId) {
@@ -45,11 +45,11 @@ export default {
     qDialogClose: async function (confirmed, data) {
       if (confirmed) {
         let updateItem = _.cloneDeep(this.item)
-        updateItem.gallery_images.splice(updateItem.gallery_images.indexOf(data), 1)
+        updateItem.images.splice(updateItem.images.indexOf(data), 1)
         if (updateItem.default_image_id === data) {
-          updateItem.default_image_id = _.get(updateItem.gallery_images, '[0]', 0)
+          updateItem.default_image_id = _.get(updateItem.images, '[0]', 0)
         }
-        await this.$store.dispatch('products/updateItem', {item: updateItem, isUpdate: true})
+        await this.$store.dispatch('productCategories/updateItem', {item: updateItem, isUpdate: true})
         await this.$store.dispatch('attachments/deleteItem', data)
       }
       this.qDialog = false
@@ -57,7 +57,7 @@ export default {
     updateImage (itemId) {
       let updateItem = _.cloneDeep(this.item)
       updateItem.default_image_id = itemId
-      this.$store.dispatch('products/updateItem', {item: updateItem, isUpdate: true})
+      this.$store.dispatch('productCategories/updateItem', {item: updateItem, isUpdate: true})
     },
     uploadFiles (file) {
       this.$refs.uploader.processQueue()
@@ -88,9 +88,9 @@ export default {
         if (updateItem.default_image_id === 0) {
           updateItem.default_image_id = imagesArray[0]
         }
-        updateItem.gallery_images = updateItem.gallery_images.concat(imagesArray)
-        await this.$store.dispatch('products/updateItem', {item: updateItem, isUpdate: true})
-        await this.$store.dispatch('attachments/attachmentsInfo', {attachments_ids: updateItem.gallery_images.join()})
+        updateItem.images = updateItem.images.concat(imagesArray)
+        await this.$store.dispatch('productCategories/updateItem', {item: updateItem, isUpdate: true})
+        await this.$store.dispatch('attachments/attachmentsInfo', {attachments_ids: updateItem.images.join()})
       } else {
         text = 'Загрузка файлов не удалась. Обратитесь к администратору'
         context = 'error'
@@ -110,8 +110,8 @@ export default {
     }
   },
   created () {
-    if (this.item.gallery_images.length > 0) {
-      this.$store.dispatch('attachments/attachmentsInfo', {attachments_ids: this.item.gallery_images.join()})
+    if (this.item.images.length > 0) {
+      this.$store.dispatch('attachments/attachmentsInfo', {attachments_ids: this.item.images.join()})
     }
   },
   mounted () {

@@ -17,9 +17,10 @@ export const login = ({ commit, getters }, {login, password, rememberMe}) => {
         savedUser.user_role_data.user_role_route_access = getRoutes(savedUser.user_role_data.user_role_route_access.length > 0 ? savedUser.user_role_data.user_role_route_access[0] : {})
         savedUser.login_data = {
           login: responseData.login,
-          password: responseData.password,
-          orders_count: responseData.orders_count
+          password: responseData.password
         }
+        savedUser.no_image_url = responseData.no_image_url
+        savedUser.orders_count = responseData.orders_count
         if (rememberMe) {
           commit(types.R_USER_DATA, savedUser)
         } else {

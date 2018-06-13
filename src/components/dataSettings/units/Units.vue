@@ -28,9 +28,10 @@
         slot="items"
         slot-scope="props">
         <tr>
-          <td>{{ props.item.Id }}</td>
-          <td>{{ props.item.SettingName }}</td>
-          <td>{{ props.item.SettingValue }}</td>
+          <td>{{ props.item.id }}</td>
+          <td>{{ props.item.name }}</td>
+          <td>{{ props.item.system_name }}</td>
+          <td>{{ props.item.display_value }}</td>
           <td class="px-1">
             <v-tooltip top>
               <v-btn
