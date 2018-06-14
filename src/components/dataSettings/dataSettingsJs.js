@@ -10,6 +10,7 @@ export default {
         {id: 6, name: 'Пользовательское соглашение', path: 'userAgreement'},
         {id: 7, name: 'Настройка валют', path: 'currencies'},
         {id: 8, name: 'Настройка единиц измерения', path: 'units'},
+        {id: 10, name: 'Настройка областей', path: 'areas'},
         {id: 9, name: 'Настройка отображения', path: 'display'}]
     }
   },

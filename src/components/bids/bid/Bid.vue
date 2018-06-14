@@ -25,12 +25,15 @@
         slot-scope="props">
         <tr @click="goTo(props.item)">
           <td>{{ props.item.id }}</td>
-          <td>{{ props.item.user_id }}</td>
+          <td>{{ props.item.order_user_data.client_data.name }}</td>
+          <td>{{ props.item.client_address_data.address }}</td>
+          <td>{{ props.item.client_address_data.city_data.name }}</td>
+          <td>{{ props.item.client_address_data.city_data.area_data.name }}</td>
           <td>{{ props.item.total_amount }}</td>
           <td>{{ props.item[$route.name === 'bids.inbox' ? 'creation_date'
           : $route.name === 'bids.active' ? 'processed_date' : 'execute_date'] | moment("DD.MM.YYYY HH:mm") }}</td>
-          <td>{{ props.item.executor_id }}</td>
-          <td>{{ props.item.order_state_id }}</td>
+          <td>{{ ldsh.get(props.item, 'order_executor_data.name', 'Нет') }}</td>
+          <td>{{ props.item.order_state_data.name }}</td>
         </tr>
       </template>
     </v-data-table>

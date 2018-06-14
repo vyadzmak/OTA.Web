@@ -15,6 +15,8 @@ import UserAgreement from '@/components/dataSettings/userAgreement/UserAgreement
 import Currencies from '@/components/dataSettings/currencies/Currencies.vue'
 import Units from '@/components/dataSettings/units/Units.vue'
 import Display from '@/components/dataSettings/display/Display.vue'
+import Areas from '@/components/dataSettings/areas/Areas.vue'
+import Area from '@/components/dataSettings/areas/area/Area.vue'
 
 import adminChildren from './adminChildren'
 import categoryChildren from './categoryChildren'
@@ -96,6 +98,16 @@ const dashboard = {
     path: 'units',
     name: 'units',
     component: Units
+  },
+  {
+    path: 'areas',
+    name: 'areas',
+    component: Areas
+  },
+  {
+    path: 'area',
+    name: 'area',
+    component: Area
   },
   {
     path: 'currencies',

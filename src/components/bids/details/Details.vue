@@ -15,17 +15,17 @@
           <v-divider/>
           <v-list-tile>
             <v-list-tile-content class="body-2">№ Заявки:</v-list-tile-content>
-            <v-list-tile-content class="align-end">00000001</v-list-tile-content>
+            <v-list-tile-content class="align-end">{{ item.id }}</v-list-tile-content>
           </v-list-tile>
           <v-divider/>
           <v-list-tile>
             <v-list-tile-content class="body-2">Заказчик:</v-list-tile-content>
-            <v-list-tile-content class="align-end">trololo</v-list-tile-content>
+            <v-list-tile-content class="align-end">{{ item.order_user_data.client_data.name }}</v-list-tile-content>
           </v-list-tile>
           <v-divider/>
           <v-list-tile>
             <v-list-tile-content class="body-2">Время:</v-list-tile-content>
-            <v-list-tile-content class="align-end">trololo</v-list-tile-content>
+            <v-list-tile-content class="align-end">{{ item.creation_date | moment("DD.MM.YYYY HH:mm") }}</v-list-tile-content>
           </v-list-tile>
           <v-divider/>
           <v-list-tile>
@@ -41,17 +41,17 @@
           <v-divider/>
           <v-list-tile>
             <v-list-tile-content class="body-2">Контакт:</v-list-tile-content>
-            <v-list-tile-content class="align-end">trololo</v-list-tile-content>
+            <v-list-tile-content class="align-end">{{ item.client_address_data.name }}</v-list-tile-content>
           </v-list-tile>
           <v-divider/>
           <v-list-tile>
             <v-list-tile-content class="body-2">E-mail:</v-list-tile-content>
-            <v-list-tile-content class="align-end">trololo</v-list-tile-content>
+            <v-list-tile-content class="align-end">{{ item.client_address_data.email }}</v-list-tile-content>
           </v-list-tile>
           <v-divider/>
           <v-list-tile>
             <v-list-tile-content class="body-2">Телефон:</v-list-tile-content>
-            <v-list-tile-content class="align-end">trololo</v-list-tile-content>
+            <v-list-tile-content class="align-end">{{ item }}</v-list-tile-content>
           </v-list-tile>
           <v-divider/>
         </v-list>
@@ -66,22 +66,22 @@
             <v-divider/>
             <v-list-tile>
               <v-list-tile-content class="body-2">Сумма:</v-list-tile-content>
-              <v-list-tile-content class="align-end">00000001</v-list-tile-content>
+              <v-list-tile-content class="align-end">{{ item }}</v-list-tile-content>
             </v-list-tile>
             <v-divider/>
             <v-list-tile>
               <v-list-tile-content class="body-2">Скидка:</v-list-tile-content>
-              <v-list-tile-content class="align-end">00000001</v-list-tile-content>
+              <v-list-tile-content class="align-end">{{ item }}</v-list-tile-content>
             </v-list-tile>
             <v-divider/>
             <v-list-tile>
               <v-list-tile-content class="body-2">Итого:</v-list-tile-content>
-              <v-list-tile-content class="align-end">00000001</v-list-tile-content>
+              <v-list-tile-content class="align-end">{{ item }}</v-list-tile-content>
             </v-list-tile>
             <v-divider/>
             <v-list-tile>
               <v-list-tile-content class="body-2">Количество:</v-list-tile-content>
-              <v-list-tile-content class="align-end">00000001</v-list-tile-content>
+              <v-list-tile-content class="align-end">{{ item }}</v-list-tile-content>
             </v-list-tile>
             <v-divider/>
           </v-list>

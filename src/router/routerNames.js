@@ -5,7 +5,7 @@ export const settings = ['dataSettings',
   'categories', 'category', 'category.general', 'category.gallery',
   'brands', 'brand', 'brand.general', 'brand.gallery',
   'partners', 'partner', 'partner.general', 'partner.gallery',
-  'userAgreement', 'currencies', 'units', 'display']
+  'userAgreement', 'currencies', 'units', 'display', 'areas', 'area']
 export const catalog = ['catalogs',
   'product', 'product.general', 'product.gallery', 'product.recommendation', 'product.reviews']
 

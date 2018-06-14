@@ -1,7 +1,9 @@
 export default [
   {link: 'adminSettings', additional: [{link: 'routeAdminGeneral', requestParams: ['user_id']}]},
+  {link: 'areaCatalog'},
   {link: 'attachments', additional: [{link: 'attachmentsInfo', requestParams: ['attachments_ids']}]},
   {link: 'brandsCatalog'},
+  {link: 'cityCatalog', additional: [{link: 'cityCatalogByArea', requestParams: ['user_id', 'area_id']}]},
   {link: 'clientAddresses', additional: [{link: 'clientAddressesByClient', requestParams: ['user_id', 'client_id']}]},
   {link: 'clientInfo', additional: [{link: 'clientInfoByClient', requestParams: ['user_id', 'client_id']}]},
   {link: 'clientTypes'},

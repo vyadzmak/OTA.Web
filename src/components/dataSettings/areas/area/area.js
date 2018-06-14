@@ -3,14 +3,14 @@ import questionDialog from '@/components/questionDialog/QuestionDialog.vue'
 import updateModal from './updateModal/UpdateModal.vue'
 
 export default {
-  name: 'bidDetails',
+  name: 'units',
   data () {
     return {
       search: '',
       headers: [
         { text: 'Id', align: 'left', value: 'id' },
-        { text: 'Имя', align: 'left', value: 'name' },
-        { text: 'Системное имя', align: 'left', value: 'system_name' },
+        { text: 'Город/а.е.', align: 'left', value: 'name' },
+        { text: 'Область/Регион', align: 'left', value: 'cityCatalog_data.name' },
         { text: 'Отображаемое значение', align: 'left', value: 'display_value' },
         {sortable: false},
         {sortable: false}
@@ -27,14 +27,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({items: 'unitCatalog/items',
-      userData: 'userData',
-      item: 'orders/item'})
+    ...mapGetters({items: 'cityCatalog/items', userData: 'userData', item: 'areaCatalog/item'})
   },
   methods: {
     openQDialog: function (itemId) {
       this.dialogData = {
-        message: 'Вы действительно хотите удалить еденицу измерения?',
+        message: 'Вы действительно хотите удалить город/а.е.?',
         title: 'Удаление',
         isClosable: true,
         data: itemId
@@ -46,14 +44,12 @@ export default {
       if (!item) {
         isUpdate = false
         item = {
-          system_name: '',
           name: '',
-          display_value: '',
-          is_default: false
+          area_id: this.item.id
         }
       }
       this.dialogData = {
-        title: (isUpdate ? 'Обновление' : 'Добавление') + ' еденицы измерения',
+        title: (isUpdate ? 'Обновление' : 'Добавление') + ' города/а.е.',
         isClosable: true,
         item: isUpdate ? _.cloneDeep(item) : item,
         isUpdate
@@ -62,19 +58,19 @@ export default {
     },
     dialogClose (confirmed, item, isUpdate) {
       if (confirmed) {
-        this.$store.dispatch('unitCatalog/updateItem', {item, isUpdate})
+        this.$store.dispatch('cityCatalog/updateItem', {item, isUpdate})
       }
       this.dialog = false
     },
     qDialogClose (confirmed, data) {
       if (confirmed) {
-        this.$store.dispatch('unitCatalog/deleteItem', data)
+        this.$store.dispatch('cityCatalog/deleteItem', data)
       }
       this.qDialog = false
     }
   },
   created () {
-    this.$store.dispatch('unitCatalog/getItems')
+    this.$store.dispatch('cityCatalog/cityCatalogByArea', {user_id: this.userData.id, area_id: this.item.id})
   },
   mounted () {
     this.$refs.dataTable.defaultPagination.descending = true

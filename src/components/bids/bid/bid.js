@@ -8,16 +8,17 @@ export default {
       headers: [
         { text: 'Id', align: 'left', value: 'id' },
         // { text: '№ заявки', align: 'left', value: 'number' },
-        { text: 'Заказчик', align: 'left', value: 'user_id' },
-        // { text: 'Адрес', align: 'left', value: 'display_value' },
+        { text: 'Заказчик', align: 'left', value: 'order_user_data.client_data.name' },
+        { text: 'Адрес', align: 'left', value: 'client_address_data.address' },
+        { text: 'Город/а.е.', align: 'left', value: 'client_address_data.city_data.name' },
+        { text: 'Регион/Область', align: 'left', value: 'client_address_data.city_data.area_data.name' },
         { text: 'Сумма', align: 'left', value: 'total_amount' },
-        // { text: 'Кол-во', align: 'left', value: 'display_values' },
         { text: 'Время заказа',
           align: 'left',
           value: this.$route.name === 'bids.inbox' ? 'creation_date'
             : this.$route.name === 'bids.active' ? 'processed_date' : 'execute_date'},
-        { text: 'Исполнитель', align: 'left', value: 'executor_id' },
-        { text: 'Статус', align: 'left', value: 'order_state_id' }
+        { text: 'Исполнитель', align: 'left', value: 'order_executor_data.name' },
+        { text: 'Статус', align: 'left', value: 'order_state_data.name' }
       ],
       tableRowsShown: [10, 20, 50, 100, {text: 'Все', value: -1}],
       rowsPerPageText: 'Строк на странице',

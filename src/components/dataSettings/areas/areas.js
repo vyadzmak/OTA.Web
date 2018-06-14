@@ -3,15 +3,13 @@ import questionDialog from '@/components/questionDialog/QuestionDialog.vue'
 import updateModal from './updateModal/UpdateModal.vue'
 
 export default {
-  name: 'bidDetails',
+  name: 'areas',
   data () {
     return {
       search: '',
       headers: [
         { text: 'Id', align: 'left', value: 'id' },
         { text: 'Имя', align: 'left', value: 'name' },
-        { text: 'Системное имя', align: 'left', value: 'system_name' },
-        { text: 'Отображаемое значение', align: 'left', value: 'display_value' },
         {sortable: false},
         {sortable: false}
       ],
@@ -27,14 +25,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({items: 'unitCatalog/items',
-      userData: 'userData',
-      item: 'orders/item'})
+    ...mapGetters({items: 'areaCatalog/items', userData: 'userData'})
   },
   methods: {
     openQDialog: function (itemId) {
       this.dialogData = {
-        message: 'Вы действительно хотите удалить еденицу измерения?',
+        message: 'Вы действительно хотите удалить регион?',
         title: 'Удаление',
         isClosable: true,
         data: itemId
@@ -46,14 +42,11 @@ export default {
       if (!item) {
         isUpdate = false
         item = {
-          system_name: '',
-          name: '',
-          display_value: '',
-          is_default: false
+          name: ''
         }
       }
       this.dialogData = {
-        title: (isUpdate ? 'Обновление' : 'Добавление') + ' еденицы измерения',
+        title: (isUpdate ? 'Обновление' : 'Добавление') + ' региона',
         isClosable: true,
         item: isUpdate ? _.cloneDeep(item) : item,
         isUpdate
@@ -62,19 +55,23 @@ export default {
     },
     dialogClose (confirmed, item, isUpdate) {
       if (confirmed) {
-        this.$store.dispatch('unitCatalog/updateItem', {item, isUpdate})
+        this.$store.dispatch('areaCatalog/updateItem', {item, isUpdate})
       }
       this.dialog = false
     },
     qDialogClose (confirmed, data) {
       if (confirmed) {
-        this.$store.dispatch('unitCatalog/deleteItem', data)
+        this.$store.dispatch('areaCatalog/deleteItem', data)
       }
       this.qDialog = false
+    },
+    goTo (item) {
+      this.$store.commit('areaCatalog/item', item)
+      this.$router.push({name: 'area'})
     }
   },
   created () {
-    this.$store.dispatch('unitCatalog/getItems')
+    this.$store.dispatch('areaCatalog/getItems')
   },
   mounted () {
     this.$refs.dataTable.defaultPagination.descending = true
