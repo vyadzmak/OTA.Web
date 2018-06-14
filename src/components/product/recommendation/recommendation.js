@@ -1,81 +1,44 @@
-import questionDialog from '@/components/questionDialog/QuestionDialog.vue'
-import { ModalService } from 'vue-modal-dialog'
+import {mapGetters} from 'vuex'
 
 export default {
-  name: 'log',
+  name: 'productRecommendation',
   data () {
     return {
-      msg: 'Лог',
       search: '',
-      logs: [],
-      errors: [],
       headers: [
-        { text: 'ID', align: 'left', value: 'id' },
-        { text: 'Дата', align: 'left', value: 'date' },
-        { text: 'Сообщение', align: 'left', value: 'message' }
+        {sortable: false},
+        { text: 'Id', align: 'left', value: 'id' },
+        { text: 'Наименование', align: 'left', value: 'name' },
+        { text: 'Артикул', align: 'left', value: 'product_code' },
+        {sortable: false}
       ],
       tableRowsShown: [10, 20, 50, 100, {text: 'Все', value: -1}],
       rowsPerPageText: 'Строк на странице',
       noDataText: 'Нет данных',
-      noResultsText: 'Поиск не дал результатов'
+      noResultsText: 'Поиск не дал результатов',
+      item: {},
+      selectedItems: []
     }
   },
   computed: {
-    userData: function () {
-      return this.$store.getters.userData
+    ...mapGetters({items: 'routeCatalogProductsRecommendations/items', userData: 'userData'}),
+    product () {
+      let result = _.get(this.$store, 'getters.products/item', {})
+      this.item = _.cloneDeep(result)
+      this.selectedItems = _.map(_.get(this.item, 'product_recomendations', []), v => { return {id: v} })
+      return result
     }
   },
   methods: {
-    showDeleteModal: function () {
-      let modalConfig = {
-        size: 'md',
-        data: {
-          message: 'Вы действительно хотите очистить лог?',
-          title: 'Очитска лога',
-          isClosable: true
-        }
-      }
-      ModalService.open(questionDialog, modalConfig).then(
-        modalSubmit => { this.deleteItems() },
-        modalCancel => {}
-      ).catch(
-        err => {
-          console.log(err)
-        }
-      )
-    },
-    deleteItems: function () {
-      this.$store.commit('showSpinner', true)
-      this.$http.delete('log', {params: {id: -1}})
-        .then(response => {
-          if (response.status === 204) {
-            this.logs.splice(0, this.logs.length)
-            this.$store.commit('showSnackbar', {text: 'Очистка лога прошла успешно', snackbar: true, context: 'success'})
-          } else {
-            this.$store.commit('showSnackbar', {text: 'Очистка лога не удалась. Обратитесь к администратору', snackbar: true, context: 'error'})
-          }
-          this.$store.commit('showSpinner', false)
-        })
-        .catch(e => {
-          this.errors.push(e)
-          this.$store.commit('showSpinner', false)
-          this.$store.commit('showSnackbar', {text: 'Очистка лога не удалась. Обратитесь к администратору', snackbar: true, context: 'error'})
-        })
+    updateItem () {
+      this.item.product_recomendations = _.map(this.selectedItems, v => { return v.id })
+      this.$store.dispatch('products/updateItem', {item: this.item, isUpdate: true})
     }
   },
   created () {
-    this.$store.commit('showSpinner', true)
-    this.$http.get(`log`)
-      .then(response => {
-        this.$store.commit('showSpinner', false)
-        this.logs = response.data
-      })
-      .catch(e => {
-        this.errors.push(e)
-        this.$store.commit('showSpinner', false)
-      })
+    this.$store.dispatch('routeCatalogProductsRecommendations/getItems', {user_id: this.userData.id, product_id: this.product.id})
   },
   mounted () {
-    this.$refs.logDataTable.defaultPagination.descending = true
+    this.$refs.dataTable.defaultPagination.descending = true
   }
 }

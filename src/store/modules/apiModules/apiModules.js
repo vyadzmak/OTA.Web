@@ -11,7 +11,7 @@ export default [
   {link: 'orderPositionStates'},
   {link: 'orderPositions'},
   {link: 'orderStates'},
-  {link: 'orders'},
+  {link: 'orders', additional: [{link: 'routeOrders', requestParams: ['user_id', 'state_id']}]},
   {link: 'partnersCatalog'},
   {link: 'productCategories', additional: [{link: 'productsCategoriesByProductCategory', requestParams: ['user_id', 'category_id']}]},
   {link: 'productComments', additional: [{link: 'routeCatalogProductsComments', requestParams: ['user_id', 'product_id']}]},

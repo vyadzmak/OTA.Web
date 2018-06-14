@@ -1,17 +1,23 @@
+import {mapGetters} from 'vuex'
+
 export default {
-  name: 'settings',
+  name: 'bids',
   data () {
     return {
-      msg: 'Настройки',
       search: '',
-      settings: [],
-      errors: [],
       headers: [
-        { text: 'ID', align: 'left', value: 'Id' },
-        { text: 'Фамилия', align: 'left', value: 'SettingName' },
-        { text: 'Имя', align: 'left', value: 'SettingValue' },
-        {sortable: false},
-        {sortable: false}
+        { text: 'Id', align: 'left', value: 'id' },
+        // { text: '№ заявки', align: 'left', value: 'number' },
+        { text: 'Заказчик', align: 'left', value: 'user_id' },
+        // { text: 'Адрес', align: 'left', value: 'display_value' },
+        { text: 'Сумма', align: 'left', value: 'total_amount' },
+        // { text: 'Кол-во', align: 'left', value: 'display_values' },
+        { text: 'Время заказа',
+          align: 'left',
+          value: this.$route.name === 'bids.inbox' ? 'creation_date'
+            : this.$route.name === 'bids.active' ? 'processed_date' : 'execute_date'},
+        { text: 'Исполнитель', align: 'left', value: 'executor_id' },
+        { text: 'Статус', align: 'left', value: 'order_state_id' }
       ],
       tableRowsShown: [10, 20, 50, 100, {text: 'Все', value: -1}],
       rowsPerPageText: 'Строк на странице',
@@ -20,55 +26,29 @@ export default {
     }
   },
   computed: {
-    userData: function () {
-      return this.$store.getters.userData
+    ...mapGetters({items: 'orders/items', userData: 'userData'}),
+    currentStateFilter () {
+      switch (this.$route.name) {
+        case 'bids.inbox': return 1
+        case 'bids.active': return 2
+        case 'bids.history': return 3
+        default: return 0
+      }
     }
   },
   methods: {
-    updateItem: function (item, isUpdate) {
-      this.$store.commit('showSpinner', true)
-      this.$http({method: isUpdate ? 'put' : 'post',
-        url: 'settings',
-        data: item,
-        config: { contentType: 'application/json' }
-      })
-        .then(response => {
-          let responseData = response.data ? (response.data !== 'Error' ? JSON.parse(response.data) : null) : null
-          if (responseData) {
-            if (isUpdate) {
-              this.settings.splice(this.settings.findIndex((element, index, array) => {
-                if (element.Id === item.Id) {
-                  return true
-                }
-              }), 1)
-            }
-            this.settings.push(responseData)
-            this.$store.commit('showSnackbar', {text: (isUpdate ? 'Обновление' : 'Добавление') + ' настройки прошло успешно', snackbar: true, context: 'success'})
-          } else {
-            this.$store.commit('showSnackbar', {text: (isUpdate ? 'Обновление' : 'Добавление') + ' настройки не удалось', snackbar: true, context: 'error'})
-          }
-          this.$store.commit('showSpinner', false)
-        })
-        .catch(e => {
-          this.errors.push(e)
-          this.$store.commit('showSpinner', false)
-          this.$store.commit('showSnackbar', {text: (isUpdate ? 'Обновление' : 'Добавление') + ' настройки не удалось. Обратитесь к администратору', snackbar: true, context: 'error'})
-        })
+    goTo (item) {
+      this.$store.commit('orders/item', item)
+      this.$router.push({name: 'bids.details'})
     }
   },
   created () {
-    this.$store.commit('showSpinner', true)
-    this.$http.get(`settings`)
-      .then(response => {
-        this.$store.commit('showSpinner', false)
-        this.settings = JSON.parse(response.data)
-      })
-      .catch(e => {
-        this.errors.push(e)
-        this.$store.commit('showSpinner', false)
-      })
+    this.$store.dispatch('orders/routeOrders', {user_id: this.userData.id, state_id: this.currentStateFilter})
   },
   mounted () {
-    this.$refs.settingsDataTable.defaultPagination.descending = true
+    this.$refs.dataTable.defaultPagination.descending = true
+  },
+  beforeDestroy () {
+    this.$store.commit('orders/items', [])
   }
 }

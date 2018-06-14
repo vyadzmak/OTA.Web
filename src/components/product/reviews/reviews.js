@@ -1,141 +1,75 @@
+import {mapGetters} from 'vuex'
 import questionDialog from '@/components/questionDialog/QuestionDialog.vue'
 import updateModal from './updateModal/UpdateModal.vue'
-import { ModalService } from 'vue-modal-dialog'
 
 export default {
-  name: 'settings',
+  name: 'productReviews',
   data () {
     return {
-      msg: 'Настройки',
       search: '',
-      settings: [],
-      errors: [],
       headers: [
-        { text: 'ID', align: 'left', value: 'Id' },
-        { text: 'Фамилия', align: 'left', value: 'SettingName' },
-        { text: 'Имя', align: 'left', value: 'SettingValue' },
+        { text: 'Id', align: 'left', value: 'id' },
+        { text: 'Автор', align: 'left', value: 'comment_user_data.name' },
+        { text: 'Комментарий', align: 'left', value: 'comment_text' },
+        { text: 'Дата', align: 'left', value: 'creation_date' },
+        { text: 'Оценка', align: 'left', value: 'rate' },
         {sortable: false},
         {sortable: false}
       ],
       tableRowsShown: [10, 20, 50, 100, {text: 'Все', value: -1}],
       rowsPerPageText: 'Строк на странице',
       noDataText: 'Нет данных',
-      noResultsText: 'Поиск не дал результатов'
+      noResultsText: 'Поиск не дал результатов',
+      dialogData: null,
+      dialog: false,
+      dialogComponent: updateModal,
+      qDialog: false,
+      qDialogComponent: questionDialog
     }
   },
   computed: {
-    userData: function () {
-      return this.$store.getters.userData
-    }
+    ...mapGetters({items: 'productComments/items', userData: 'userData', product: 'products/item'})
   },
   methods: {
-    showDeleteModal: function (itemId) {
-      let modalConfig = {
-        size: 'md',
-        data: {
-          message: 'Вы действительно хотите удалить настройку?',
-          title: 'Удаление настройки',
-          isClosable: true
-        }
+    openQDialog: function (itemId) {
+      this.dialogData = {
+        message: 'Вы действительно хотите удалить отзыв?',
+        title: 'Удаление',
+        isClosable: true,
+        data: itemId
       }
-      ModalService.open(questionDialog, modalConfig).then(
-        modalSubmit => { this.deleteItem(itemId) },
-        modalCancel => {}
-      ).catch(
-        err => {
-          console.log(err)
-        }
-      )
+      this.qDialog = true
     },
-    showUpdateModal: function (item) {
+    openDialog (item) {
       let isUpdate = true
-      if (!item.Id) {
-        isUpdate = false
-        item.Id = -1
-        item.SettingName = ''
-        item.SettingValue = ''
+      if (!item) {
+        return
       }
-      let modalConfig = {
-        size: 'lg',
-        data: {
-          title: (isUpdate ? 'Обновление' : 'Добавление') + ' настройки',
-          isClosable: true,
-          item: isUpdate ? Object.assign({}, item) : item
-        }
+      this.dialogData = {
+        title: (isUpdate ? 'Обновление' : 'Добавление') + ' отзыва',
+        isClosable: true,
+        item: isUpdate ? _.cloneDeep(item) : item,
+        isUpdate
       }
-      ModalService.open(updateModal, modalConfig).then(
-        modalSubmit => {
-          this.updateItem(modalSubmit, isUpdate)
-        },
-        modalCancel => { console.log(modalCancel) }
-      ).catch(err => { console.log(err) })
+      this.dialog = true
     },
-    deleteItem: function (itemId) {
-      this.$store.commit('showSpinner', true)
-      this.$http.delete('settings', {params: {id: itemId}})
-        .then(response => {
-          if (response.data && response.data !== 'Error') {
-            this.settings.splice(this.settings.findIndex((element, index, array) => {
-              if (element.Id === itemId) {
-                return true
-              }
-            }), 1)
-            this.$store.commit('showSnackbar', {text: 'Удаление настройки прошло успешно', snackbar: true, context: 'success'})
-          } else {
-            this.$store.commit('showSnackbar', {text: 'Удаление настройки не удалось. Обратитесь к администратору', snackbar: true, context: 'error'})
-          }
-          this.$store.commit('showSpinner', false)
-        })
-        .catch(e => {
-          this.errors.push(e)
-          this.$store.commit('showSpinner', false)
-          this.$store.commit('showSnackbar', {text: 'Удаление настройки не удалось. Обратитесь к администратору', snackbar: true, context: 'error'})
-        })
+    dialogClose (confirmed, item, isUpdate) {
+      if (confirmed) {
+        this.$store.dispatch('productComments/updateItem', {item, isUpdate})
+      }
+      this.dialog = false
     },
-    updateItem: function (item, isUpdate) {
-      this.$store.commit('showSpinner', true)
-      this.$http({method: isUpdate ? 'put' : 'post',
-        url: 'settings',
-        data: item,
-        config: { contentType: 'application/json' }
-      })
-        .then(response => {
-          let responseData = response.data ? (response.data !== 'Error' ? JSON.parse(response.data) : null) : null
-          if (responseData) {
-            if (isUpdate) {
-              this.settings.splice(this.settings.findIndex((element, index, array) => {
-                if (element.Id === item.Id) {
-                  return true
-                }
-              }), 1)
-            }
-            this.settings.push(responseData)
-            this.$store.commit('showSnackbar', {text: (isUpdate ? 'Обновление' : 'Добавление') + ' настройки прошло успешно', snackbar: true, context: 'success'})
-          } else {
-            this.$store.commit('showSnackbar', {text: (isUpdate ? 'Обновление' : 'Добавление') + ' настройки не удалось', snackbar: true, context: 'error'})
-          }
-          this.$store.commit('showSpinner', false)
-        })
-        .catch(e => {
-          this.errors.push(e)
-          this.$store.commit('showSpinner', false)
-          this.$store.commit('showSnackbar', {text: (isUpdate ? 'Обновление' : 'Добавление') + ' настройки не удалось. Обратитесь к администратору', snackbar: true, context: 'error'})
-        })
+    qDialogClose (confirmed, data) {
+      if (confirmed) {
+        this.$store.dispatch('productComments/deleteItem', data)
+      }
+      this.qDialog = false
     }
   },
   created () {
-    this.$store.commit('showSpinner', true)
-    this.$http.get(`settings`)
-      .then(response => {
-        this.$store.commit('showSpinner', false)
-        this.settings = JSON.parse(response.data)
-      })
-      .catch(e => {
-        this.errors.push(e)
-        this.$store.commit('showSpinner', false)
-      })
+    this.$store.dispatch('productComments/routeCatalogProductsComments', {user_id: this.userData.id, product_id: this.product.id})
   },
   mounted () {
-    this.$refs.settingsDataTable.defaultPagination.descending = true
+    this.$refs.dataTable.defaultPagination.descending = true
   }
 }

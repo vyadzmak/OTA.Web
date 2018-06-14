@@ -1,42 +1,59 @@
 <template>
-  <div>
-    <v-card>
-      <v-card-title>
-        <v-btn
-          color="error"
-          dark
-          @click.stop="showDeleteModal({})">Очистить лог</v-btn>
-        <v-spacer/>
-        <v-text-field
-          v-model="search"
-          append-icon="search"
-          label="Поиск"
-          single-line
-          hide-details
-        />
-      </v-card-title>
-      <v-data-table
-        ref = "logDataTable"
-        :headers="headers"
-        :items="logs"
-        :search="search"
-        :rows-per-page-items="tableRowsShown"
-        :rows-per-page-text="rowsPerPageText"
-        :no-results-text="noResultsText"
-        :no-data-text="noDataText"
-      >
-        <template
-          slot="items"
-          slot-scope="props">
-          <tr>
-            <td>{{ props.item.id }}</td>
-            <td>{{ props.item.date | moment("DD.MM.YYYY HH:mm:ss") }}</td>
-            <td>{{ props.item.message }}</td>
-          </tr>
-        </template>
-      </v-data-table>
-    </v-card>
-  </div>
+  <v-card>
+    <v-card-title>
+      <v-btn
+        dark
+        color="success"
+        @click="updateItem()"
+      >Обновить</v-btn>
+      <v-spacer/>
+      <v-text-field
+        v-model="search"
+        append-icon="search"
+        label="Поиск"
+        single-line
+        hide-details
+      />
+    </v-card-title>
+    <v-data-table
+      ref="dataTable"
+      v-model="selectedItems"
+      :headers="headers"
+      :items="items"
+      :search="search"
+      :rows-per-page-items="tableRowsShown"
+      :rows-per-page-text="rowsPerPageText"
+      :no-results-text="noResultsText"
+      :no-data-text="noDataText"
+      item-key="id"
+    >
+      <template
+        slot="items"
+        slot-scope="props">
+        <tr>
+          <td>
+            <v-checkbox
+              v-model="props.selected"
+              primary
+              hide-details
+            />
+          </td>
+          <td v-text="props.item.id"/>
+          <td v-text="props.item.name"/>
+          <td v-text="props.item.product_code"/>
+          <td class="px-1">
+            <v-tooltip top>
+              <v-btn
+                slot="activator"
+                icon
+                @click.stop="getItem(props.item.id)"><v-icon color="warning">mdi-eye</v-icon></v-btn>
+              <span>Удалить</span>
+            </v-tooltip>
+          </td>
+        </tr>
+      </template>
+    </v-data-table>
+  </v-card>
 </template>
 
 <script src="./recommendation.js"></script>

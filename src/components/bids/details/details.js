@@ -1,141 +1,80 @@
+import {mapGetters} from 'vuex'
 import questionDialog from '@/components/questionDialog/QuestionDialog.vue'
 import updateModal from './updateModal/UpdateModal.vue'
-import { ModalService } from 'vue-modal-dialog'
 
 export default {
-  name: 'settings',
+  name: 'bidDetails',
   data () {
     return {
-      msg: 'Настройки',
       search: '',
-      settings: [],
-      errors: [],
       headers: [
-        { text: 'ID', align: 'left', value: 'Id' },
-        { text: 'Фамилия', align: 'left', value: 'SettingName' },
-        { text: 'Имя', align: 'left', value: 'SettingValue' },
+        { text: 'Id', align: 'left', value: 'id' },
+        { text: 'Имя', align: 'left', value: 'name' },
+        { text: 'Системное имя', align: 'left', value: 'system_name' },
+        { text: 'Отображаемое значение', align: 'left', value: 'display_value' },
         {sortable: false},
         {sortable: false}
       ],
       tableRowsShown: [10, 20, 50, 100, {text: 'Все', value: -1}],
       rowsPerPageText: 'Строк на странице',
       noDataText: 'Нет данных',
-      noResultsText: 'Поиск не дал результатов'
+      noResultsText: 'Поиск не дал результатов',
+      dialogData: null,
+      dialog: false,
+      dialogComponent: updateModal,
+      qDialog: false,
+      qDialogComponent: questionDialog
     }
   },
   computed: {
-    userData: function () {
-      return this.$store.getters.userData
-    }
+    ...mapGetters({items: 'unitCatalog/items', userData: 'userData'})
   },
   methods: {
-    showDeleteModal: function (itemId) {
-      let modalConfig = {
-        size: 'md',
-        data: {
-          message: 'Вы действительно хотите удалить настройку?',
-          title: 'Удаление настройки',
-          isClosable: true
-        }
+    openQDialog: function (itemId) {
+      this.dialogData = {
+        message: 'Вы действительно хотите удалить еденицу измерения?',
+        title: 'Удаление',
+        isClosable: true,
+        data: itemId
       }
-      ModalService.open(questionDialog, modalConfig).then(
-        modalSubmit => { this.deleteItem(itemId) },
-        modalCancel => {}
-      ).catch(
-        err => {
-          console.log(err)
-        }
-      )
+      this.qDialog = true
     },
-    showUpdateModal: function (item) {
+    openDialog (item) {
       let isUpdate = true
-      if (!item.Id) {
+      if (!item) {
         isUpdate = false
-        item.Id = -1
-        item.SettingName = ''
-        item.SettingValue = ''
-      }
-      let modalConfig = {
-        size: 'lg',
-        data: {
-          title: (isUpdate ? 'Обновление' : 'Добавление') + ' настройки',
-          isClosable: true,
-          item: isUpdate ? Object.assign({}, item) : item
+        item = {
+          system_name: '',
+          name: '',
+          display_value: '',
+          is_default: false
         }
       }
-      ModalService.open(updateModal, modalConfig).then(
-        modalSubmit => {
-          this.updateItem(modalSubmit, isUpdate)
-        },
-        modalCancel => { console.log(modalCancel) }
-      ).catch(err => { console.log(err) })
+      this.dialogData = {
+        title: (isUpdate ? 'Обновление' : 'Добавление') + ' еденицы измерения',
+        isClosable: true,
+        item: isUpdate ? _.cloneDeep(item) : item,
+        isUpdate
+      }
+      this.dialog = true
     },
-    deleteItem: function (itemId) {
-      this.$store.commit('showSpinner', true)
-      this.$http.delete('settings', {params: {id: itemId}})
-        .then(response => {
-          if (response.data && response.data !== 'Error') {
-            this.settings.splice(this.settings.findIndex((element, index, array) => {
-              if (element.Id === itemId) {
-                return true
-              }
-            }), 1)
-            this.$store.commit('showSnackbar', {text: 'Удаление настройки прошло успешно', snackbar: true, context: 'success'})
-          } else {
-            this.$store.commit('showSnackbar', {text: 'Удаление настройки не удалось. Обратитесь к администратору', snackbar: true, context: 'error'})
-          }
-          this.$store.commit('showSpinner', false)
-        })
-        .catch(e => {
-          this.errors.push(e)
-          this.$store.commit('showSpinner', false)
-          this.$store.commit('showSnackbar', {text: 'Удаление настройки не удалось. Обратитесь к администратору', snackbar: true, context: 'error'})
-        })
+    dialogClose (confirmed, item, isUpdate) {
+      if (confirmed) {
+        this.$store.dispatch('unitCatalog/updateItem', {item, isUpdate})
+      }
+      this.dialog = false
     },
-    updateItem: function (item, isUpdate) {
-      this.$store.commit('showSpinner', true)
-      this.$http({method: isUpdate ? 'put' : 'post',
-        url: 'settings',
-        data: item,
-        config: { contentType: 'application/json' }
-      })
-        .then(response => {
-          let responseData = response.data ? (response.data !== 'Error' ? JSON.parse(response.data) : null) : null
-          if (responseData) {
-            if (isUpdate) {
-              this.settings.splice(this.settings.findIndex((element, index, array) => {
-                if (element.Id === item.Id) {
-                  return true
-                }
-              }), 1)
-            }
-            this.settings.push(responseData)
-            this.$store.commit('showSnackbar', {text: (isUpdate ? 'Обновление' : 'Добавление') + ' настройки прошло успешно', snackbar: true, context: 'success'})
-          } else {
-            this.$store.commit('showSnackbar', {text: (isUpdate ? 'Обновление' : 'Добавление') + ' настройки не удалось', snackbar: true, context: 'error'})
-          }
-          this.$store.commit('showSpinner', false)
-        })
-        .catch(e => {
-          this.errors.push(e)
-          this.$store.commit('showSpinner', false)
-          this.$store.commit('showSnackbar', {text: (isUpdate ? 'Обновление' : 'Добавление') + ' настройки не удалось. Обратитесь к администратору', snackbar: true, context: 'error'})
-        })
+    qDialogClose (confirmed, data) {
+      if (confirmed) {
+        this.$store.dispatch('unitCatalog/deleteItem', data)
+      }
+      this.qDialog = false
     }
   },
   created () {
-    this.$store.commit('showSpinner', true)
-    this.$http.get(`settings`)
-      .then(response => {
-        this.$store.commit('showSpinner', false)
-        this.settings = JSON.parse(response.data)
-      })
-      .catch(e => {
-        this.errors.push(e)
-        this.$store.commit('showSpinner', false)
-      })
+    this.$store.dispatch('unitCatalog/getItems')
   },
   mounted () {
-    this.$refs.settingsDataTable.defaultPagination.descending = true
+    this.$refs.dataTable.defaultPagination.descending = true
   }
 }

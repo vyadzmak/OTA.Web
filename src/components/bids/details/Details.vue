@@ -93,9 +93,9 @@
       </v-layout>
     </v-card-text>
     <v-data-table
-      ref="settingsDataTable"
+      ref="dataTable"
       :headers="headers"
-      :items="settings"
+      :items="items"
       :search="search"
       :rows-per-page-items="tableRowsShown"
       :rows-per-page-text="rowsPerPageText"
@@ -106,15 +106,16 @@
         slot="items"
         slot-scope="props">
         <tr>
-          <td>{{ props.item.Id }}</td>
-          <td>{{ props.item.SettingName }}</td>
-          <td>{{ props.item.SettingValue }}</td>
+          <td>{{ props.item.id }}</td>
+          <td>{{ props.item.name }}</td>
+          <td>{{ props.item.system_name }}</td>
+          <td>{{ props.item.display_value }}</td>
           <td class="px-1">
             <v-tooltip top>
               <v-btn
                 slot="activator"
                 icon
-                @click.stop="updatePressed(props.item)"><v-icon color="info">mdi-pen</v-icon></v-btn>
+                @click.stop="openDialog(props.item)"><v-icon color="info">mdi-pen</v-icon></v-btn>
               <span>Редактировать</span>
             </v-tooltip>
           </td>
@@ -123,13 +124,32 @@
               <v-btn
                 slot="activator"
                 icon
-                @click.stop="showDeleteModal(props.item.id)"><v-icon color="error">mdi-delete-variant</v-icon></v-btn>
+                @click.stop="openQDialog(props.item.id)"><v-icon color="error">mdi-delete-variant</v-icon></v-btn>
               <span>Удалить</span>
             </v-tooltip>
           </td>
         </tr>
       </template>
     </v-data-table>
+    <v-dialog
+      v-model="dialog"
+      max-width="500px">
+      <component
+        v-if="dialog"
+        :is="dialogComponent"
+        :data="dialogData"
+        @dialog-close="dialogClose"/>
+    </v-dialog>
+    <v-dialog
+      v-model="qDialog"
+      scrollable
+      max-width="300px">
+      <component
+        v-if="qDialog"
+        :is="qDialogComponent"
+        :data="dialogData"
+        @dialog-close="qDialogClose"/>
+    </v-dialog>
 </v-card></template>
 
 <script src="./details.js"></script>

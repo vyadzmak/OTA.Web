@@ -15,7 +15,7 @@
         <v-icon>{{ item.icon }}</v-icon>
       </v-tab>
     </v-tabs>
-    <router-view/>
+    <router-view :key="$route.path"/>
   </div>
 </template>
 

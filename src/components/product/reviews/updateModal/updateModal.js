@@ -1,4 +1,3 @@
-import { ModalService } from 'vue-modal-dialog'
 
 export default {
   name: 'dialogHeader',
@@ -6,12 +5,13 @@ export default {
   data () {
     return {
       valid: false,
-      sNameRules: [
+      nameRules: [
         (v) => !!v || 'Имя параметра должно быть заполнено',
-        (v) => (v && v.length <= 270) || 'Не более 270 символов'
+        (v) => (v && v.length <= 600) || 'Не более 600 символов'
       ],
-      sValueRules: [
-        (v) => !!v || 'Значение параметра должна быть заполнено'
+      numRules: [
+        (v) => !!v || 'Стоимость должна быть заполнена',
+        (v) => (!isNaN(parseFloat(v)) && isFinite(v)) || 'Введите число'
       ]
     }
   },
@@ -20,11 +20,11 @@ export default {
   methods: {
     submit: function () {
       if (this.$refs.form.validate()) {
-        ModalService.submit(this.data.item) // resolve .open() promise
+        this.$emit('dialog-close', true, this.data.item, this.data.isUpdate)
       }
     },
     cancel: function () {
-      ModalService.cancel(this.data.item) // reject .open() promise
+      this.$emit('dialog-close', false)
     },
     clear: function () {
       this.$refs.form.reset()
