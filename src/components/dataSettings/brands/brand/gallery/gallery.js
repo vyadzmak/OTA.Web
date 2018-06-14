@@ -88,7 +88,7 @@ export default {
         if (updateItem.default_image_id === 0) {
           updateItem.default_image_id = imagesArray[0]
         }
-        updateItem.images = updateItem.images.concat(imagesArray)
+        updateItem.images = updateItem.images ? updateItem.images.concat(imagesArray) : imagesArray
         await this.$store.dispatch('brandsCatalog/updateItem', {item: updateItem, isUpdate: true})
         await this.$store.dispatch('attachments/attachmentsInfo', {attachments_ids: updateItem.images.join()})
       } else {
