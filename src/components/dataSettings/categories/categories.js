@@ -1,3 +1,4 @@
+import {baseUrl} from '@/httpClient/index'
 import {mapGetters} from 'vuex'
 import questionDialog from '@/components/questionDialog/QuestionDialog.vue'
 import addDialogComponent from './addDialog/addDialog.vue'
@@ -6,6 +7,7 @@ export default {
   name: 'categories',
   data () {
     return {
+      baseUrl: baseUrl.slice(0, -1),
       msg: 'Настройка каталогов',
       categoryIds: [-1],
       dialog: false,

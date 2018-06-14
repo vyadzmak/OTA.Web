@@ -1,3 +1,4 @@
+import {baseUrl} from '@/httpClient/index'
 import {mapGetters} from 'vuex'
 import questionDialog from '@/components/questionDialog/QuestionDialog.vue'
 import updateModal from './updateModal/updateModal.vue'
@@ -6,6 +7,7 @@ export default {
   name: 'partners',
   data () {
     return {
+      baseUrl: baseUrl.slice(0, -1),
       dialog: false,
       dialogComponent: updateModal,
       dialogData: null,

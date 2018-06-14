@@ -56,7 +56,7 @@
           <v-card-text class="text-xs-center">
             <v-card-media
               :key="index+'img'"
-              :src="item.default_image_id?item.default_image_data.thumb_file_path:userData.no_image_url"
+              :src="baseUrl+(item.default_image_id?item.default_image_data.thumb_file_path:userData.no_image_url)"
               height="150px"
               contain/>
           </v-card-text>
@@ -92,7 +92,7 @@
             </div>
             <v-card-media
               :key="index+'img'"
-              :src="item.default_image_id?item.default_image_data.thumb_file_path:userData.no_image_url"
+              :src="baseUrl+(item.default_image_id?item.default_image_data.thumb_file_path:userData.no_image_url)"
               height="150px"
               contain/>
           </v-card-text>

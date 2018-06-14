@@ -20,7 +20,7 @@
           <v-divider/>
           <v-list-tile>
             <v-list-tile-content class="body-2">Заказчик:</v-list-tile-content>
-            <v-list-tile-content class="align-end">{{ item.order_user_data.client_data.name }}</v-list-tile-content>
+            <v-list-tile-content class="align-end">{{ ldsh.get(item, 'order_user_data.client_data.name') }}</v-list-tile-content>
           </v-list-tile>
           <v-divider/>
           <v-list-tile>
@@ -41,17 +41,17 @@
           <v-divider/>
           <v-list-tile>
             <v-list-tile-content class="body-2">Контакт:</v-list-tile-content>
-            <v-list-tile-content class="align-end">{{ item.client_address_data.name }}</v-list-tile-content>
+            <v-list-tile-content class="align-end">{{ ldsh.get(item, 'client_address_data.name') }}</v-list-tile-content>
           </v-list-tile>
           <v-divider/>
           <v-list-tile>
             <v-list-tile-content class="body-2">E-mail:</v-list-tile-content>
-            <v-list-tile-content class="align-end">{{ item.client_address_data.email }}</v-list-tile-content>
+            <v-list-tile-content class="align-end">{{ ldsh.get(item, 'client_address_data.email') }}</v-list-tile-content>
           </v-list-tile>
           <v-divider/>
           <v-list-tile>
             <v-list-tile-content class="body-2">Телефон:</v-list-tile-content>
-            <v-list-tile-content class="align-end">{{ item }}</v-list-tile-content>
+            <v-list-tile-content class="align-end">{{ ldsh.get(item, '') }}</v-list-tile-content>
           </v-list-tile>
           <v-divider/>
         </v-list>
@@ -66,22 +66,22 @@
             <v-divider/>
             <v-list-tile>
               <v-list-tile-content class="body-2">Сумма:</v-list-tile-content>
-              <v-list-tile-content class="align-end">{{ item }}</v-list-tile-content>
+              <v-list-tile-content class="align-end">{{ item.amount }}</v-list-tile-content>
             </v-list-tile>
             <v-divider/>
             <v-list-tile>
               <v-list-tile-content class="body-2">Скидка:</v-list-tile-content>
-              <v-list-tile-content class="align-end">{{ item }}</v-list-tile-content>
+              <v-list-tile-content class="align-end">{{ item.discount_amount }}</v-list-tile-content>
             </v-list-tile>
             <v-divider/>
             <v-list-tile>
               <v-list-tile-content class="body-2">Итого:</v-list-tile-content>
-              <v-list-tile-content class="align-end">{{ item }}</v-list-tile-content>
+              <v-list-tile-content class="align-end">{{ item.total_amount }}</v-list-tile-content>
             </v-list-tile>
             <v-divider/>
             <v-list-tile>
               <v-list-tile-content class="body-2">Количество:</v-list-tile-content>
-              <v-list-tile-content class="align-end">{{ item }}</v-list-tile-content>
+              <v-list-tile-content class="align-end">{{ ldsh.get(item, '') }}</v-list-tile-content>
             </v-list-tile>
             <v-divider/>
           </v-list>

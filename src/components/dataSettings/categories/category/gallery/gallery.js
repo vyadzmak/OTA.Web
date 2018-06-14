@@ -6,6 +6,7 @@ export default {
   name: 'gallery',
   data () {
     return {
+      baseUrl: baseUrl.slice(0, -1),
       valid: false,
       menu: false,
       totalProgress: 0,
