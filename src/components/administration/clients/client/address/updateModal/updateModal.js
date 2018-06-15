@@ -6,17 +6,17 @@ export default {
   data () {
     return {
       valid: false,
-      sNameRules: [
-        (v) => (!v || v.length <= 25) || 'Не более 25 символов'
-      ],
       nameRules: [
         (v) => !!v || 'Имя параметра должно быть заполнено',
-        (v) => (v && v.length <= 70) || 'Не более 70 символов'
+        (v) => (v && v.length <= 500) || 'Не более 500 символов'
+      ],
+      sNameRules: [
+        (v) => (!v || v.length <= 250) || 'Не более 250 символов'
       ]
     }
   },
   computed: {
-    ...mapGetters({clientTypes: 'clientTypes/items'})
+    ...mapGetters({cityTypes: 'cityCatalog/items'})
   },
   methods: {
     submit: function () {

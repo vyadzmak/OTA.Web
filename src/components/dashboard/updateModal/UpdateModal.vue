@@ -21,7 +21,8 @@
         v-bind="options"
         class="col-12 mb-2"
         tag="section"
-        @complete="updateAvatar">
+        @sending = "beforeSend"
+        @complete="completeSend">
         <v-btn
           dark
           color="info">Сменить аватар</v-btn>

@@ -1,4 +1,6 @@
-export const admin = ['administration', 'administration.log', 'administration.clients',
+export const admin = ['administration', 'administration.log',
+  'administration.clients', 'administration.client',
+  'administration.client.address', 'administration.client.info', 'administration.client.general',
   'administration.users', 'administration.settings', 'administration.general']
 export const bids = ['bids', 'bids.inbox', 'bids.active', 'bids.history', 'bids.details']
 export const settings = ['dataSettings',

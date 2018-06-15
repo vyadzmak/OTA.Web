@@ -27,12 +27,21 @@
       <template
         slot="items"
         slot-scope="props">
-        <tr @click="goTo(props.item)">
+        <tr>
           <td>{{ props.item.id }}</td>
-          <td v-text="props.item.name"/>
-          <td>{{ ldsh.get(props.item, 'client_addresses_data[0].address') }}</td>
-          <td>{{ ldsh.get(props.item, 'client_info_data[0].email') }}</td>
-          <td>{{ ldsh.get(props.item, 'client_info_data[0].phone_number') }}</td>
+          <td>{{ props.item.email }}</td>
+          <td>{{ props.item.phone_number }}</td>
+          <td>{{ props.item.main_info }}</td>
+          <td>{{ props.item.additional_info }}</td>
+          <td class="px-1">
+            <v-tooltip top>
+              <v-btn
+                slot="activator"
+                icon
+                @click.stop="openDialog(props.item)"><v-icon color="info">mdi-pen</v-icon></v-btn>
+              <span>Редактировать</span>
+            </v-tooltip>
+          </td>
           <td class="px-1">
             <v-tooltip top>
               <v-btn
@@ -47,6 +56,7 @@
     </v-data-table>
     <v-dialog
       v-model="dialog"
+      scrollable
       max-width="500px">
       <component
         v-if="dialog"
@@ -67,6 +77,6 @@
   </v-card>
 </template>
 
-<script src="./clients.js"></script>
+<script src="./info.js"></script>
 
 <style scoped></style>

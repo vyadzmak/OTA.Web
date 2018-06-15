@@ -35,6 +35,9 @@ export default {
   computed: {
     updateUser () {
       return this.data.item.id ? this.data.item : null
+    },
+    userData () {
+      return this.$store.getters.userData
     }
   },
   methods: {
@@ -59,10 +62,29 @@ export default {
       }
       this.newPassword = passwd
     },
-    updateAvatar (...args) {
-      args.forEach(val => {
-        console.log(val)// update avatar in modal window and maybe in store
-      })
+    beforeSend (files, xhrRequest, formData) {
+      xhrRequest.setRequestHeader('Access-Control-Allow-Origin', '*')
+      xhrRequest.setRequestHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Cache-Control, Key, Access-Control-Allow-Origin')
+      this.$store.commit('showSpinner', true)
+      formData.append('user_id', this.userData.id)
+    },
+    completeSend: async function (...args) {
+      this.$store.commit('showSpinner', false)
+      console.log(args)
+      // let text = 'Загрузка файлов успешно завершена'
+      // let context = 'success'
+      // if (files && files.length > 0 && files[0].xhr.status === 200) {
+      //   let updateItem = _.cloneDeep(this.item)
+      //   let imagesArray = JSON.parse(files[0].xhr.response)
+      //   if (updateItem.default_image_id === 0) {
+      //     updateItem.default_image_id = imagesArray[0]
+      //   }
+      //   updateItem.images = updateItem.images ? updateItem.images.concat(imagesArray) : imagesArray
+      // } else {
+      //   text = 'Загрузка файлов не удалась. Обратитесь к администратору'
+      //   context = 'error'
+      // }
+      // this.$store.commit('showSnackbar', {text, snackbar: true, context})
     }
   }
 }

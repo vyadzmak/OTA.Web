@@ -3,16 +3,17 @@ import questionDialog from '@/components/questionDialog/QuestionDialog.vue'
 import updateModal from './updateModal/UpdateModal.vue'
 
 export default {
-  name: 'currencies',
+  name: 'units',
   data () {
     return {
       search: '',
       headers: [
         { text: 'Id', align: 'left', value: 'id' },
-        { text: 'Имя', align: 'left', value: 'name' },
-        { text: 'Адрес', align: 'left', value: 'client_addresses_data[0].address' },
-        { text: 'Email', align: 'left', value: 'client_info_data[0].email' },
-        { text: 'Телефон', align: 'left', value: 'client_info_data[0].phone_number' },
+        { text: 'Название', align: 'left', value: 'name' },
+        { text: 'Адрес', align: 'left', value: 'address' },
+        { text: 'Город/а.е.', align: 'left', value: 'city_data.name' },
+        { text: 'Регион/Область', align: 'left', value: 'city_data.area_data.name' },
+        {sortable: false},
         {sortable: false}
       ],
       tableRowsShown: [10, 20, 50, 100, {text: 'Все', value: -1}],
@@ -27,12 +28,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({items: 'clients/items', userData: 'userData'})
+    ...mapGetters({items: 'clientAddresses/items', userData: 'userData', item: 'clients/item'})
   },
   methods: {
     openQDialog: function (itemId) {
       this.dialogData = {
-        message: 'Вы действительно хотите удалить клиента?',
+        message: 'Вы действительно хотите удалить адрес?',
         title: 'Удаление',
         isClosable: true,
         data: itemId
@@ -44,15 +45,18 @@ export default {
       if (!item) {
         isUpdate = false
         item = {
+          client_id: this.item.id,
+          address: '',
+          is_default: false,
+          city_id: null,
+          confirmed: false,
           name: '',
-          client_type_id: null,
-          lock_state: false,
-          registration_number: ''
+          code: ''
         }
       }
-      await this.$store.dispatch('clientTypes/getItems')
+      await this.$store.dispatch('cityCatalog/getItems')
       this.dialogData = {
-        title: (isUpdate ? 'Обновление' : 'Добавление') + ' клиента',
+        title: (isUpdate ? 'Обновление' : 'Добавление') + ' адреса',
         isClosable: true,
         item: isUpdate ? _.cloneDeep(item) : item,
         isUpdate
@@ -61,26 +65,19 @@ export default {
     },
     dialogClose (confirmed, item, isUpdate) {
       if (confirmed) {
-        if (!isUpdate) {
-          item.registration_date = new Date()
-        }
-        this.$store.dispatch('clients/updateItem', {item, isUpdate})
+        this.$store.dispatch('clientAddresses/updateItem', {item, isUpdate})
       }
       this.dialog = false
     },
     qDialogClose (confirmed, data) {
       if (confirmed) {
-        this.$store.dispatch('clients/deleteItem', data)
+        this.$store.dispatch('clientAddresses/deleteItem', data)
       }
       this.qDialog = false
-    },
-    goTo (item) {
-      this.$store.commit('clients/item', item)
-      this.$router.push({name: 'administration.client'})
     }
   },
   created () {
-    this.$store.dispatch('clients/routeAdminClients', {'user_id': this.userData.id})
+    this.$store.dispatch('clientAddresses/clientAddressesByClient', {user_id: this.userData.id, client_id: this.item.id})
   },
   mounted () {
     this.$refs.dataTable.defaultPagination.descending = true

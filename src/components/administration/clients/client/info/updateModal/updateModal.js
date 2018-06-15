@@ -1,22 +1,18 @@
-import {mapGetters} from 'vuex'
-
+import {baseUrl} from '@/httpClient/index'
 export default {
   name: 'dialogHeader',
   props: ['data'],
   data () {
     return {
-      valid: false,
-      sNameRules: [
-        (v) => (!v || v.length <= 25) || 'Не более 25 символов'
-      ],
-      nameRules: [
-        (v) => !!v || 'Имя параметра должно быть заполнено',
-        (v) => (v && v.length <= 70) || 'Не более 70 символов'
-      ]
+      options: {
+        acceptedFileTypes: ['.jpg', '.jpeg', '.png'],
+        url: baseUrl + 'uploadFiles',
+        autoProcessQueue: true,
+        uploadMultiple: true
+      }
     }
   },
   computed: {
-    ...mapGetters({clientTypes: 'clientTypes/items'})
   },
   methods: {
     submit: function () {

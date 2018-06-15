@@ -3,16 +3,17 @@ import questionDialog from '@/components/questionDialog/QuestionDialog.vue'
 import updateModal from './updateModal/UpdateModal.vue'
 
 export default {
-  name: 'currencies',
+  name: 'units',
   data () {
     return {
       search: '',
       headers: [
         { text: 'Id', align: 'left', value: 'id' },
-        { text: 'Имя', align: 'left', value: 'name' },
-        { text: 'Адрес', align: 'left', value: 'client_addresses_data[0].address' },
-        { text: 'Email', align: 'left', value: 'client_info_data[0].email' },
-        { text: 'Телефон', align: 'left', value: 'client_info_data[0].phone_number' },
+        { text: 'Email', align: 'left', value: 'email' },
+        { text: 'Телефон', align: 'left', value: 'phone_number' },
+        { text: 'Основная информация', align: 'left', value: 'main_info' },
+        { text: 'Дополнительная информация', align: 'left', value: 'additional_info' },
+        {sortable: false},
         {sortable: false}
       ],
       tableRowsShown: [10, 20, 50, 100, {text: 'Все', value: -1}],
@@ -27,32 +28,33 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({items: 'clients/items', userData: 'userData'})
+    ...mapGetters({items: 'clientInfo/items', userData: 'userData', client: 'clients/item'})
   },
   methods: {
     openQDialog: function (itemId) {
       this.dialogData = {
-        message: 'Вы действительно хотите удалить клиента?',
+        message: 'Вы действительно хотите удалить информацию о клиенте?',
         title: 'Удаление',
         isClosable: true,
         data: itemId
       }
       this.qDialog = true
     },
-    openDialog: async function (item) {
+    openDialog (item) {
       let isUpdate = true
       if (!item) {
         isUpdate = false
         item = {
-          name: '',
-          client_type_id: null,
-          lock_state: false,
-          registration_number: ''
+          client_id: this.client.id,
+          logo_attachment_id: null,
+          email: '',
+          main_info: '',
+          additional_info: '',
+          phone_number: ''
         }
       }
-      await this.$store.dispatch('clientTypes/getItems')
       this.dialogData = {
-        title: (isUpdate ? 'Обновление' : 'Добавление') + ' клиента',
+        title: (isUpdate ? 'Обновление' : 'Добавление') + ' информации о клиенте',
         isClosable: true,
         item: isUpdate ? _.cloneDeep(item) : item,
         isUpdate
@@ -61,26 +63,19 @@ export default {
     },
     dialogClose (confirmed, item, isUpdate) {
       if (confirmed) {
-        if (!isUpdate) {
-          item.registration_date = new Date()
-        }
-        this.$store.dispatch('clients/updateItem', {item, isUpdate})
+        this.$store.dispatch('clientInfo/updateItem', {item, isUpdate})
       }
       this.dialog = false
     },
     qDialogClose (confirmed, data) {
       if (confirmed) {
-        this.$store.dispatch('clients/deleteItem', data)
+        this.$store.dispatch('clientInfo/deleteItem', data)
       }
       this.qDialog = false
-    },
-    goTo (item) {
-      this.$store.commit('clients/item', item)
-      this.$router.push({name: 'administration.client'})
     }
   },
   created () {
-    this.$store.dispatch('clients/routeAdminClients', {'user_id': this.userData.id})
+    this.$store.dispatch('clientInfo/clientInfoByClient', {user_id: this.$store.userData.id, client_id: this.client.id})
   },
   mounted () {
     this.$refs.dataTable.defaultPagination.descending = true
