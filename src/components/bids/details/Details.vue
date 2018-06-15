@@ -1,6 +1,17 @@
 <template>
   <v-card>
-    <v-card-title class="headline pb-0">Общая информация</v-card-title>
+    <v-card-title class="headline pb-0">Общая информация<v-spacer/>
+      <v-btn
+        v-show="item.order_state_id===1"
+        color="primary"
+        dark
+        @click.stop="acceptBid()">Принять заявку</v-btn>
+      <v-btn
+        v-show="item.order_state_id===2"
+        color="warning"
+        dark
+        @click.stop="closeBid()">Закрыть заявку</v-btn>
+    </v-card-title>
     <v-card-text>
       <v-layout
         align-content-space-around
@@ -29,29 +40,44 @@
           </v-list-tile>
           <v-divider/>
           <v-list-tile>
-            <v-list-tile-content class="body-2">Адрес:</v-list-tile-content>
+            <v-list-tile-content
+              class="body-2"
+              style="display:-webkit-box">Адрес:<v-tooltip top>
+                <v-btn
+                  v-show="item.order_state_id===2"
+                  slot="activator"
+                  icon
+                  @click.stop="updateAddress()"><v-icon color="info">mdi-pen</v-icon></v-btn>
+                <span>Редактировать</span>
+            </v-tooltip></v-list-tile-content>
             <v-list-tile-content class="align-end">
               <v-select
+                v-model="item.client_address_id"
+                :items="clientAddresses"
+                :disabled="item.order_state_id!==2"
+                item-text="address"
+                item-value="id"
                 style="width:100%"
                 solo
                 hide-details
                 single-line
-                label="Адрес"/></v-list-tile-content>
+                label="Адрес"/>
+            </v-list-tile-content>
           </v-list-tile>
           <v-divider/>
           <v-list-tile>
             <v-list-tile-content class="body-2">Контакт:</v-list-tile-content>
-            <v-list-tile-content class="align-end">{{ ldsh.get(item, 'client_address_data.name') }}</v-list-tile-content>
+            <v-list-tile-content class="align-end">{{ ldsh.get(item, 'order_user_data.name') }}</v-list-tile-content>
           </v-list-tile>
           <v-divider/>
           <v-list-tile>
             <v-list-tile-content class="body-2">E-mail:</v-list-tile-content>
-            <v-list-tile-content class="align-end">{{ ldsh.get(item, 'client_address_data.email') }}</v-list-tile-content>
+            <v-list-tile-content class="align-end">{{ userInfo.email }}</v-list-tile-content>
           </v-list-tile>
           <v-divider/>
           <v-list-tile>
             <v-list-tile-content class="body-2">Телефон:</v-list-tile-content>
-            <v-list-tile-content class="align-end">{{ ldsh.get(item, '') }}</v-list-tile-content>
+            <v-list-tile-content class="align-end">{{ userInfo.phone_number }}</v-list-tile-content>
           </v-list-tile>
           <v-divider/>
         </v-list>
@@ -81,13 +107,14 @@
             <v-divider/>
             <v-list-tile>
               <v-list-tile-content class="body-2">Количество:</v-list-tile-content>
-              <v-list-tile-content class="align-end">{{ ldsh.get(item, '') }}</v-list-tile-content>
+              <v-list-tile-content class="align-end">{{ items.length }}</v-list-tile-content>
             </v-list-tile>
             <v-divider/>
           </v-list>
           <v-textarea
             class="px-3"
             hide-details
+            disabled
             label="Примечание"/>
         </v-flex>
       </v-layout>
@@ -107,10 +134,27 @@
         slot-scope="props">
         <tr>
           <td>{{ props.item.id }}</td>
-          <td>{{ props.item.name }}</td>
-          <td>{{ props.item.system_name }}</td>
-          <td>{{ props.item.display_value }}</td>
-          <td class="px-1">
+          <td>{{ props.item.product_data.name }}</td>
+          <td>{{ props.item.product_data.product_code }}</td>
+          <td>{{ props.item.count }}</td>
+          <td>{{ props.item.amount_per_item }}</td>
+          <td>{{ props.item.amount_per_item_discount }}</td>
+          <td>{{ props.item.total_amount }}</td>
+          <td>{{ props.item.description }}</td>
+          <td
+            v-show="item.order_state_id===2"
+            class="px-1">
+            <v-tooltip top>
+              <v-icon
+                slot="activator"
+                :color="props.item.order_position_states.id===1?'success'
+                :props.item.order_position_states.id===3?'warning':'error'">mdi-eye</v-icon>
+              <span>{{ props.item.order_position_states.title }}</span>
+            </v-tooltip>
+          </td>
+          <td
+            v-show="item.order_state_id===2"
+            class="px-1">
             <v-tooltip top>
               <v-btn
                 slot="activator"
@@ -119,7 +163,9 @@
               <span>Редактировать</span>
             </v-tooltip>
           </td>
-          <td class="px-1">
+          <td
+            v-show="item.order_state_id===2"
+            class="px-1">
             <v-tooltip top>
               <v-btn
                 slot="activator"
