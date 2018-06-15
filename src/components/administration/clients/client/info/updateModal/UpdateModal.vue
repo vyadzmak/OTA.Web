@@ -16,7 +16,9 @@
         class="v-card-form">
         <v-text-field
           v-model="data.item.email"
-          :rules="[(v) => (!v || v.length <= 32) || 'Не более 32 символов']"
+          :rules="[(v) => !!v || 'Введите e-mail адрес',
+                   (v) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'Введите правильный e-mail адрес',
+                   (v) => (!v || v.length <= 32) || 'Не более 32 символов']"
           label="Email"
         />
         <v-text-field

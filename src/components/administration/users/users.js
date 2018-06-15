@@ -1,168 +1,108 @@
+import {mapGetters} from 'vuex'
 import questionDialog from '@/components/questionDialog/QuestionDialog.vue'
 import updateModal from './updateModal/UpdateModal.vue'
-import { ModalService } from 'vue-modal-dialog'
 
 export default {
   name: 'users',
   data () {
     return {
-      msg: 'Пользователи',
       search: '',
-      users: [],
-      errors: [],
       headers: [
-        { text: 'ID', align: 'left', value: 'id' },
-        { text: 'Фамилия', align: 'left', value: 'last_name' },
-        { text: 'Имя', align: 'left', value: 'first_name' },
-        { text: 'Email', align: 'left', value: 'login_data[0].login' },
-        { text: 'Дата регистрации', align: 'left', value: 'login_data[0].registration_date' },
-        { text: 'Последняя авторизация', align: 'left', value: 'login_data[0].lastLogin_date' },
+        { text: 'Id', align: 'left', value: 'id' },
+        { text: 'Логин', align: 'left', value: 'user_login.login' },
+        { text: 'Имя', align: 'left', value: 'name' },
+        { text: 'Роль', align: 'left', value: 'user_role_data.title' },
+        { text: 'Клиент', align: 'left', value: 'client_data.name' },
         {sortable: false},
         {sortable: false}
       ],
       tableRowsShown: [10, 20, 50, 100, {text: 'Все', value: -1}],
       rowsPerPageText: 'Строк на странице',
       noDataText: 'Нет данных',
-      noResultsText: 'Поиск не дал результатов'
+      noResultsText: 'Поиск не дал результатов',
+      dialogData: null,
+      dialog: false,
+      dialogComponent: updateModal,
+      qDialog: false,
+      qDialogComponent: questionDialog
     }
   },
   computed: {
-    userData: function () {
-      return this.$store.getters.userData
-    }
+    ...mapGetters({items: 'users/items', userData: 'userData', user: 'users/item'})
   },
   methods: {
-    showDeleteModal: function (itemId) {
-      let modalConfig = {
-        size: 'md',
-        data: {
-          message: 'Вы действительно хотите удалить пользователя?',
-          title: 'Удаление пользователя',
-          isClosable: true
-        }
+    openQDialog (itemId) {
+      this.dialogData = {
+        message: 'Вы действительно хотите удалить пользователя?',
+        title: 'Удаление',
+        isClosable: true,
+        data: itemId
       }
-      ModalService.open(questionDialog, modalConfig).then(
-        modalSubmit => { this.deleteItem(itemId) },
-        modalCancel => {}
-      ).catch(
-        err => {
-          console.log(err)
-        }
-      )
+      this.qDialog = true
     },
-    showUpdateModal: function (item) {
-      let isUpdate = false
-      if (item.id) {
-        item = _.cloneDeep(item)
-        item.login_data[0].password = ''
-        isUpdate = true
-      } else {
-        item.client_id = this.$route.params.id
-        item.first_name = ''
-        item.last_name = ''
-        item.lock_state = false
-        item.login_data = [{
-          login: '',
-          password: ''
-        }]
-        item.user_role_id = ''
-      }
-      this.getUserRoles().then(() => {
-        let modalConfig = {
-          size: 'lg',
-          data: {
-            title: (isUpdate ? 'Обновление' : 'Добавление') + ' пользователя',
-            isClosable: true,
-            item: item
-          }
-        }
-        ModalService.open(updateModal, modalConfig).then(
-          modalSubmit => {
-            this.updateItem(modalSubmit, isUpdate)
+    openDialog: async function (item) {
+      let isUpdate = true
+      if (!item) {
+        isUpdate = false
+        item = {
+          name: '',
+          lock_state: false,
+          client_id: null,
+          user_role_id: null,
+          user_role_data: null,
+          user_login: {
+            login: '',
+            password: ''
           },
-          modalCancel => { console.log(modalCancel) }
-        ).catch(err => { console.log(err) })
-      }).catch(err => {
-        console.log(err)
-        this.$store.commit('showSnackbar', {text: 'Не удалось загрузить нового пользователя', snackbar: true, context: 'error'})
-      })
+          client_data: null
+        }
+      } else {
+        item.user_login.password = ''
+      }
+      await this.$store.dispatch('clients/getItems')
+      await this.$store.dispatch('userRoles/getItems')
+      this.dialogData = {
+        title: (isUpdate ? 'Обновление' : 'Добавление') + ' пользователя',
+        isClosable: true,
+        item: isUpdate ? _.cloneDeep(item) : item,
+        isUpdate
+      }
+      this.dialog = true
     },
-    deleteItem: function (itemId) {
-      this.$store.commit('showSpinner', true)
-      this.$http.delete('users', {params: {id: itemId}})
-        .then(response => {
-          if (response.status === 200) {
-            this.users.splice(_.findIndex(this.users, {id: itemId}), 1)
-            this.$store.commit('showSnackbar', {text: 'Удаление пользователя прошло успешно', snackbar: true, context: 'success'})
-          } else {
-            this.$store.commit('showSnackbar', {text: 'Удаление пользователя не удалось. Обратитесь к администратору', snackbar: true, context: 'error'})
+    dialogClose: async function (confirmed, item, isUpdate) {
+      if (confirmed) {
+        item.user_role_id = item.user_role_data.id
+        item.client_id = item.client_data.id
+        let loginData = item.user_login
+        item.user_login = undefined
+        item.user_role_data = undefined
+        item.client_data = undefined
+        let res = await this.$store.dispatch('users/updateItem', {item, isUpdate})
+        if (!loginData.id) {
+          loginData.registration_date = new Date()
+          loginData.user_id = this.user.id
+        } else {
+          if (!loginData.password) {
+            loginData.password = undefined
           }
-          this.$store.commit('showSpinner', false)
-        })
-        .catch(e => {
-          this.errors.push(e)
-          this.$store.commit('showSpinner', false)
-          this.$store.commit('showSnackbar', {text: 'Удаление пользователя не удалось. Обратитесь к администратору', snackbar: true, context: 'error'})
-        })
+        }
+        res = await this.$store.dispatch('userLogins/updateItem', {item: loginData, isUpdate})
+        this.$store.dispatch('users/routeAdminUsers', {user_id: this.userData.id})
+        console.log(res)
+      }
+      this.dialog = false
     },
-    updateItem: function (item, isUpdate) {
-      this.$store.commit('showSpinner', true)
-      this.$http({method: isUpdate ? 'put' : 'post',
-        url: isUpdate ? 'user/' + item.id : 'users',
-        data: item,
-        config: { contentType: 'application/json' }
-      })
-        .then(response => {
-          let responseData = response.data && response.data !== 'Error' ? response.data : null
-          if (responseData) {
-            if (isUpdate) {
-              this.users.splice(_.findIndex(this.users, {id: item.id}), 1)
-            }
-            this.users.push(responseData)
-            this.$store.commit('showSnackbar', {text: (isUpdate ? 'Обновление' : 'Добавление') + ' пользователя прошло успешно', snackbar: true, context: 'success'})
-          } else {
-            this.$store.commit('showSnackbar', {text: (isUpdate ? 'Обновление' : 'Добавление') + ' пользователя не удалось', snackbar: true, context: 'error'})
-          }
-          this.$store.commit('showSpinner', false)
-        })
-        .catch(e => {
-          this.errors.push(e)
-          this.$store.commit('showSpinner', false)
-          this.$store.commit('showSnackbar', {text: (isUpdate ? 'Обновление' : 'Добавление') + ' пользователя не удалось. Обратитесь к администратору', snackbar: true, context: 'error'})
-        })
-    },
-    getUserRoles (isUpdate) {
-      this.$store.commit('showSpinner', true)
-      return new Promise((resolve, reject) => {
-        this.$http.get('userRoles')
-          .then(response => {
-            if (response.data && response.data !== 'Error') {
-              this.$store.commit('setUpdateProperty', response.data)
-            }
-            this.$store.commit('showSpinner', false)
-            resolve()
-          })
-          .catch(e => {
-            this.$store.commit('showSpinner', false)
-            this.errors.push(e)
-            reject(e)
-          })
-      })
+    qDialogClose (confirmed, data) {
+      if (confirmed) {
+        this.$store.dispatch('users/deleteItem', data)
+      }
+      this.qDialog = false
     }
   },
   created () {
-    this.$store.commit('showSpinner', true)
-    this.$http.get(`clientUsers/` + (this.$route.params.id ? this.$route.params.id : this.userData.client_id))
-      .then(response => {
-        this.$store.commit('showSpinner', false)
-        this.users = response.data
-      })
-      .catch(e => {
-        this.errors.push(e)
-        this.$store.commit('showSpinner', false)
-      })
+    this.$store.dispatch('users/routeAdminUsers', {user_id: this.userData.id})
   },
   mounted () {
-    this.$refs.usersDataTable.defaultPagination.descending = true
+    this.$refs.dataTable.defaultPagination.descending = true
   }
 }

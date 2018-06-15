@@ -33,7 +33,7 @@
           <td>{{ props.item[$route.name === 'bids.inbox' ? 'creation_date'
           : $route.name === 'bids.active' ? 'processed_date' : 'execute_date'] | moment("DD.MM.YYYY HH:mm") }}</td>
           <td>{{ ldsh.get(props.item, 'order_executor_data.name', 'Нет') }}</td>
-          <td>{{ props.item.order_state_data.name }}</td>
+          <td>{{ props.item.order_state_data.title }}</td>
         </tr>
       </template>
     </v-data-table>

@@ -100,7 +100,7 @@
               <v-flex xs7>
                 <div>
                   <div>Профиль пользователя</div>
-                  <div class="headline">{{ userData.first_name + ' ' + userData.last_name }}</div>
+                  <div class="headline">{{ userData.name }}</div>
                 </div>
               </v-flex>
               <v-flex xs5>

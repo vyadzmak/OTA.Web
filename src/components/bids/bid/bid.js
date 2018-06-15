@@ -18,7 +18,7 @@ export default {
           value: this.$route.name === 'bids.inbox' ? 'creation_date'
             : this.$route.name === 'bids.active' ? 'processed_date' : 'execute_date'},
         { text: 'Исполнитель', align: 'left', value: 'order_executor_data.name' },
-        { text: 'Статус', align: 'left', value: 'order_state_data.name' }
+        { text: 'Статус', align: 'left', value: 'order_state_data.title' }
       ],
       tableRowsShown: [10, 20, 50, 100, {text: 'Все', value: -1}],
       rowsPerPageText: 'Строк на странице',
