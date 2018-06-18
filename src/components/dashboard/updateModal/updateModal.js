@@ -10,6 +10,7 @@ export default {
         autoProcessQueue: true,
         uploadMultiple: false
       },
+      imgSrc: 'https://raw.githubusercontent.com/vuetifyjs/docs/dev/static/doc-images/lists/1.jpg',
       valid: false,
       newPassword: '',
       repeatPassword: '',
@@ -68,9 +69,14 @@ export default {
       this.$store.commit('showSpinner', true)
       formData.append('user_id', this.userData.id)
     },
-    completeSend: async function (...args) {
+    completeSend: async function (e) {
       this.$store.commit('showSpinner', false)
-      console.log(args)
+      let xhrObj = _.get(e, 'xhr', {})
+      if (xhrObj.status === 200) {
+        this.imgSrc = e._dataUrl
+      } else {
+        this.$store.commit('showSnackbar', {text: 'Загрузка файла не удалась. Обратитесь к администратору', snackbar: true, context: 'error'})
+      }
       // let text = 'Загрузка файлов успешно завершена'
       // let context = 'success'
       // if (files && files.length > 0 && files[0].xhr.status === 200) {

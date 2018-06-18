@@ -20,8 +20,8 @@ export default {
   },
   methods: {
     getNext (item) {
+      this.categoryIds.push(item.id)
       if (item.internal_categories_count > 0) {
-        this.categoryIds.push(item.id)
         this.getCategories(item.id)
       } else if (item.internal_products_count > 0) {
         this.productsShown = true
@@ -59,7 +59,7 @@ export default {
           currency_id: null
         }
       }
-      await this.$store.dispatch('currencyCatalog/getItems')
+      let serverDialogData = await this.$store.dispatch('currencyCatalog/getItems')
       this.dialogData = {
         title: (isUpdate ? 'Обновление' : 'Добавление') + ' продукта',
         isClosable: true,
@@ -106,11 +106,11 @@ export default {
       if (!this.categoryTail || this.categoryTail < 0) {
         next()
       } else {
+        this.categoryIds.splice(this.categoryIds.length - 1, 1)
         if (this.productsShown) {
           this.productsShown = false
           this.$store.commit('products/items', [])
         } else {
-          this.categoryIds.splice(this.categoryIds.length - 1, 1)
           this.getCategories(this.categoryTail)
         }
         next(false)

@@ -12,7 +12,6 @@
     <v-card-text style="height: 80vh;">
       <v-form
         ref="form"
-        v-model="valid"
         class="v-card-form">
         <v-text-field
           v-model="data.item.email"

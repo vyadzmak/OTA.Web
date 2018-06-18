@@ -1,83 +1,50 @@
 import {mapGetters} from 'vuex'
-import questionDialog from '@/components/questionDialog/QuestionDialog.vue'
-import updateModal from './updateModal/UpdateModal.vue'
+import {baseUrl} from '@/httpClient/index'
 
 export default {
-  name: 'units',
+  name: 'clientGeneral',
   data () {
     return {
-      search: '',
-      headers: [
-        { text: 'Id', align: 'left', value: 'id' },
-        { text: 'Email', align: 'left', value: 'email' },
-        { text: 'Телефон', align: 'left', value: 'phone_number' },
-        { text: 'Основная информация', align: 'left', value: 'main_info' },
-        { text: 'Дополнительная информация', align: 'left', value: 'additional_info' },
-        {sortable: false},
-        {sortable: false}
-      ],
-      tableRowsShown: [10, 20, 50, 100, {text: 'Все', value: -1}],
-      rowsPerPageText: 'Строк на странице',
-      noDataText: 'Нет данных',
-      noResultsText: 'Поиск не дал результатов',
-      dialogData: null,
-      dialog: false,
-      dialogComponent: updateModal,
-      qDialog: false,
-      qDialogComponent: questionDialog
+      item: {},
+      options: {
+        acceptedFileTypes: ['.jpg', '.jpeg', '.png'],
+        url: baseUrl + 'uploadFiles',
+        autoProcessQueue: true,
+        uploadMultiple: true
+      }
     }
   },
   computed: {
-    ...mapGetters({items: 'clientInfo/items', userData: 'userData', client: 'clients/item'})
+    ...mapGetters({userData: 'userData', client: 'clients/item'}),
+    compItem () {
+      let result = _.get(this.$store.getters, 'clientInfo/item', {})
+      this.item = _.cloneDeep(result)
+      return result
+    }
   },
   methods: {
-    openQDialog: function (itemId) {
-      this.dialogData = {
-        message: 'Вы действительно хотите удалить информацию о клиенте?',
-        title: 'Удаление',
-        isClosable: true,
-        data: itemId
-      }
-      this.qDialog = true
-    },
-    openDialog (item) {
+    updateItem () {
       let isUpdate = true
-      if (!item) {
+      if (!this.item.client_id) {
         isUpdate = false
-        item = {
-          client_id: this.client.id,
-          logo_attachment_id: null,
-          email: '',
-          main_info: '',
-          additional_info: '',
-          phone_number: ''
-        }
+        this.item.client_id = this.client.id
       }
-      this.dialogData = {
-        title: (isUpdate ? 'Обновление' : 'Добавление') + ' информации о клиенте',
-        isClosable: true,
-        item: isUpdate ? _.cloneDeep(item) : item,
-        isUpdate
-      }
-      this.dialog = true
+      this.$store.dispatch('clientInfo/updateItem', {item: this.item, isUpdate})
     },
-    dialogClose (confirmed, item, isUpdate) {
-      if (confirmed) {
-        this.$store.dispatch('clientInfo/updateItem', {item, isUpdate})
+    updateAvatar (e) {
+      if (e[0].xhr.status === 200) {
+        this.$store.dispatch('clientInfo/updateItem', {item: this.item, isUpdate: true})
+      } else {
+        this.$store.commit('showSnackbar', {text: 'Загрузка картинки не удалась', snackbar: true, context: 'error'})
       }
-      this.dialog = false
-    },
-    qDialogClose (confirmed, data) {
-      if (confirmed) {
-        this.$store.dispatch('clientInfo/deleteItem', data)
-      }
-      this.qDialog = false
     }
   },
   created () {
-    this.$store.dispatch('clientInfo/clientInfoByClient', {user_id: this.$store.userData.id, client_id: this.client.id})
+    this.$store.dispatch('clientInfo/clientInfoByClient', {user_id: this.userData.id, client_id: this.client.id})
   },
   mounted () {
-    this.$refs.dataTable.defaultPagination.descending = true
+  },
+  beforeDestroy () {
+    this.$store.commit('clientInfo/item', {})
   }
 }

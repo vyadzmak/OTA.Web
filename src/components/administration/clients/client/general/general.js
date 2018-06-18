@@ -20,10 +20,11 @@ export default {
       this.$store.dispatch('clients/updateItem', {item: this.item, isUpdate: true})
     }
   },
-  created () {
-    this.$store.dispatch('clients/getItem', {id: this.compItem.id})
-    this.$store.dispatch('clientTypes/getItem')
+  created: async function () {
+    let a = await this.$store.dispatch('clientTypes/getItems')
+    let b = await this.$store.dispatch('clients/getItem', {id: this.compItem.id})
   },
-  mounted () {
+  beforeDestroy () {
+    this.$store.commit('clientTypes/items', [])
   }
 }

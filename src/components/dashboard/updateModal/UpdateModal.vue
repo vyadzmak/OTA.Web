@@ -10,23 +10,26 @@
         @click="cancel"><v-icon>clear</v-icon></v-btn>
     </v-card-title>
     <v-card-text style="height: 80vh;">
-      <v-avatar size="125px">
-        <img
-          class="img-circle elevation-7 mb-1"
-          src="https://raw.githubusercontent.com/vuetifyjs/docs/dev/static/doc-images/lists/1.jpg"
-        >
-      </v-avatar>
-      <vue-transmit
-        ref="uploader"
-        v-bind="options"
-        class="col-12 mb-2"
-        tag="section"
-        @sending = "beforeSend"
-        @complete="completeSend">
-        <v-btn
-          dark
-          color="info">Сменить аватар</v-btn>
-      </vue-transmit>
+      <v-card-actions>
+        <v-spacer/>
+        <v-avatar size="125px">
+          <img
+            :src="imgSrc"
+            class="img-circle elevation-7 mb-1"
+          >
+        </v-avatar>
+        <vue-transmit
+          ref="uploader"
+          v-bind="options"
+          class="col-12 mb-2"
+          tag="section"
+          @sending = "beforeSend"
+          @complete="completeSend">
+          <v-btn
+            dark
+            color="info">Сменить аватар</v-btn>
+        </vue-transmit>
+      </v-card-actions>
       <v-form
         ref="form"
         v-model="valid">
