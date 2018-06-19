@@ -29,7 +29,7 @@ export default [
   {link: 'userLogins'},
   {link: 'userRoleRoutes'},
   {link: 'userRoles'},
-  {link: 'users', additional: [{link: 'routeAdminUsers', requestParams: ['user_id']}]},
+  {link: 'users'},
   {link: 'viewSettings'},
   {link: 'routeCatalogProductsRecommendations', requestParams: ['user_id', 'product_id']}
 ]

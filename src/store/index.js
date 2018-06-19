@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import VuexPersistedState from 'vuex-persistedstate'
 import * as mutations from './mutations'
 import loginUser from './modules/loginUser/loginUser'
+import crudUsers from './modules/crudUsers/crudUsers'
 import apiModules from './modules/apiModules/apiModules'
 import ApiModule from './modules/apiModules/ApiModule'
 
@@ -13,6 +14,7 @@ apiModules.forEach(element => {
 })
 
 importedModules.loginUser = loginUser
+importedModules.crudUsers = crudUsers
 
 Vue.use(Vuex)
 

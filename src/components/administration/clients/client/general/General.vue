@@ -47,7 +47,7 @@
           </v-flex>
         </v-layout>
       </v-form>
-      <div v-show="false">{{ item }}</div>
+      <div v-show="false">{{ compItem }}</div>
     </v-card-text>
     <v-card-actions><v-btn
       dark

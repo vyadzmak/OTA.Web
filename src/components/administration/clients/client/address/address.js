@@ -81,5 +81,8 @@ export default {
   },
   mounted () {
     this.$refs.dataTable.defaultPagination.descending = true
+  },
+  beforeDestroy () {
+    this.$store.commit('clientAddresses/items', [])
   }
 }

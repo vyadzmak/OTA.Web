@@ -1,5 +1,6 @@
 <template>
   <v-card>
+    <div v-show="false">{{ compItem }}</div>
     <v-form ref="form">
       <v-card-text>
         <v-layout
@@ -58,8 +59,6 @@
         </v-layout>
       </v-card-text>
     </v-form>
-    <div
-      v-text="compItem"/>
     <v-card-actions><v-btn
       dark
       color="success"

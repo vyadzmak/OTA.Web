@@ -1,5 +1,5 @@
 export const admin = ['administration', 'administration.log',
-  'administration.clients', 'administration.client',
+  'administration.clients', 'administration.client', 'administration.client.users',
   'administration.client.address', 'administration.client.info', 'administration.client.general',
   'administration.users', 'administration.settings', 'administration.general']
 export const bids = ['bids', 'bids.inbox', 'bids.active', 'bids.history', 'bids.details']

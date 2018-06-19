@@ -23,3 +23,7 @@ export const catalogBack = (state, payload) => {
 export const categoryBack = (state, payload) => {
   state.categoryBack = payload
 }
+
+export const updateByPath = (state, {path, value}) => {
+  _.set(state, path, value)
+}

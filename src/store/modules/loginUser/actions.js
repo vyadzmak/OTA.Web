@@ -20,6 +20,7 @@ export const login = ({ commit, getters }, {login, password, rememberMe}) => {
           password: responseData.password
         }
         savedUser.no_image_url = responseData.no_image_url
+        savedUser.no_avatar_url = responseData.no_avatar_url
         savedUser.orders_count = responseData.orders_count
         if (rememberMe) {
           commit(types.R_USER_DATA, savedUser)

@@ -26,6 +26,9 @@ export default {
       } else if (item.internal_products_count > 0) {
         this.productsShown = true
         this.$store.dispatch('products/productsByProductCategory', {user_id: this.userData.id, category_id: item.id})
+      } else {
+        this.productsShown = true
+        this.$store.commit('products/items', [])
       }
     },
     goTo (item) {
@@ -110,9 +113,8 @@ export default {
         if (this.productsShown) {
           this.productsShown = false
           this.$store.commit('products/items', [])
-        } else {
-          this.getCategories(this.categoryTail)
         }
+        this.getCategories(this.categoryTail)
         next(false)
       }
     } else {

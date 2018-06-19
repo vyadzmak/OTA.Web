@@ -20,9 +20,9 @@ export default {
       this.$store.dispatch('clients/updateItem', {item: this.item, isUpdate: true})
     }
   },
-  created: async function () {
-    let a = await this.$store.dispatch('clientTypes/getItems')
-    let b = await this.$store.dispatch('clients/getItem', {id: this.compItem.id})
+  created () {
+    this.$store.dispatch('clientTypes/getItems')
+    this.$store.dispatch('clients/getItem', {id: this.compItem.id})
   },
   beforeDestroy () {
     this.$store.commit('clientTypes/items', [])

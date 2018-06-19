@@ -28,7 +28,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({items: 'crudUsers/items', userData: 'userData', user: 'crudUsers/item'})
+    ...mapGetters({items: 'crudUsers/items',
+      userData: 'userData',
+      user: 'crudUsers/item',
+      client: 'clients/item'})
   },
   methods: {
     openQDialog (itemId) {
@@ -47,14 +50,18 @@ export default {
         item = {
           name: '',
           lock_state: false,
-          client_id: null,
-          user_role_id: null,
           user_role_data: null,
           user_login: {
             login: '',
             password: ''
           },
-          client_data: null
+          client_data: {id: this.client.id},
+          user_info_data: {
+            email: '',
+            phone_number: '',
+            birthday: null,
+            avatar_id: null
+          }
         }
       } else {
         item.user_login.password = ''
@@ -83,7 +90,7 @@ export default {
     }
   },
   created () {
-    this.$store.dispatch('crudUsers/routeAdminUsers', {user_id: this.userData.id})
+    this.$store.dispatch('crudUsers/usersByClient', {user_id: this.userData.id, client_id: this.client.id})
   },
   mounted () {
     this.$refs.dataTable.defaultPagination.descending = true
