@@ -33,6 +33,16 @@
           <td>{{ props.item.name }}</td>
           <td>{{ ldsh.get(props.item, 'user_role_data.title') }}</td>
           <td>{{ ldsh.get(props.item, 'client_data.name') }}</td>
+          <td>{{ ldsh.get(props.item, 'user_info_data.phone_number') }}</td>
+          <td>
+            <v-tooltip top>
+              <v-icon
+                slot="activator"
+                :color="props.item.lock_state?'error':'success'">
+                {{ props.item.lock_state?'fas fa-lock':'fas fa-check' }}</v-icon>
+              <span>{{ props.item.lock_state?'Заблокирован':'Активен' }}</span>
+            </v-tooltip>
+          </td>
           <td class="px-1">
             <v-tooltip top>
               <v-btn

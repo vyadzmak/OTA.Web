@@ -6,7 +6,7 @@ export default {
   name: 'gallery',
   data () {
     return {
-      baseUrl: baseUrl.slice(0,-1),
+      baseUrl: baseUrl.slice(0, -1),
       valid: false,
       menu: false,
       totalProgress: 0,
@@ -50,8 +50,8 @@ export default {
         if (updateItem.default_image_id === data) {
           updateItem.default_image_id = _.get(updateItem.gallery_images, '[0]', 0)
         }
-        await this.$store.dispatch('products/updateItem', {item: updateItem, isUpdate: true})
-        await this.$store.dispatch('attachments/deleteItem', data)
+        this.dialogData = await this.$store.dispatch('products/updateItem', {item: updateItem, isUpdate: true})
+        this.dialogData = await this.$store.dispatch('attachments/deleteItem', data)
       }
       this.qDialog = false
     },
@@ -90,8 +90,8 @@ export default {
           updateItem.default_image_id = imagesArray[0]
         }
         updateItem.gallery_images = updateItem.gallery_images ? updateItem.gallery_images.concat(imagesArray) : imagesArray
-        await this.$store.dispatch('products/updateItem', {item: updateItem, isUpdate: true})
-        await this.$store.dispatch('attachments/attachmentsInfo', {attachments_ids: updateItem.gallery_images.join()})
+        this.dialogData = await this.$store.dispatch('products/updateItem', {item: updateItem, isUpdate: true})
+        this.dialogData = await this.$store.dispatch('attachments/attachmentsInfo', {attachments_ids: updateItem.gallery_images.join()})
       } else {
         text = 'Загрузка файлов не удалась. Обратитесь к администратору'
         context = 'error'

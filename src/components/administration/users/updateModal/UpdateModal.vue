@@ -49,6 +49,7 @@
           item-text="name"
           return-object
           label="Клиент"
+          disabled
           required
         />
         <v-select
@@ -61,7 +62,70 @@
           label="Роль"
           required
         />
+        <template v-if="data.isUpdate">
+          <v-text-field
+            v-model="data.item.user_info_data.email"
+            :rules="[(v) => (!v || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v)) || 'Введите правильный e-mail адрес',
+                     (v) => (!v || v.length <= 32) || 'Не более 32 символов']"
+            label="Email"
+          />
+          <v-text-field
+            v-model="data.item.user_info_data.phone_number"
+            :rules="[(v) => (!v || v.length <= 32) || 'Не более 32 символов']"
+            label="Телефон"
+          />
+          <v-menu
+            :close-on-content-click="false"
+            v-model="datePicker"
+            :nudge-right="40"
+            lazy
+            transition="scale-transition"
+            offset-y
+            full-width
+            max-width="290px"
+            min-width="290px"
+          >
+            <v-text-field
+              slot="activator"
+              v-model="data.item.user_info_data.birthday"
+              label="Дата рождения"
+              prepend-icon="event"
+              readonly
+            />
+            <v-date-picker
+              v-model="data.item.user_info_data.birthday"
+              no-title
+              @input="datePicker = false"/>
+          </v-menu>
+        </template>
       </v-form>
+      <template v-if="data.isUpdate">
+        <v-card-actions>
+          <v-spacer/>
+          <v-avatar size="125px">
+            <img
+              :src="imgUrl"
+              class="img-circle elevation-7 mb-1"
+            >
+          </v-avatar>
+          <v-spacer/>
+        </v-card-actions>
+        <v-card-actions>
+          <v-spacer/>
+          <vue-transmit
+            ref="uploader"
+            v-bind="options"
+            class="col-12 mb-2"
+            tag="section"
+            @sending = "beforeSend"
+            @complete="completeSend">
+            <v-btn
+              dark
+              color="info">Сменить аватар</v-btn>
+          </vue-transmit>
+          <v-spacer/>
+        </v-card-actions>
+      </template>
     </v-card-text>
     <v-card-actions>
       <v-spacer/>

@@ -14,8 +14,27 @@
           :class="item.isActive?'active-route':'route'"
           @click="goToRoute(item.path)"
         >
-          <v-list-tile-action>
-            <v-tooltip right>
+          <v-list-tile-action v-if="item.hasBadge">
+            <v-tooltip
+              right>
+              <v-badge
+                slot="activator"
+                v-model="userData.orders_count"
+                left
+                color="purple"
+                overlap>
+                <span slot="badge">{{ userData.orders_count }}</span>
+                <v-icon
+                  :class="item.isActive?'active-icon':''"
+                  light
+                  v-html="item.icon"/>
+              </v-badge>
+              <span v-text="item.title"/>
+            </v-tooltip>
+          </v-list-tile-action>
+          <v-list-tile-action v-if="!item.hasBadge">
+            <v-tooltip
+              right>
               <v-icon
                 slot="activator"
                 :class="item.isActive?'active-icon':''"
@@ -106,8 +125,8 @@
               <v-flex xs5>
                 <v-avatar size="125px">
                   <img
+                    :src="avatarUrl"
                     class="img-circle elevation-7 mb-1"
-                    src="https://raw.githubusercontent.com/vuetifyjs/docs/dev/static/doc-images/lists/1.jpg"
                   >
                 </v-avatar>
               </v-flex>

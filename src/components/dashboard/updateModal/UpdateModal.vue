@@ -9,32 +9,22 @@
         dark
         @click="cancel"><v-icon>clear</v-icon></v-btn>
     </v-card-title>
-    <v-card-text style="height: 80vh;">
-      <v-card-actions>
-        <v-spacer/>
-        <v-avatar size="125px">
-          <img
-            :src="imgSrc"
-            class="img-circle elevation-7 mb-1"
-          >
-        </v-avatar>
-        <vue-transmit
-          ref="uploader"
-          v-bind="options"
-          class="col-12 mb-2"
-          tag="section"
-          @sending = "beforeSend"
-          @complete="completeSend">
-          <v-btn
-            dark
-            color="info">Сменить аватар</v-btn>
-        </vue-transmit>
-      </v-card-actions>
+    <v-card-text style="height:80vh">
       <v-form
         ref="form"
-        v-model="valid">
+        v-model="valid"
+        class="v-card-form">
         <v-text-field
-          v-model="updateUser.login_data.login"
+          v-model="data.item.name"
+          :rules="nameRules"
+          label="Имя"
+          required
+        />
+        <v-text-field
+          v-model="data.item.user_login.login"
+          :rules="[(v) => !!v || 'Введите e-mail адрес',
+                   (v) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'Введите правильный e-mail адрес',
+                   (v) => (!v || v.length <= 32) || 'Не более 32 символов']"
           label="Логин"
           disabled
         />
@@ -52,29 +42,96 @@
           label="Повторите пароль"
           required
         />
-        <v-text-field
-          v-model="updateUser.first_name"
-          :rules="fNameRules"
-          label="Имя"
-          required
+        <v-checkbox
+          v-model="data.item.lock_state"
+          label="Заблокирован"
+          disabled/>
+        <v-select
+          v-model="data.item.client_data"
+          :items="clients"
+          item-value="id"
+          item-text="name"
+          return-object
+          label="Клиент"
+          disabled
         />
-        <v-text-field
-          v-model="updateUser.last_name"
-          :rules="lNameRules"
-          label="Фамилия"
-          required
+        <v-select
+          v-model="data.item.user_role_data"
+          :items="userRoles"
+          item-value="id"
+          item-text="title"
+          return-object
+          label="Роль"
+          disabled
         />
-        <v-text-field
-          v-model="updateUser.phone"
-          label="Телефон"
-          required
-        />
-        <v-checkbox label="Присылать уведомления на почту"/>
-        <v-checkbox label="Присылать смс-уведомления на телефон"/>
+        <template v-if="data.isUpdate">
+          <v-text-field
+            v-model="data.item.user_info_data.email"
+            :rules="[(v) => (!v || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v)) || 'Введите правильный e-mail адрес',
+                     (v) => (!v || v.length <= 32) || 'Не более 32 символов']"
+            label="Email"
+          />
+          <v-text-field
+            v-model="data.item.user_info_data.phone_number"
+            :rules="[(v) => (!v || v.length <= 32) || 'Не более 32 символов']"
+            label="Телефон"
+          />
+          <v-menu
+            :close-on-content-click="false"
+            v-model="datePicker"
+            :nudge-right="40"
+            lazy
+            transition="scale-transition"
+            offset-y
+            full-width
+            max-width="290px"
+            min-width="290px"
+          >
+            <v-text-field
+              slot="activator"
+              v-model="data.item.user_info_data.birthday"
+              label="Дата рождения"
+              prepend-icon="event"
+              readonly
+            />
+            <v-date-picker
+              v-model="data.item.user_info_data.birthday"
+              no-title
+              @input="datePicker = false"/>
+          </v-menu>
+        </template>
       </v-form>
+      <template v-if="data.isUpdate">
+        <v-card-actions>
+          <v-spacer/>
+          <v-avatar size="125px">
+            <img
+              :src="imgUrl"
+              class="img-circle elevation-7 mb-1"
+            >
+          </v-avatar>
+          <v-spacer/>
+        </v-card-actions>
+        <v-card-actions>
+          <v-spacer/>
+          <vue-transmit
+            ref="uploader"
+            v-bind="options"
+            class="col-12 mb-2"
+            tag="section"
+            @sending = "beforeSend"
+            @complete="completeSend">
+            <v-btn
+              dark
+              color="info">Сменить аватар</v-btn>
+          </vue-transmit>
+          <v-spacer/>
+        </v-card-actions>
+      </template>
     </v-card-text>
     <v-card-actions>
       <v-spacer/>
+      <v-btn @click="clear">Очистить</v-btn>
       <v-btn
         :class="{ green: valid, red: !valid }"
         color="success"

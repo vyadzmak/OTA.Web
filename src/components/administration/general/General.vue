@@ -1,13 +1,20 @@
 <template>
   <div>
     <v-card>
+      <v-card-actions><v-btn
+        dark
+        color="success"
+        @click="updateItem()"
+      >Обновить</v-btn></v-card-actions>
       <v-card-text>
         <v-form ref="form">
           <v-layout
-            column>
+            justify-center
+            row
+            wrap>
             <v-flex
-              md6
-              sm12
+              md7
+              xs12
               pa-1>
               <v-text-field
                 v-model="settings.data_refresh_interval"
@@ -15,8 +22,8 @@
                 label="Время обновления заявок (в мс)"/>
             </v-flex>
             <v-flex
-              md6
-              sm12
+              md7
+              xs12
               pa-1>
               <v-text-field
                 v-model="settings.count_data_take_device"
@@ -24,8 +31,8 @@
                 label="Количество данных выводимых ну устройства (для операции take)"/>
             </v-flex>
             <v-flex
-              md6
-              sm12
+              md7
+              xs12
               pa-1>
               <v-text-field
                 v-model="settings.count_log_data_records_auto_clean"
@@ -36,11 +43,6 @@
         </v-form>
         <div v-show="false">{{ item }}</div>
       </v-card-text>
-      <v-card-actions><v-btn
-        dark
-        color="success"
-        @click="updateItem()"
-      >Обновить</v-btn></v-card-actions>
     </v-card>
   </div>
 </template>

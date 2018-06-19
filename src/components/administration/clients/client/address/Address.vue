@@ -56,6 +56,7 @@
     </v-data-table>
     <v-dialog
       v-model="dialog"
+      scrollable
       max-width="500px">
       <component
         v-if="dialog"
@@ -65,7 +66,6 @@
     </v-dialog>
     <v-dialog
       v-model="qDialog"
-      scrollable
       max-width="300px">
       <component
         v-if="qDialog"

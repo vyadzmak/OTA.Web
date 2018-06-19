@@ -19,6 +19,7 @@ export const login = ({ commit, getters }, {login, password, rememberMe}) => {
           login: responseData.login,
           password: responseData.password
         }
+        savedUser.user_info_data = {}
         savedUser.no_image_url = responseData.no_image_url
         savedUser.no_avatar_url = responseData.no_avatar_url
         savedUser.orders_count = responseData.orders_count

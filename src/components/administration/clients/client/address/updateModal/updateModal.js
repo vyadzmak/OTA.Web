@@ -12,11 +12,12 @@ export default {
       ],
       sNameRules: [
         (v) => (!v || v.length <= 250) || 'Не более 250 символов'
-      ]
+      ],
+      areaId: null
     }
   },
   computed: {
-    ...mapGetters({cityTypes: 'cityCatalog/items'})
+    ...mapGetters({cityTypes: 'cityCatalog/items', areaTypes: 'areaCatalog/items', userData: 'userData'})
   },
   methods: {
     submit: function () {
@@ -29,6 +30,19 @@ export default {
     },
     clear: function () {
       this.$refs.form.reset()
+    },
+    getCities () {
+      if (this.areaId) {
+        this.$store.dispatch('cityCatalog/cityCatalogByArea', {user_id: this.userData.id, area_id: this.areaId})
+      }
+    },
+    areaUpdated () {
+      this.getCities()
+      this.data.item.city_id = null
     }
+  },
+  created () {
+    this.areaId = _.get(this.data, 'item.city_data.area_id', null)
+    this.getCities()
   }
 }

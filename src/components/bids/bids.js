@@ -20,6 +20,8 @@ export default {
     }
   },
   created () {
+    this.$store.dispatch('adminSettings/routeAdminGeneral', {'user_id': this.userData.id})
+    this.$store.commit('updateByPath', {path: 'loginUser.userData.orders_count', value: 0})
   },
   mounted () {
   }

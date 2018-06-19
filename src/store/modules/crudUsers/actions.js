@@ -66,7 +66,7 @@ export const userDetails = ({ commit, getters }, payload) => {
   })
 }
 
-export const updateItem = ({ commit, getters }, {item, isUpdate}) => {
+export const updateItem = ({ commit, getters }, {item, isUpdate, fromDashboard}) => {
   return new Promise((resolve, reject) => {
     _(item).keys().forEach(key => {
       if (key.slice(-3) === '_id' && item[key] === 0) {
@@ -100,7 +100,9 @@ export const updateItem = ({ commit, getters }, {item, isUpdate}) => {
       .then(response => {
         if (response.status === 201) {
           commit('item', response.data)
-          commit('update', response.data)
+          if (!fromDashboard) {
+            commit('update', response.data)
+          }
           commit('showSnackbar', {text: (isUpdate ? 'Обновление' : 'Добавление') + ' данных прошло успешно', snackbar: true, context: 'success'}, { root: true })
           commit('showSpinner', false, {root: true})
         } else {

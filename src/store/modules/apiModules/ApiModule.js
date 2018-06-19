@@ -5,7 +5,7 @@ class ApiModule {
     this.namespaced = true
     this.state = {
       items: [],
-      item: null
+      item: {}
     }
     this.mutations = mutations
     this.getters = {

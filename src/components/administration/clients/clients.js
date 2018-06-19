@@ -50,7 +50,7 @@ export default {
           registration_number: ''
         }
       }
-      await this.$store.dispatch('clientTypes/getItems')
+      this.dialogData = await this.$store.dispatch('clientTypes/getItems')
       this.dialogData = {
         title: (isUpdate ? 'Обновление' : 'Добавление') + ' клиента',
         isClosable: true,

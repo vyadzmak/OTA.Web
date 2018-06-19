@@ -13,6 +13,8 @@ export default {
         { text: 'Имя', align: 'left', value: 'name' },
         { text: 'Роль', align: 'left', value: 'user_role_data.title' },
         { text: 'Клиент', align: 'left', value: 'client_data.name' },
+        { text: 'Телефон', align: 'left', value: 'user_info_data.phone_number' },
+        { text: 'Статус', align: 'left', value: 'lock_state' },
         {sortable: false},
         {sortable: false}
       ],
@@ -66,8 +68,8 @@ export default {
       } else {
         item.user_login.password = ''
       }
-      await this.$store.dispatch('clients/getItems')
-      await this.$store.dispatch('userRoles/getItems')
+      this.dialogData = await this.$store.dispatch('clients/getItems')
+      this.dialogData = await this.$store.dispatch('userRoles/getItems')
       this.dialogData = {
         title: (isUpdate ? 'Обновление' : 'Добавление') + ' пользователя',
         isClosable: true,

@@ -50,11 +50,12 @@ export default {
           is_default: false,
           city_id: null,
           confirmed: false,
+          tobacco_alcohol_license: false,
           name: '',
           code: ''
         }
       }
-      await this.$store.dispatch('cityCatalog/getItems')
+      this.dialogData = await this.$store.dispatch('areaCatalog/getItems')
       this.dialogData = {
         title: (isUpdate ? 'Обновление' : 'Добавление') + ' адреса',
         isClosable: true,

@@ -62,7 +62,7 @@ export default {
           currency_id: null
         }
       }
-      let serverDialogData = await this.$store.dispatch('currencyCatalog/getItems')
+      this.dialogData = await this.$store.dispatch('currencyCatalog/getItems')
       this.dialogData = {
         title: (isUpdate ? 'Обновление' : 'Добавление') + ' продукта',
         isClosable: true,

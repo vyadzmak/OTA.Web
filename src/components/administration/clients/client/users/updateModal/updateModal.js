@@ -25,7 +25,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({clients: 'clients/items', userRoles: 'userRoles/items', userData: 'userData'}),
+    ...mapGetters({clients: 'clients/items', userData: 'userData'}),
+    userRoles () {
+      return _.filter(this.$store.getters['userRoles/items'], v => { return v.id > 3 })
+    },
     imgUrl () {
       if (this.imgSrc) {
         return this.imgSrc

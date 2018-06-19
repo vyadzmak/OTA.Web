@@ -50,8 +50,8 @@ export default {
         if (updateItem.default_image_id === data) {
           updateItem.default_image_id = _.get(updateItem.images, '[0]', 0)
         }
-        await this.$store.dispatch('partnersCatalog/updateItem', {item: updateItem, isUpdate: true})
-        await this.$store.dispatch('attachments/deleteItem', data)
+        this.dialogData = await this.$store.dispatch('partnersCatalog/updateItem', {item: updateItem, isUpdate: true})
+        this.dialogData = await this.$store.dispatch('attachments/deleteItem', data)
       }
       this.qDialog = false
     },
@@ -90,8 +90,8 @@ export default {
           updateItem.default_image_id = imagesArray[0]
         }
         updateItem.images = updateItem.images ? updateItem.images.concat(imagesArray) : imagesArray
-        await this.$store.dispatch('partnersCatalog/updateItem', {item: updateItem, isUpdate: true})
-        await this.$store.dispatch('attachments/attachmentsInfo', {attachments_ids: updateItem.images.join()})
+        this.dialogData = await this.$store.dispatch('partnersCatalog/updateItem', {item: updateItem, isUpdate: true})
+        this.dialogData = await this.$store.dispatch('attachments/attachmentsInfo', {attachments_ids: updateItem.images.join()})
       } else {
         text = 'Загрузка файлов не удалась. Обратитесь к администратору'
         context = 'error'
