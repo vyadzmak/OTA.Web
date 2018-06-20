@@ -12,6 +12,7 @@ export default {
         { text: 'Имя', align: 'left', value: 'name' },
         { text: 'Системное имя', align: 'left', value: 'system_name' },
         { text: 'Отображаемое значение', align: 'left', value: 'display_value' },
+        { text: 'По умолчанию', align: 'left', value: 'is_default' },
         {sortable: false},
         {sortable: false}
       ],

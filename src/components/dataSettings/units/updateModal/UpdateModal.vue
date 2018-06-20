@@ -31,6 +31,9 @@
         label="Системное имя"
         required
       />
+      <v-checkbox
+        v-model="data.item.is_default"
+        label="Использовать по умолчанию"/>
       <v-card-actions>
         <v-spacer/>
         <v-btn @click="clear">Очистить</v-btn>

@@ -9,7 +9,7 @@
         dark
         @click="cancel"><v-icon>clear</v-icon></v-btn>
     </v-card-title>
-    <v-card-text style="height:300px;">
+    <v-card-text style="height:80vh;">
       <v-form
         ref="form"
         v-model="valid">

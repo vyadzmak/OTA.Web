@@ -1,6 +1,7 @@
 import {mapGetters} from 'vuex'
 import questionDialog from '@/components/questionDialog/QuestionDialog.vue'
 import updateModal from './updateModal/UpdateModal.vue'
+import productModal from './productModal/productModal.vue'
 
 export default {
   name: 'bidDetails',
@@ -16,7 +17,11 @@ export default {
       dialogComponent: updateModal,
       qDialog: false,
       qDialogComponent: questionDialog,
-      item: {}
+      productDialog: false,
+      productDialogComponent: productModal,
+      item: {},
+      productInfo: {},
+      userDetails: {}
     }
   },
   computed: {
@@ -24,12 +29,18 @@ export default {
       userData: 'userData',
       usersInfo: 'userInfo/items',
       clientAddresses: 'clientAddresses/items'}),
-    userInfo () {
-      return _.find(this.usersInfo, {user_id: this.userData.id})
-    },
     compItem () {
       let result = _.get(this.$store.getters, 'orders/item')
-      this.item = _.cloneDeep(result)
+      if (!this.item.id) {
+        this.item = _.cloneDeep(result)
+      }
+      return result
+    },
+    compUserDetails () {
+      let result = _.get(this.$store.getters, 'crudUsers/item')
+      if (!this.userDetails.id || this.userDetails.id === result.id) {
+        this.userDetails = _.cloneDeep(result)
+      }
       return result
     },
     headers () {
@@ -91,6 +102,18 @@ export default {
       }
       this.qDialog = false
     },
+    openProductDialog: async function (item) {
+      this.productInfo = await this.$store.dispatch('products/getItem', {id: item.product_data.id})
+      this.productInfo = _.get(this.$store, 'getters.products/item', {})
+      this.dialogData = {
+        title: item.product_data.name,
+        isClosable: true
+      }
+      this.productDialog = true
+    },
+    productDialogClose () {
+      this.productDialog = false
+    },
     acceptBid () {
       this.item.order_state_id = 2
       this.item.executor_id = this.userData.id
@@ -105,9 +128,9 @@ export default {
     }
   },
   created () {
-    this.$store.dispatch('orderPositions/getItems')
+    this.$store.dispatch('orderPositions/orderPositionsByOrders', {user_id: this.userData.id, order_id: this.compItem.id})
     this.$store.dispatch('clientAddresses/clientAddressesByClient', {user_id: this.userData.id, client_id: _.get(this.compItem, 'order_user_data.client_id')})
-    this.$store.dispatch('userInfo/getItems')
+    this.$store.dispatch('crudUsers/userDetails', {user_id: this.userData.id, request_user_id: _.get(this.item, 'order_user_data.id')})
   },
   mounted () {
     this.$refs.dataTable.defaultPagination.descending = true

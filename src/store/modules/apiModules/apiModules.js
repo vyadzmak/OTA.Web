@@ -11,7 +11,7 @@ export default [
   {link: 'currencyCatalog'},
   {link: 'log', additional: [{link: 'routeAdminLogs', requestParams: ['user_id']}]},
   {link: 'orderPositionStates'},
-  {link: 'orderPositions'},
+  {link: 'orderPositions', additional: [{link: 'orderPositionsByOrders', requestParams: ['user_id', 'order_id']}]},
   {link: 'orderStates'},
   {link: 'orders', additional: [{link: 'routeOrders', requestParams: ['user_id', 'state_id']}]},
   {link: 'partnersCatalog'},

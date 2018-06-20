@@ -11,22 +11,20 @@
         :key="index"
         tag="a"
         xs12
-        sm6
-        md3
-        lg3
+        sm4
+        md2
+        lg2
         @click="goToSetting(item.path)">
         <v-card class="hover-card">
-          <v-card-text
-            class="text-xs-center"
-          >
+          <div class="text-xs-center pa-1">
             <img
               :src="'static/p'+(item.id-1)+'.png'"
-              width="150px">
-          </v-card-text>
+              width="125px">
+          </div>
           <v-card-text
             class="text-xs-center">
             <div
-              class="headline category-name"
+              class="subheading category-name"
               v-text="item.name"/>
         </v-card-text></v-card>
       </v-flex>
@@ -40,7 +38,7 @@
 @import '../../assets/styles/scss/mixins.scss';
 
 .category-name {
-  @include lineClamp(2);
+  @include lineClamp(2, 45px);
   // @include responsiveText(14px, 22px);
 }
 </style>

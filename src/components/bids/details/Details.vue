@@ -1,5 +1,8 @@
 <template>
   <v-card>
+    <div
+      v-show="false"
+      v-text="compUserDetails.id"/>
     <v-card-title class="headline pb-0">Общая информация<v-spacer/>
       <v-btn
         v-show="item.order_state_id===1"
@@ -72,12 +75,12 @@
           <v-divider/>
           <v-list-tile>
             <v-list-tile-content class="body-2">E-mail:</v-list-tile-content>
-            <v-list-tile-content class="align-end">{{ userInfo.email }}</v-list-tile-content>
+            <v-list-tile-content class="align-end">{{ ldsh.get(userDetails, 'user_info_data.email') }}</v-list-tile-content>
           </v-list-tile>
           <v-divider/>
           <v-list-tile>
             <v-list-tile-content class="body-2">Телефон:</v-list-tile-content>
-            <v-list-tile-content class="align-end">{{ userInfo.phone_number }}</v-list-tile-content>
+            <v-list-tile-content class="align-end">{{ ldsh.get(userDetails, 'user_info_data.phone_number') }}</v-list-tile-content>
           </v-list-tile>
           <v-divider/>
         </v-list>
@@ -92,17 +95,17 @@
             <v-divider/>
             <v-list-tile>
               <v-list-tile-content class="body-2">Сумма:</v-list-tile-content>
-              <v-list-tile-content class="align-end">{{ item.amount }}</v-list-tile-content>
+              <v-list-tile-content class="align-end">{{ item.amount||'0' }}</v-list-tile-content>
             </v-list-tile>
             <v-divider/>
             <v-list-tile>
               <v-list-tile-content class="body-2">Скидка:</v-list-tile-content>
-              <v-list-tile-content class="align-end">{{ item.discount_amount }}</v-list-tile-content>
+              <v-list-tile-content class="align-end">{{ item.discount_amount||'0' }}</v-list-tile-content>
             </v-list-tile>
             <v-divider/>
             <v-list-tile>
               <v-list-tile-content class="body-2">Итого:</v-list-tile-content>
-              <v-list-tile-content class="align-end">{{ item.total_amount }}</v-list-tile-content>
+              <v-list-tile-content class="align-end">{{ item.total_amount||'0' }}</v-list-tile-content>
             </v-list-tile>
             <v-divider/>
             <v-list-tile>
@@ -145,10 +148,14 @@
             v-show="item.order_state_id===2"
             class="px-1">
             <v-tooltip top>
-              <v-icon
+              <v-btn
                 slot="activator"
-                :color="props.item.order_position_states.id===1?'success'
-                :props.item.order_position_states.id===3?'warning':'error'">mdi-eye</v-icon>
+                icon
+                @click.stop="openProductDialog(props.item)">
+                <v-icon
+                  :color="props.item.order_position_states.id===1?'success'
+                  :props.item.order_position_states.id===3?'warning':'error'">mdi-eye</v-icon>
+              </v-btn>
               <span>{{ props.item.order_position_states.title }}</span>
             </v-tooltip>
           </td>
@@ -188,13 +195,22 @@
     </v-dialog>
     <v-dialog
       v-model="qDialog"
-      scrollable
       max-width="300px">
       <component
         v-if="qDialog"
         :is="qDialogComponent"
         :data="dialogData"
         @dialog-close="qDialogClose"/>
+    </v-dialog>
+    <v-dialog
+      v-model="productDialog"
+      scrollable
+      max-width="500px">
+      <component
+        v-if="productDialog"
+        :is="productDialogComponent"
+        :data="dialogData"
+        @dialog-close="productDialogClose"/>
     </v-dialog>
 </v-card></template>
 

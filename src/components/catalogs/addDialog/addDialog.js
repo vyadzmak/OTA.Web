@@ -19,7 +19,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({currencyTypes: 'currencyCatalog/items'})
+    currencyTypes () {
+      let result = _.get(this.$store, 'getters.currencyCatalog/items')
+      if (!this.data.item.currency_id && result.length > 0) {
+        this.data.item.currency_id = _(result).filter({is_default: true}).get('[0].id', result[0].id)
+      }
+      return result
+    }
   },
   methods: {
     submit: function () {

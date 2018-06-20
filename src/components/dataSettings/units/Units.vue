@@ -32,6 +32,9 @@
           <td>{{ props.item.name }}</td>
           <td>{{ props.item.system_name }}</td>
           <td>{{ props.item.display_value }}</td>
+          <td><v-icon
+            v-if="props.item.is_default"
+            color="success">fas fa-check</v-icon></td>
           <td class="px-1">
             <v-tooltip top>
               <v-btn

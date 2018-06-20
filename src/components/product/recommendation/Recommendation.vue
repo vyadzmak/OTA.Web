@@ -46,13 +46,23 @@
               <v-btn
                 slot="activator"
                 icon
-                @click.stop="getItem(props.item.id)"><v-icon color="warning">mdi-eye</v-icon></v-btn>
-              <span>Удалить</span>
+                @click.stop="openProductDialog(props.item)"><v-icon color="warning">mdi-eye</v-icon></v-btn>
+              <span>Просмотр</span>
             </v-tooltip>
           </td>
         </tr>
       </template>
     </v-data-table>
+    <v-dialog
+      v-model="productDialog"
+      scrollable
+      max-width="500px">
+      <component
+        v-if="productDialog"
+        :is="productDialogComponent"
+        :data="dialogData"
+        @dialog-close="productDialogClose"/>
+    </v-dialog>
   </v-card>
 </template>
 

@@ -29,17 +29,19 @@
         v-show="productsShown"
         tag="a"
         xs12
-        sm6
-        md3
-        lg3
+        sm4
+        md2
+        lg2
         @click="openDialog()">
         <v-card
           height="100%"
           class="hover-card">
           <v-card-text
-            class="text-xs-center py-5 grey--text"
-          ><div class="display-3 pt-3">Добавить</div>
-            <div><v-icon color="grey">fas fa-plus fa-7x</v-icon></div>
+            class="text-xs-center py-4 grey--text"
+          ><div class="py-5">
+            <div class="headline pt-3">Добавить</div>
+            <div><v-icon color="grey">fas fa-plus fa-5x</v-icon></div>
+          </div>
         </v-card-text></v-card>
       </v-flex>
       <v-flex
@@ -48,40 +50,41 @@
         :key="index+'-item'"
         tag="a"
         xs12
-        sm6
-        md3
-        lg3
+        sm4
+        md2
+        lg2
         @click="getNext(item)">
         <v-card class="hover-card">
-          <v-card-text class="text-xs-center">
+          <div class="text-xs-center pa-2">
             <v-card-media
               :key="index+'img'"
-              :src="baseUrl+(item.default_image_id?item.default_image_data.thumb_file_path:userData.no_image_url)"
-              height="150px"
+              :src="item.default_image_id?baseUrl+item.default_image_data.thumb_file_path:userData.no_image_url"
+              height="125px"
               contain/>
-          </v-card-text>
-          <v-card-text class="text-xs-center">
+          </div>
+          <div class="text-xs-center">
             <div
-              class="headline product-name"
+              class="subheading product-name"
               v-text="item.name"/>
             <div
               class="grey--text"
               v-text="item.internal_categories_count>0?
                 `Категорий `+item.internal_categories_count:
-              `Товаров `+(item.internal_products_count||0)"/>
-        </v-card-text></v-card>
+                item.internal_products_count>0?
+              `Товаров `+item.internal_products_count:'Категорий 0'"/>
+        </div></v-card>
       </v-flex>
       <v-flex
         v-for="(item, index) in products"
         :key="index+'-prod'"
         tag="a"
         xs12
-        sm6
-        md3
-        lg3
+        sm4
+        md2
+        lg2
         @click="goTo(item)">
         <v-card class="hover-card">
-          <v-card-text class="text-xs-center">
+          <div class="text-xs-center pa-1">
             <div class="card-top-action">
               <div><v-btn
                 icon
@@ -92,18 +95,29 @@
             </div>
             <v-card-media
               :key="index+'img'"
-              :src="baseUrl+(item.default_image_id?item.default_image_data.thumb_file_path:userData.no_image_url)"
-              height="150px"
+              :src="item.default_image_id?baseUrl+item.default_image_data.thumb_file_path:userData.no_image_url"
+              height="125px"
               contain/>
-          </v-card-text>
-          <v-card-text class="text-xs-center">
+          </div>
+          <div class="text-xs-center pa-1">
             <div
-              class="headline product-name"
+              class="subheading product-name"
               v-text="item.name"/>
+            <div
+              class="grey--text"
+              v-text="`Артикул: `+item.product_code"/>
             <div
               class="grey--text product-description"
               v-text="item.short_description"/>
-        </v-card-text></v-card>
+            <v-layout class="pa-1 white--text">
+              <v-flex
+                style="background: green"
+                v-text="item.unit_value+' '+ldsh(units).filter({id: item.unit_id}).get('[0].display_value', '')"/>
+              <v-flex
+                style="background: purple"
+                v-text="item.amount+' '+ldsh(currencies).filter({id: item.currency_id}).get('[0].display_value', '')"/>
+            </v-layout>
+        </div></v-card>
       </v-flex>
     </v-layout>
   </v-container>
@@ -118,6 +132,6 @@
   @include lineClamp(3, 60px);
 }
 .product-name {
-  @include lineClamp(2);
+  @include lineClamp(2, 50px);
 }
 </style>

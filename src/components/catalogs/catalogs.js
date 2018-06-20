@@ -88,6 +88,8 @@ export default {
     ...mapGetters({userData: 'userData',
       items: 'productCategories/items',
       products: 'products/items',
+      units: 'unitCatalog/items',
+      currencies: 'currencyCatalog/items',
       catalogBack: 'catalogBack'}),
     categoryTail () {
       return _.last(this.categoryIds)
@@ -97,6 +99,8 @@ export default {
     this.$store.commit('catalogBack', true)
     this.$store.commit('products/items', [])
     this.getCategories(-1)
+    this.$store.dispatch('unitCatalog/getItems')
+    this.$store.dispatch('currencyCatalog/getItems')
   },
   mounted () {
   },

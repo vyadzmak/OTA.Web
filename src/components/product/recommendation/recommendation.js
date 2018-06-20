@@ -1,4 +1,5 @@
 import {mapGetters} from 'vuex'
+import productModal from './productModal/productModal.vue'
 
 export default {
   name: 'productRecommendation',
@@ -17,7 +18,10 @@ export default {
       noDataText: 'Нет данных',
       noResultsText: 'Поиск не дал результатов',
       item: {},
-      selectedItems: []
+      selectedItems: [],
+      dialogData: null,
+      productDialog: false,
+      productDialogComponent: productModal
     }
   },
   computed: {
@@ -33,6 +37,23 @@ export default {
     updateItem () {
       this.item.product_recomendations = _.map(this.selectedItems, v => { return v.id })
       this.$store.dispatch('products/updateItem', {item: this.item, isUpdate: true})
+    },
+    openProductDialog: async function (item) {
+      let productInfo = await this.$http.get('products/' + item.id)
+      if (productInfo.status === 200) {
+        productInfo = productInfo.data
+      } else {
+        return
+      }
+      this.dialogData = {
+        title: item.name,
+        isClosable: true,
+        item: productInfo
+      }
+      this.productDialog = true
+    },
+    productDialogClose () {
+      this.productDialog = false
     }
   },
   created () {
