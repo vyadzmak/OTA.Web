@@ -32,6 +32,6 @@ export default {
   },
   beforeDestroy () {
     this.$store.commit('adminSettings/items', [])
-    this.$store.commit('adminSettings/item', null)
+    this.$store.commit('adminSettings/item', {})
   }
 }

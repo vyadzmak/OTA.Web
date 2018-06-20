@@ -138,7 +138,7 @@ const dashboard = {
     name: 'administration',
     component: Administration,
     redirect: to => {
-      return {name: 'administration.general'}
+      return {name: 'administration.users'}
     },
     children: adminChildren
   }]

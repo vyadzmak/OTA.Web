@@ -11,7 +11,6 @@ export default {
         { text: 'Id', align: 'left', value: 'id' },
         { text: 'Город/а.е.', align: 'left', value: 'name' },
         { text: 'Область/Регион', align: 'left', value: 'cityCatalog_data.name' },
-        { text: 'Отображаемое значение', align: 'left', value: 'display_value' },
         {sortable: false},
         {sortable: false}
       ],

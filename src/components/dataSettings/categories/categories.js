@@ -9,7 +9,7 @@ export default {
     return {
       baseUrl: baseUrl.slice(0, -1),
       msg: 'Настройка каталогов',
-      categoryIds: [-1],
+      categoryIds: [{id: -1, name: 'Главная'}],
       dialog: false,
       dialogComponent: addDialogComponent,
       dialogData: null,
@@ -20,10 +20,10 @@ export default {
   methods: {
     getNext (item) {
       if (item.internal_categories_count > 0) {
-        this.categoryIds.push(item.id)
+        this.categoryIds.push({id: item.id, name: item.name})
         this.getCategories(item.id)
       } else if (!item.internal_products_count) {
-        this.categoryIds.push(item.id)
+        this.categoryIds.push({id: item.id, name: item.name})
         this.$store.commit('productCategories/items', [])
       }
     },
@@ -31,6 +31,12 @@ export default {
       this.$store.commit('categoryBack', false)
       this.$store.commit('productCategories/item', item)
       this.$router.push({name: 'category'})
+    },
+    goBack (id) {
+      if (id !== this.categoryTail.id) {
+        this.categoryIds.splice(_.findIndex(this.categoryIds, {id}) + 1)
+        this.getCategories(this.categoryTail.id)
+      }
     },
     getCategories (categoryId) {
       this.$store.dispatch('productCategories/productsCategoriesByProductCategory', {user_id: this.userData.id, category_id: categoryId})
@@ -54,7 +60,7 @@ export default {
           full_description: '',
           user_creator_id: this.userData.id,
           is_lock: false,
-          parent_category_id: this.categoryTail
+          parent_category_id: this.categoryTail.id
         }
       }
       this.dialogData = {
@@ -92,11 +98,11 @@ export default {
   },
   beforeRouteLeave (to, from, next) {
     if (this.categoryBack) {
-      if (!this.categoryTail || this.categoryTail < 0) {
+      if (!this.categoryTail || this.categoryTail.id < 0) {
         next()
       } else {
         this.categoryIds.splice(this.categoryIds.length - 1, 1)
-        this.getCategories(this.categoryTail)
+        this.getCategories(this.categoryTail.id)
         next(false)
       }
     } else {

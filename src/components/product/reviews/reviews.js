@@ -13,6 +13,7 @@ export default {
         { text: 'Комментарий', align: 'left', value: 'comment_text' },
         { text: 'Дата', align: 'left', value: 'creation_date' },
         { text: 'Оценка', align: 'left', value: 'rate' },
+        { text: 'Скрыт', align: 'left', value: 'is_delete' },
         {sortable: false},
         {sortable: false}
       ],

@@ -16,7 +16,7 @@
               color="primary">
               <img
                 width="50"
-                src="@/assets/img/share.svg">
+                src="@/assets/img/logo.png">
               <v-toolbar-title>{{ msg }}
               </v-toolbar-title>
             </v-toolbar>

@@ -10,6 +10,33 @@
         @click="cancel"><v-icon>clear</v-icon></v-btn>
     </v-card-title>
     <v-card-text style="height:80vh">
+      <template v-if="data.isUpdate">
+        <v-card-actions>
+          <v-spacer/>
+          <v-avatar size="125px">
+            <img
+              :src="imgUrl"
+              class="img-circle elevation-7 mb-1"
+            >
+          </v-avatar>
+          <v-spacer/>
+        </v-card-actions>
+        <v-card-actions>
+          <v-spacer/>
+          <vue-transmit
+            ref="uploader"
+            v-bind="options"
+            class="col-12 mb-2"
+            tag="section"
+            @sending = "beforeSend"
+            @complete="completeSend">
+            <v-btn
+              dark
+              color="info">Сменить аватар</v-btn>
+          </vue-transmit>
+          <v-spacer/>
+        </v-card-actions>
+      </template>
       <v-form
         ref="form"
         v-model="valid"
@@ -99,33 +126,6 @@
           </v-menu>
         </template>
       </v-form>
-      <template v-if="data.isUpdate">
-        <v-card-actions>
-          <v-spacer/>
-          <v-avatar size="125px">
-            <img
-              :src="imgUrl"
-              class="img-circle elevation-7 mb-1"
-            >
-          </v-avatar>
-          <v-spacer/>
-        </v-card-actions>
-        <v-card-actions>
-          <v-spacer/>
-          <vue-transmit
-            ref="uploader"
-            v-bind="options"
-            class="col-12 mb-2"
-            tag="section"
-            @sending = "beforeSend"
-            @complete="completeSend">
-            <v-btn
-              dark
-              color="info">Сменить аватар</v-btn>
-          </vue-transmit>
-          <v-spacer/>
-        </v-card-actions>
-      </template>
     </v-card-text>
     <v-card-actions>
       <v-spacer/>

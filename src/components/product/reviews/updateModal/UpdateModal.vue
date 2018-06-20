@@ -25,6 +25,9 @@
         label="Оценка"
         required
       />
+      <v-checkbox
+        v-model="data.item.is_delete"
+        label="Скрыть отзыв"/>
       <v-card-actions>
         <v-spacer/>
         <v-btn @click="clear">Очистить</v-btn>

@@ -1,5 +1,10 @@
 <template>
   <v-card>
+    <v-card-actions><v-btn
+      dark
+      color="success"
+      @click="updateItem()"
+    >Обновить</v-btn></v-card-actions>
     <v-card-text>
       <v-form ref="form">
         <v-layout
@@ -49,11 +54,6 @@
       </v-form>
       <div v-show="false">{{ compItem }}</div>
     </v-card-text>
-    <v-card-actions><v-btn
-      dark
-      color="success"
-      @click="updateItem()"
-    >Обновить</v-btn></v-card-actions>
   </v-card>
 </template>
 

@@ -1,6 +1,11 @@
 <template>
   <div>
     <v-card>
+      <v-card-actions><v-btn
+        dark
+        color="success"
+        @click="updateItem()"
+      >Обновить</v-btn></v-card-actions>
       <v-card-text>
         <div
           v-show="false"
@@ -21,11 +26,6 @@
             label="Описание"/>
         </v-form>
       </v-card-text>
-      <v-card-actions><v-btn
-        dark
-        color="success"
-        @click="updateItem()"
-      >Обновить</v-btn></v-card-actions>
     </v-card>
   </div>
 </template>

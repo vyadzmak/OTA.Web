@@ -22,6 +22,15 @@
         :data="dialogData"
         @dialog-close="qDialogClose"/>
     </v-dialog>
+    <v-breadcrumbs class="py-1">
+      <v-breadcrumbs-item
+        v-for="item in categoryIds"
+        :key="item.id"
+        @click.native="goBack(item.id)"
+      >
+        {{ item.name }}
+      </v-breadcrumbs-item>
+    </v-breadcrumbs>
     <v-layout
       row
       wrap>

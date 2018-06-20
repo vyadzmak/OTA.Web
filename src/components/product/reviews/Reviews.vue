@@ -29,6 +29,7 @@
           <td v-text="props.item.comment_text"/>
           <td>{{ props.item.creation_date | moment('DD.MM.YYYY HH:mm') }}</td>
           <td v-text="props.item.rate"/>
+          <td><v-icon v-if="props.item.is_delete">fas fa-eye-slash</v-icon></td>
           <td class="px-1">
             <v-tooltip top>
               <v-btn
