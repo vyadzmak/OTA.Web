@@ -21,7 +21,7 @@
         row
         wrap>
         <v-flex
-          lg5
+          lg6
           md6
           sm8
           xs12
@@ -45,14 +45,8 @@
           <v-list-tile>
             <v-list-tile-content
               class="body-2"
-              style="display:-webkit-box">Адрес:<v-tooltip top>
-                <v-btn
-                  v-show="item.order_state_id===2"
-                  slot="activator"
-                  icon
-                  @click.stop="updateAddress()"><v-icon color="info">mdi-pen</v-icon></v-btn>
-                <span>Редактировать</span>
-            </v-tooltip></v-list-tile-content>
+              style="display:-webkit-box">Адрес:
+            </v-list-tile-content>
             <v-list-tile-content class="align-end">
               <v-select
                 v-model="item.client_address_id"
@@ -66,6 +60,44 @@
                 single-line
                 label="Адрес"/>
             </v-list-tile-content>
+            <v-list-tile-action
+              v-show="item.order_state_id===2"><v-tooltip top>
+                <v-btn
+                  slot="activator"
+                  icon
+                  @click.stop="updateAddress()"><v-icon color="info">mdi-pen</v-icon></v-btn>
+                <span>Редактировать</span>
+            </v-tooltip></v-list-tile-action>
+          </v-list-tile>
+          <v-divider/>
+          <v-list-tile>
+            <v-list-tile-content class="body-2">Город/а.е.:</v-list-tile-content>
+            <v-list-tile-content class="align-end">{{ ldsh.get(compItem, 'client_address_data.city_data.name') }}</v-list-tile-content>
+          </v-list-tile>
+          <v-divider/>
+          <v-list-tile>
+            <v-list-tile-content class="body-2">Регион/область:</v-list-tile-content>
+            <v-list-tile-content class="align-end">{{ ldsh.get(compItem, 'client_address_data.city_data.area_data.name') }}</v-list-tile-content>
+          </v-list-tile>
+          <v-divider/>
+          <v-list-tile>
+            <v-list-tile-content class="body-2">Подтвержден:</v-list-tile-content>
+            <v-list-tile-content class="align-end">
+              <v-icon
+                slot="activator"
+                :color="compItem.client_address_data.confirmed?'success':'error'">
+                {{ 'fas fa-'+(compItem.client_address_data.confirmed?'check':'times') }}
+            </v-icon></v-list-tile-content>
+          </v-list-tile>
+          <v-divider/>
+          <v-list-tile>
+            <v-list-tile-content class="body-2">Лицензия на продажу алкоголя:</v-list-tile-content>
+            <v-list-tile-content class="align-end">
+              <v-icon
+                slot="activator"
+                :color="compItem.client_address_data.tobacco_alcohol_license?'success':'error'">
+                {{ 'fas fa-'+(compItem.client_address_data.tobacco_alcohol_license?'check':'times') }}
+            </v-icon></v-list-tile-content>
           </v-list-tile>
           <v-divider/>
           <v-list-tile>
@@ -86,7 +118,7 @@
         </v-list>
         </v-flex>
         <v-flex
-          lg5
+          lg6
           md6
           sm8
           xs12
@@ -143,6 +175,11 @@
           <td>{{ props.item.amount_per_item }}</td>
           <td>{{ props.item.amount_per_item_discount }}</td>
           <td>{{ props.item.total_amount }}</td>
+          <td><v-icon
+            slot="activator"
+            :color="props.item.need_invoice?'success':'error'">
+            {{ 'fas fa-'+(props.item.need_invoice?'check':'times') }}
+          </v-icon></td>
           <td>{{ props.item.description }}</td>
           <td
             v-show="item.order_state_id===2"

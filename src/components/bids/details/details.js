@@ -52,6 +52,7 @@ export default {
         { text: 'Сумма за ед.', align: 'left', value: 'amount_per_item' },
         { text: 'Скидка', align: 'left', value: 'amount_per_item_discount' },
         { text: 'Итого', align: 'left', value: 'total_amount' },
+        { text: 'Накладная', align: 'left', value: 'need_invoice' },
         { text: 'Примечание', align: 'left', value: 'description' }
       ]
       if (this.compItem.order_state_id === 2) {
@@ -115,9 +116,13 @@ export default {
       this.productDialog = false
     },
     acceptBid () {
-      this.item.order_state_id = 2
-      this.item.executor_id = this.userData.id
-      this.$store.dispatch('orders/updateItem', {item: this.item, isUpdate: true})
+      if (_.get(this.compItem, 'client_address_data.confirmed')) {
+        this.item.order_state_id = 2
+        this.item.executor_id = this.userData.id
+        this.$store.dispatch('orders/updateItem', {item: this.item, isUpdate: true})
+      } else {
+        this.$store.commit('showSnackbar', {text: 'Адрес заявки не был подтвержден, поэтому невозможно принять заявку в работу. Подтвердите адрес и повторите', snackbar: true, context: 'error'})
+      }
     },
     closeBid () {
       this.item.order_state_id = 3

@@ -34,6 +34,11 @@
           : $route.name === 'bids.active' ? 'processed_date' : 'execute_date'] | moment("DD.MM.YYYY HH:mm") }}</td>
           <td>{{ ldsh.get(props.item, 'order_executor_data.name', 'Нет') }}</td>
           <td>{{ props.item.order_state_data.title }}</td>
+          <td><v-icon
+            slot="activator"
+            :color="ldsh.get(props.item, 'client_address_data.confirmed')?'success':'error'">
+            {{ 'fas fa-'+(ldsh.get(props.item, 'client_address_data.confirmed')?'check':'times') }}
+          </v-icon></td>
         </tr>
       </template>
     </v-data-table>

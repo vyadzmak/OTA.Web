@@ -9,7 +9,7 @@
     <v-form ref="form">
       <v-card-text>
         <v-layout
-          column
+          row
           wrap>
           <v-flex
             lg6
@@ -43,11 +43,12 @@
             lg6
             md6
             sm12
-            pa-1>
+            pa-1
+            class="text-xs-center">
             <v-avatar size="125px">
               <img
+                :src="imgUrl"
                 class="img-circle elevation-7 mb-1"
-                src="https://raw.githubusercontent.com/vuetifyjs/docs/dev/static/doc-images/lists/1.jpg"
               >
             </v-avatar>
             <vue-transmit
@@ -55,7 +56,8 @@
               v-bind="options"
               class="col-12 mb-2"
               tag="section"
-              @complete-multiple="updateAvatar">
+              @sending = "beforeSend"
+              @complete="completeSend">
               <v-btn
                 dark
                 color="info">Сменить аватар</v-btn>
