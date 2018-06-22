@@ -25,7 +25,11 @@ export default {
     }
   },
   created () {
+    this.$store.dispatch('viewSettings/routeViewSettings', {user_id: this.userData.id})
   },
   mounted () {
+  },
+  beforeDestroy () {
+    this.$store.commit('viewSettings/item', {})
   }
 }

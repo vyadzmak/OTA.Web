@@ -23,7 +23,7 @@ export default {
       },
       rowsPerPageItems: [6, 12, 18, 24],
       pagination: {
-        rowsPerPage: 4
+        rowsPerPage: 6
       },
       dialogData: null,
       qDialog: false,

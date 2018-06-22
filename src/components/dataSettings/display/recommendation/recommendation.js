@@ -1,42 +1,64 @@
+import {mapGetters} from 'vuex'
+import productModal from './productModal/productModal.vue'
 
 export default {
-  name: 'recommendation',
+  name: 'displayRecommendation',
   data () {
     return {
       search: '',
-      settings: [],
-      errors: [],
       headers: [
-        { text: 'ID', align: 'left', value: 'Id' },
-        { text: 'Фамилия', align: 'left', value: 'SettingName' },
-        { text: 'Имя', align: 'left', value: 'SettingValue' },
         {sortable: false},
+        { text: 'Id', align: 'left', value: 'id' },
+        { text: 'Наименование', align: 'left', value: 'name' },
+        { text: 'Артикул', align: 'left', value: 'product_code' },
         {sortable: false}
       ],
       tableRowsShown: [10, 20, 50, 100, {text: 'Все', value: -1}],
       rowsPerPageText: 'Строк на странице',
       noDataText: 'Нет данных',
-      noResultsText: 'Поиск не дал результатов'
+      noResultsText: 'Поиск не дал результатов',
+      item: {},
+      selectedItems: [],
+      dialogData: null,
+      productDialog: false,
+      productDialogComponent: productModal
     }
   },
   computed: {
-    userData: function () {
-      return this.$store.getters.userData
+    ...mapGetters({items: 'products/items', userData: 'userData'}),
+    compItem () {
+      let result = this.$store.getters['viewSettings/item']
+      this.item = result ? _.cloneDeep(result) : {}
+      this.selectedItems = _.map(_.get(this.item, 'recomendation_elements', []), v => { return {id: v} })
+      return result
     }
   },
   methods: {
-    updateItem: function (item, isUpdate) {
-      this.$store.commit('showSpinner', true)
-
-      this.$store.commit('showSnackbar', {text: (isUpdate ? 'Обновление' : 'Добавление') + ' настройки прошло успешно', snackbar: true, context: 'success'})
-
-      this.$store.commit('showSpinner', false)
+    updateItem () {
+      this.item.recomendation_elements = _.map(this.selectedItems, v => { return v.id })
+      this.$store.dispatch('viewSettings/updateItem', {item: this.item, isUpdate: true})
+    },
+    openProductDialog: async function (item) {
+      let productInfo = await this.$http.get('products/' + item.id)
+      if (productInfo.status === 200) {
+        productInfo = productInfo.data
+      } else {
+        return
+      }
+      this.dialogData = {
+        title: item.name,
+        isClosable: true,
+        item: productInfo
+      }
+      this.productDialog = true
+    },
+    productDialogClose () {
+      this.productDialog = false
     }
   },
   created () {
-    // this.$store.commit('showSpinner', true)
+    this.$store.dispatch('products/getItems')
   },
   mounted () {
-    this.$refs.recommendationDataTable.defaultPagination.descending = true
   }
 }

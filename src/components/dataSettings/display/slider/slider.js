@@ -1,11 +1,12 @@
+import {mapGetters} from 'vuex'
 import questionDialog from '@/components/questionDialog/QuestionDialog.vue'
-import { ModalService } from 'vue-modal-dialog'
 import {baseUrl} from '@/httpClient/index'
 
 export default {
   name: 'slider',
   data () {
     return {
+      baseUrl: baseUrl.slice(0, -1),
       valid: false,
       menu: false,
       totalProgress: 0,
@@ -20,54 +21,47 @@ export default {
         uploadMultiple: true,
         maxFiles: 300
       },
-      rowsPerPageItems: [4, 8, 12],
+      rowsPerPageItems: [6, 12, 18, 24],
       pagination: {
-        rowsPerPage: 4
+        rowsPerPage: 6
       },
-      items: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+      dialogData: null,
+      qDialog: false,
+      qDialogComponent: questionDialog
     }
   },
   computed: {
-    userData: function () {
-      return this.$store.getters.userData
+    ...mapGetters({userData: 'userData', item: 'viewSettings/item', items: 'attachments/items'}),
+    sliderImages () {
+      return this.item.slider_images || []
     }
   },
   methods: {
-    showDeleteModal: function (id) {
-      let modalConfig = {
-        size: 'md',
-        data: {
-          message: 'Вы действительно хотите удалить изображение?',
-          title: 'Удаление изображения',
-          isClosable: true
-        }
+    openQDialog: function (itemId) {
+      this.dialogData = {
+        message: 'Вы действительно хотите удалить изображение?',
+        title: 'Удаление',
+        isClosable: true,
+        data: itemId
       }
-      ModalService.open(questionDialog, modalConfig).then(
-        modalSubmit => { this.deleteItem(id) },
-        modalCancel => {}
-      ).catch(
-        err => {
-          console.log(err)
-        }
-      )
+      this.qDialog = true
     },
-    deleteItem: function (id) {
-      // this.$store.commit('showSpinner', true)
-      // this.$http.delete('log', {params: {id}})
-      //   .then(response => {
-      //     if (response.status === 204) {
-      //       this.logs.splice(0, this.logs.length)
-      //       this.$store.commit('showSnackbar', {text: 'Очистка лога прошла успешно', snackbar: true, context: 'success'})
-      //     } else {
-      //       this.$store.commit('showSnackbar', {text: 'Очистка лога не удалась. Обратитесь к администратору', snackbar: true, context: 'error'})
-      //     }
-      //     this.$store.commit('showSpinner', false)
-      //   })
-      //   .catch(e => {
-      //     this.errors.push(e)
-      //     this.$store.commit('showSpinner', false)
-      //     this.$store.commit('showSnackbar', {text: 'Очистка лога не удалась. Обратитесь к администратору', snackbar: true, context: 'error'})
-      //   })
+    qDialogClose: async function (confirmed, data) {
+      if (confirmed) {
+        let updateItem = _.cloneDeep(this.item)
+        updateItem.slider_images.splice(updateItem.slider_images.indexOf(data), 1)
+        if (updateItem.default_slider_image === data) {
+          updateItem.default_slider_image = _.get(updateItem.slider_images, '[0]', 0)
+        }
+        this.dialogData = await this.$store.dispatch('viewSettings/updateItem', {item: updateItem, isUpdate: true})
+        this.dialogData = await this.$store.dispatch('attachments/deleteItem', data)
+      }
+      this.qDialog = false
+    },
+    updateImage (itemId) {
+      let updateItem = _.cloneDeep(this.item)
+      updateItem.default_slider_image = itemId
+      this.$store.dispatch('viewSettings/updateItem', {item: updateItem, isUpdate: true})
     },
     uploadFiles (file) {
       this.$refs.uploader.processQueue()
@@ -79,30 +73,33 @@ export default {
       this.$refs.uploader.removeFile(file)
     },
     beforeSend (files, xhrRequest, formData) {
-      this.data.isClosable = false
       xhrRequest.setRequestHeader('Access-Control-Allow-Origin', '*')
       xhrRequest.setRequestHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Cache-Control, Key, Access-Control-Allow-Origin')
       this.filesCount = 0
       this.showProgress = true
       this.$store.commit('showSpinner', true)
-      formData.append('userId', this.$store.getters.userData.id)
+      formData.append('user_id', this.userData.id)
     },
-    completeSend (files) {
-      let x = 0
-      files.forEach(function (element) {
-        if (element.xhr.status === 200 && element.accepted) {
-          x += 1
+    completeSend: async function (files) {
+      this.showProgress = false
+      this.$refs.uploader.removeAllFiles()
+      this.filesCount = 0
+      let text = 'Загрузка файлов успешно завершена'
+      let context = 'success'
+      if (files && files.length > 0 && files[0].xhr.status === 200) {
+        let updateItem = _.cloneDeep(this.item)
+        let imagesArray = JSON.parse(files[0].xhr.response)
+        if (updateItem.default_slider_image === 0) {
+          updateItem.default_slider_image = imagesArray[0]
         }
-      }, this)
-      let text = x === files.length ? 'Загрузка файлов успешно завершена'
-        : x === 0 ? 'Загрузка файлов не удалась. Обратитесь к администратору'
-          : 'Загружено ' + x + ' из ' + files.length + '!'
-      let context = x === files.length ? 'success'
-        : x === 0 ? 'error'
-          : 'warning'
+        updateItem.slider_images = updateItem.slider_images ? updateItem.slider_images.concat(imagesArray) : imagesArray
+        this.dialogData = await this.$store.dispatch('viewSettings/updateItem', {item: updateItem, isUpdate: true})
+        this.dialogData = await this.$store.dispatch('attachments/attachmentsInfo', {attachments_ids: updateItem.slider_images.join()})
+      } else {
+        text = 'Загрузка файлов не удалась. Обратитесь к администратору'
+        context = 'error'
+      }
       this.$store.commit('showSnackbar', {text, snackbar: true, context})
-      this.data.isClosable = true
-      this.submit()
     },
     totalProgressChanged (file) {
       this.totalProgress = file.totalProgress
@@ -116,8 +113,18 @@ export default {
       }
     }
   },
+  watch: {
+    sliderImages: function (val) {
+      if ((val && val.length !== this.sliderImages.length) || (val && val.length > 0 && this.items.length === 0)) {
+        this.$store.dispatch('attachments/attachmentsInfo', {attachments_ids: val.join()})
+      }
+    }
+  },
   created () {
   },
   mounted () {
+  },
+  beforeDestroy () {
+    this.$store.commit('attachments/items', [])
   }
 }

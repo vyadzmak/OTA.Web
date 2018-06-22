@@ -1,58 +1,71 @@
 <template>
-  <div>
-    <v-card>
-      <v-card-title>
-        <v-text-field
-          v-model="search"
-          append-icon="search"
-          label="Поиск"
-          single-line
-          hide-details
-        />
-      </v-card-title>
-      <v-data-table
-        ref="recommendationDataTable"
-        :headers="headers"
-        :items="settings"
-        :search="search"
-        :rows-per-page-items="tableRowsShown"
-        :rows-per-page-text="rowsPerPageText"
-        :no-results-text="noResultsText"
-        :no-data-text="noDataText"
-      >
-        <template
-          slot="items"
-          slot-scope="props">
-          <tr>
-            <td>{{ props.item.Id }}</td>
-            <td>{{ props.item.SettingName }}</td>
-            <td>{{ props.item.SettingValue }}</td>
-            <td class="px-1">
-              <v-tooltip top>
-                <v-btn
-                  slot="activator"
-                  icon
-                  @click.stop="updatePressed(props.item)"><v-icon color="info">mdi-pen</v-icon></v-btn>
-                <span>Редактировать</span>
-              </v-tooltip>
-            </td>
-            <td class="px-1">
-              <v-tooltip top>
-                <v-btn
-                  slot="activator"
-                  icon
-                  @click.stop="showDeleteModal(props.item.id)"><v-icon color="error">mdi-delete-variant</v-icon></v-btn>
-                <span>Удалить</span>
-              </v-tooltip>
-            </td>
-          </tr>
-        </template>
-      </v-data-table>
-    </v-card>
-  </div>
+  <v-card>
+    <div v-show="false">{{ compItem.id }}</div>
+    <v-card-title>
+      <v-btn
+        dark
+        color="success"
+        @click="updateItem()"
+      >Обновить</v-btn>
+      <v-spacer/>
+      <v-text-field
+        v-model="search"
+        append-icon="search"
+        label="Поиск"
+        single-line
+        hide-details
+      />
+    </v-card-title>
+    <v-data-table
+      v-model="selectedItems"
+      :headers="headers"
+      :items="items"
+      :search="search"
+      :rows-per-page-items="tableRowsShown"
+      :rows-per-page-text="rowsPerPageText"
+      :no-results-text="noResultsText"
+      :no-data-text="noDataText"
+      item-key="id"
+    >
+      <template
+        slot="items"
+        slot-scope="props">
+        <tr>
+          <td>
+            <v-checkbox
+              v-model="props.selected"
+              primary
+              hide-details
+            />
+          </td>
+          <td v-text="props.item.id"/>
+          <td v-text="props.item.name"/>
+          <td v-text="props.item.product_code"/>
+          <td class="px-1">
+            <v-tooltip top>
+              <v-btn
+                slot="activator"
+                icon
+                @click.stop="openProductDialog(props.item)"><v-icon color="warning">mdi-eye</v-icon></v-btn>
+              <span>Просмотр</span>
+            </v-tooltip>
+          </td>
+        </tr>
+      </template>
+    </v-data-table>
+    <v-dialog
+      v-model="productDialog"
+      scrollable
+      max-width="500px">
+      <component
+        v-if="productDialog"
+        :is="productDialogComponent"
+        :data="dialogData"
+        @dialog-close="productDialogClose"/>
+    </v-dialog>
+  </v-card>
 </template>
 
 <script src="./recommendation.js"></script>
 
-<style scoped lang="scss">
-</style>
+<style scoped></style>

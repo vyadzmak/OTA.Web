@@ -2,6 +2,7 @@
   <v-container
     fluid
     grid-list-md>
+    <div v-show="false">{{ sliderImages }}</div>
     <v-data-iterator
       :items="items"
       :rows-per-page-items="rowsPerPageItems"
@@ -20,15 +21,30 @@
       >
         <v-card>
           <div class="card-top-action">
-            <div><v-btn icon><v-icon color="info">mdi-pen</v-icon></v-btn></div>
-            <div><v-btn icon><v-icon color="error">mdi-delete-variant</v-icon></v-btn></div>
+            <div><v-btn
+              icon
+              @click="updateImage(props.item.id)"><v-icon color="info">mdi-pen</v-icon></v-btn></div>
+            <div><v-btn
+              icon
+              @click="openQDialog(props.item.id)"><v-icon color="error">mdi-delete-variant</v-icon></v-btn></div>
           </div>
           <v-card-media
-            src="/static/p2.png"
-            height="125px"/>
+            :src="baseUrl + props.item.thumb_file_path"
+            height="125px"
+            contain/>
         </v-card>
       </v-flex>
     </v-data-iterator>
+    <v-dialog
+      v-model="qDialog"
+      scrollable
+      max-width="300px">
+      <component
+        v-if="qDialog"
+        :is="qDialogComponent"
+        :data="dialogData"
+        @dialog-close="qDialogClose"/>
+    </v-dialog>
     <v-btn
       v-show="filesCount>0"
       block

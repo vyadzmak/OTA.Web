@@ -1,42 +1,42 @@
+import {mapGetters} from 'vuex'
 
 export default {
   name: 'displayBrands',
   data () {
     return {
       search: '',
-      settings: [],
-      errors: [],
       headers: [
-        { text: 'ID', align: 'left', value: 'Id' },
-        { text: 'Фамилия', align: 'left', value: 'SettingName' },
-        { text: 'Имя', align: 'left', value: 'SettingValue' },
         {sortable: false},
-        {sortable: false}
+        { text: 'Id', align: 'left', value: 'id' },
+        { text: 'Наименование', align: 'left', value: 'name' },
+        { text: 'Краткое описание', align: 'left', value: 'short_description' }
       ],
       tableRowsShown: [10, 20, 50, 100, {text: 'Все', value: -1}],
       rowsPerPageText: 'Строк на странице',
       noDataText: 'Нет данных',
-      noResultsText: 'Поиск не дал результатов'
+      noResultsText: 'Поиск не дал результатов',
+      item: {},
+      selectedItems: []
     }
   },
   computed: {
-    userData: function () {
-      return this.$store.getters.userData
+    ...mapGetters({items: 'brandsCatalog/items', userData: 'userData'}),
+    compItem () {
+      let result = this.$store.getters['viewSettings/item']
+      this.item = result ? _.cloneDeep(result) : {}
+      this.selectedItems = _.map(_.get(this.item, 'brand_elements', []), v => { return {id: v} })
+      return result
     }
   },
   methods: {
-    updateItem: function (item, isUpdate) {
-      this.$store.commit('showSpinner', true)
-
-      this.$store.commit('showSnackbar', {text: (isUpdate ? 'Обновление' : 'Добавление') + ' настройки прошло успешно', snackbar: true, context: 'success'})
-
-      this.$store.commit('showSpinner', false)
+    updateItem () {
+      this.item.brand_elements = _.map(this.selectedItems, v => { return v.id })
+      this.$store.dispatch('viewSettings/updateItem', {item: this.item, isUpdate: true})
     }
   },
   created () {
-    // this.$store.commit('showSpinner', true)
+    this.$store.dispatch('brandsCatalog/getItems')
   },
   mounted () {
-    this.$refs.brandsDataTable.defaultPagination.descending = true
   }
 }

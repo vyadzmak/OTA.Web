@@ -30,6 +30,6 @@ export default [
   {link: 'userRoleRoutes'},
   {link: 'userRoles'},
   {link: 'users'},
-  {link: 'viewSettings'},
+  {link: 'viewSettings', additional: [{link: 'routeViewSettings', requestParams: ['user_id']}]},
   {link: 'routeCatalogProductsRecommendations', requestParams: ['user_id', 'product_id']}
 ]

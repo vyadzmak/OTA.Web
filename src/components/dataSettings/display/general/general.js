@@ -1,22 +1,28 @@
-
+import {mapGetters} from 'vuex'
 export default {
-  name: 'partners',
+  name: 'general',
   data () {
     return {
-      items: [1, 2, 3, 4, 5, 6],
-      level: 0,
-      backbutton: false
+      settings: {}
+    }
+  },
+  computed: {
+    ...mapGetters({userData: 'userData'}),
+    item () {
+      let result = this.$store.getters['viewSettings/item']
+      this.settings = result ? _.cloneDeep(result) : {}
+      return result
     }
   },
   methods: {
-  },
-  computed: {
-    userData () {
-      return this.$store.getters.userData
+    updateItem () {
+      this.$store.dispatch('viewSettings/updateItem', {item: this.settings, isUpdate: true})
     }
   },
   created () {
   },
   mounted () {
+  },
+  beforeDestroy () {
   }
 }
