@@ -15,8 +15,8 @@
         slot-scope="props"
         xs12
         sm6
-        md4
-        lg3
+        md3
+        lg2
       >
         <v-card>
           <div class="card-top-action">
@@ -29,7 +29,7 @@
           </div>
           <v-card-media
             :src="baseUrl + props.item.thumb_file_path"
-            height="200px"
+            height="125px"
             contain/>
         </v-card>
       </v-flex>

@@ -19,7 +19,7 @@
               right>
               <v-badge
                 slot="activator"
-                v-model="userData.orders_count"
+                v-model="badgeModel"
                 left
                 color="purple"
                 overlap>
@@ -96,14 +96,15 @@
       <v-menu
         bottom
         left>
-        <v-btn
+        <v-avatar
           slot="activator"
           class="hidden-sm-and-down"
-          flat
-          dark>
-          Профиль
-          <v-icon right>fas fa-user</v-icon>
-        </v-btn>
+          size="55px">
+          <img
+            :src="avatarUrl"
+            class="img-circle elevation-7 mb-1"
+          >
+        </v-avatar>
         <v-btn
           slot="activator"
           class="hidden-md-and-up"

@@ -21,7 +21,7 @@ export default {
         uploadMultiple: true,
         maxFiles: 300
       },
-      rowsPerPageItems: [4, 8, 12],
+      rowsPerPageItems: [6, 12, 18, 24],
       pagination: {
         rowsPerPage: 4
       },
@@ -86,7 +86,7 @@ export default {
       if (files && files.length > 0 && files[0].xhr.status === 200) {
         let updateItem = _.cloneDeep(this.item)
         let imagesArray = JSON.parse(files[0].xhr.response)
-        if (updateItem.default_image_id === 0) {
+        if (!updateItem.default_image_id || updateItem.default_image_id === 0) {
           updateItem.default_image_id = imagesArray[0]
         }
         updateItem.gallery_images = updateItem.gallery_images ? updateItem.gallery_images.concat(imagesArray) : imagesArray

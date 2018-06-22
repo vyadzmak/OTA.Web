@@ -44,22 +44,16 @@ export default {
       this.$router.push({name: 'bids.details'})
     },
     getOrders () {
-      console.log(new Date())
       this.$store.dispatch('orders/routeOrders', {user_id: this.userData.id, state_id: this.currentStateFilter})
     }
   },
   created () {
     this.getOrders()
-    if (this.currentStateFilter === 1) {
-      let updatePeriod = _.get(this.$store, 'getters.adminSettings/item.data_refresh_interval', 10000)
-      this.$options.interval = setInterval(this.getOrders, updatePeriod)
-    }
   },
   mounted () {
     this.$refs.dataTable.defaultPagination.descending = true
   },
   beforeDestroy () {
     this.$store.commit('orders/items', [])
-    clearInterval(this.$options.interval)
   }
 }

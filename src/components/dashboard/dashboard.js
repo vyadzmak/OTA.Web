@@ -64,11 +64,17 @@ export default {
       }
     },
     avatarUrl () {
-      if (this.userData.user_info_data && this.userData.user_info_data.avatar_id) {
-        return baseUrl.slice(0, -1) + _.get(this.userData, 'user_info_data.avatar_data.thumb_file_path')
+      if (this.userData && this.userData.thumbs_avatar_path) {
+        return baseUrl.slice(0, -1) + this.userData.thumbs_avatar_path
       } else {
         return this.userData.no_avatar_url
       }
+    },
+    badgeModel () {
+      return this.$route.name !== 'bids.inbox'
+    },
+    adminSettings () {
+      return this.$store.getters['adminSettings/item']
     }
   },
   methods: {
@@ -108,12 +114,37 @@ export default {
         updateResult = this.$store.getters['crudUsers/item']
         this.$store.commit('updateByPath', {path: 'loginUser.userData.name', value: updateResult.name})
         this.$store.commit('updateByPath', {path: 'loginUser.userData.user_info_data', value: updateResult.user_info_data})
+        this.$store.commit('updateByPath', {path: 'loginUser.userData.thumbs_avatar_path', value: _.get(updateResult, 'user_info_data.avatar_data.thumb_file_path')})
       }
     },
     goToRoute (path) {
       this.$store.commit('catalogBack', path === '/catalogs')
       this.$store.commit('categoryBack', path === '/categories')
       this.$router.push({path})
+    },
+    createInterval: async function () {
+      let updateInterval = this.adminSettings.data_refresh_interval
+      if (!this.adminSettings || !this.adminSettings.data_refresh_interval) {
+        updateInterval = await this.$store.dispatch('adminSettings/routeAdminGeneral', {'user_id': this.userData.id})
+        updateInterval = this.adminSettings.data_refresh_interval || 10000
+      }
+      this.$options.interval = setInterval(this.getOrders, updateInterval)
+    },
+    getOrders: async function () {
+      let response = await this.$http.get('routeOrders', {params: {user_id: this.userData.id, state_id: 1}})
+      if (response.status === 200) {
+        if (this.badgeModel) {
+          this.$store.commit('updateByPath', {path: 'loginUser.userData.orders_count', value: response.data.length})
+        } else {
+          this.$store.commit('orders/items', response.data)
+        }
+      }
     }
+  },
+  created () {
+    this.createInterval()
+  },
+  beforeDestroy () {
+    clearInterval(this.$options.interval)
   }
 }

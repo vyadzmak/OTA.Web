@@ -21,7 +21,7 @@ export default {
         uploadMultiple: true,
         maxFiles: 300
       },
-      rowsPerPageItems: [4, 8, 12],
+      rowsPerPageItems: [6, 12, 18, 24],
       pagination: {
         rowsPerPage: 4
       },
