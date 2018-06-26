@@ -1,5 +1,14 @@
 <template>
   <div>
+    <v-breadcrumbs class="py-1">
+      <v-breadcrumbs-item
+        v-for="item in breadcrumbs"
+        :key="item.id"
+        @click.native="goBack(item.id)"
+      >
+        {{ item.name }}
+      </v-breadcrumbs-item>
+    </v-breadcrumbs>
     <v-tabs
       icons-and-text
       centered

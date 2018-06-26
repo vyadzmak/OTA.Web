@@ -9,8 +9,8 @@ export default {
         (v) => !!v || 'Наименование должно быть заполнено',
         (v) => (v && v.length <= 250) || 'Не более 250 символов'
       ],
-      sDescRules: [(v) => (v.length <= 250) || 'Не более 250 символов'],
-      descRules: [(v) => (v.length <= 1500) || 'Не более 1500 символов'],
+      sDescRules: [(v) => (!v || v.length <= 250) || 'Не более 250 символов'],
+      descRules: [(v) => (!v || v.length <= 1500) || 'Не более 1500 символов'],
       numRules: [
         (v) => !!v || 'Стоимость должна быть заполнена',
         (v) => (!isNaN(parseFloat(v)) && isFinite(v)) || 'Введите число'
@@ -45,11 +45,13 @@ export default {
     }
   },
   created () {
-    this.$store.dispatch('products/routeCatalogProductsGeneral', {user_id: this.userData.id, product_id: this.compItem.id})
-    this.$store.dispatch('brandsCatalog/getItems')
-    this.$store.dispatch('partnersCatalog/getItems')
-    this.$store.dispatch('currencyCatalog/getItems')
-    this.$store.dispatch('unitCatalog/getItems')
+    if (this.compItem.id) {
+      this.$store.dispatch('products/routeCatalogProductsGeneral', {user_id: this.userData.id, product_id: this.compItem.id})
+      this.$store.dispatch('brandsCatalog/getItems')
+      this.$store.dispatch('partnersCatalog/getItems')
+      this.$store.dispatch('currencyCatalog/getItems')
+      this.$store.dispatch('unitCatalog/getItems')
+    }
   },
   mounted () {
   }

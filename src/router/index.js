@@ -5,7 +5,7 @@ import dashboard from './dashboard'
 
 import Login from '@/components/login/Login.vue'
 
-import store from '../store/index'
+import store from '@/store/index'
 
 const routes = [
   {

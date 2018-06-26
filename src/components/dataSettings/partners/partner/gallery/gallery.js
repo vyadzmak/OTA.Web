@@ -25,6 +25,8 @@ export default {
       pagination: {
         rowsPerPage: 6
       },
+      rowsPerPageText: 'Элементов на странице',
+      noDataText: 'Нет данных',
       dialogData: null,
       qDialog: false,
       qDialogComponent: questionDialog

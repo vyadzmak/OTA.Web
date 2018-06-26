@@ -2,14 +2,20 @@ import {baseUrl} from '@/httpClient/index'
 import {mapGetters} from 'vuex'
 import questionDialog from '@/components/questionDialog/QuestionDialog.vue'
 import addDialogComponent from './addDialog/addDialog.vue'
+import {catalog as catalogRoutes} from '@/router/routerNames'
 
 export default {
   name: 'catalogs',
   data () {
     return {
+      search: '',
+      rowsPerPageItems: [12, 18, 24, 36, 72, {text: 'Все', value: -1}],
+      pagination: { rowsPerPage: 12 },
+      rowsPerPageText: 'Элементов на странице',
+      noDataText: 'Нет данных',
+      noResultsText: 'Поиск не дал результатов',
       baseUrl: baseUrl.slice(0, -1),
       msg: 'Каталоги',
-      categoryIds: [{id: -1, name: 'Главная'}],
       productsShown: false,
       dialog: false,
       dialogComponent: addDialogComponent,
@@ -20,7 +26,7 @@ export default {
   },
   methods: {
     getNext (item) {
-      this.categoryIds.push({id: item.id, name: item.name})
+      this.$store.commit('breadcrumbs/add', {id: item.id, name: item.name, showProducts: !item.internal_categories_count})
       if (item.internal_categories_count > 0) {
         this.getCategories(item.id)
       } else if (item.internal_products_count > 0) {
@@ -32,13 +38,14 @@ export default {
       }
     },
     goTo (item) {
+      this.$store.commit('breadcrumbs/add', {id: 'product-' + item.id, name: item.name})
       this.$store.commit('catalogBack', false)
       this.$store.commit('products/item', item)
       this.$router.push({name: 'product'})
     },
     goBack (id) {
       if (id !== this.categoryTail.id) {
-        this.categoryIds.splice(_.findIndex(this.categoryIds, {id}) + 1)
+        this.$store.commit('breadcrumbs/delete', id)
         if (this.productsShown) {
           this.productsShown = false
           this.$store.commit('products/items', [])
@@ -100,15 +107,26 @@ export default {
       products: 'products/items',
       units: 'unitCatalog/items',
       currencies: 'currencyCatalog/items',
-      catalogBack: 'catalogBack'}),
+      catalogBack: 'catalogBack',
+      categoryIds: 'breadcrumbs/items',
+      breadcrumbsType: 'breadcrumbs/type'}),
     categoryTail () {
       return _.last(this.categoryIds)
     }
   },
   created () {
     this.$store.commit('catalogBack', true)
+    if (this.breadcrumbsType !== 'catalogs') {
+      this.$store.commit('breadcrumbs/type', 'catalogs')
+      this.$store.commit('breadcrumbs/items', [{id: -1, name: 'Каталог'}])
+    }
     this.$store.commit('products/items', [])
-    this.getCategories(-1)
+    if (this.categoryTail.showProducts) {
+      this.productsShown = true
+      this.$store.dispatch('products/productsByProductCategory', {user_id: this.userData.id, category_id: this.categoryTail.id})
+    } else {
+      this.getCategories(this.categoryTail.id)
+    }
     this.$store.dispatch('unitCatalog/getItems')
     this.$store.dispatch('currencyCatalog/getItems')
   },
@@ -121,9 +139,13 @@ export default {
   beforeRouteLeave (to, from, next) {
     if (this.catalogBack) {
       if (!this.categoryTail || this.categoryTail.id < 0) {
+        if (catalogRoutes.indexOf(to.name) === -1) {
+          this.$store.commit('breadcrumbs/type', '')
+          this.$store.commit('breadcrumbs/items', [])
+        }
         next()
       } else {
-        this.categoryIds.splice(this.categoryIds.length - 1, 1)
+        this.$store.commit('breadcrumbs/delete', this.categoryIds[this.categoryIds.length - 2].id)
         if (this.productsShown) {
           this.productsShown = false
           this.$store.commit('products/items', [])
@@ -132,6 +154,10 @@ export default {
         next(false)
       }
     } else {
+      if (catalogRoutes.indexOf(to.name) === -1) {
+        this.$store.commit('breadcrumbs/type', '')
+        this.$store.commit('breadcrumbs/items', [])
+      }
       next()
     }
   }

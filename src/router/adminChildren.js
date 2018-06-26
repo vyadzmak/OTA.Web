@@ -7,6 +7,8 @@ import General from '@/components/administration/general/General.vue'
 
 import clientChildren from './clientChildren.js'
 
+import store from '@/store/index'
+
 const adminChildren = [
   {
     path: 'log',
@@ -24,6 +26,13 @@ const adminChildren = [
     component: Client,
     redirect: to => {
       return {name: 'administration.client.general'}
+    },
+    beforeEnter (to, from, next) {
+      if (_.get(store, 'getters.clients/item.id')) {
+        next()
+      } else {
+        next({name: 'administration.clients'})
+      }
     },
     children: clientChildren
   },

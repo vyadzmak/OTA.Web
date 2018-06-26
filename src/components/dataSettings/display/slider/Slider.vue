@@ -6,6 +6,8 @@
     <v-data-iterator
       :items="items"
       :rows-per-page-items="rowsPerPageItems"
+      :rows-per-page-text="rowsPerPageText"
+      :no-data-text="noDataText"
       :pagination.sync="pagination"
       content-tag="v-layout"
       row

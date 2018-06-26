@@ -25,6 +25,8 @@ import brandChildren from './brandChildren'
 import partnerChildren from './partnerChildren'
 import bidsChildren from './bidsChildren'
 
+import store from '@/store/index'
+
 const dashboard = {
   path: '/',
   name: 'dashboard',
@@ -59,6 +61,13 @@ const dashboard = {
     redirect: to => {
       return {name: 'category.general'}
     },
+    beforeEnter (to, from, next) {
+      if (_.get(store, 'getters.productCategories/item.id')) {
+        next()
+      } else {
+        next({name: 'categories'})
+      }
+    },
     children: categoryChildren
   },
   {
@@ -73,6 +82,13 @@ const dashboard = {
     redirect: to => {
       return {name: 'brand.general'}
     },
+    beforeEnter (to, from, next) {
+      if (_.get(store, 'getters.brandsCatalog/item.id')) {
+        next()
+      } else {
+        next({name: 'brands'})
+      }
+    },
     children: brandChildren
   },
   {
@@ -86,6 +102,13 @@ const dashboard = {
     component: Partner,
     redirect: to => {
       return {name: 'partner.general'}
+    },
+    beforeEnter (to, from, next) {
+      if (_.get(store, 'getters.partnersCatalog/item.id')) {
+        next()
+      } else {
+        next({name: 'partners'})
+      }
     },
     children: partnerChildren
   },
@@ -130,6 +153,13 @@ const dashboard = {
     component: Product,
     redirect: to => {
       return {name: 'product.general'}
+    },
+    beforeEnter (to, from, next) {
+      if (_.get(store, 'getters.products/item.id')) {
+        next()
+      } else {
+        next({name: 'catalogs'})
+      }
     },
     children: productChildren
   },

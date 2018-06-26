@@ -23,7 +23,7 @@
                 label="Наименование"/>
               <v-text-field
                 v-model="item.product_code"
-                :rules="[(v)=> (v.length <= 32) || 'Не более 32 символов']"
+                :rules="[(v)=> (!v || v.length <= 32) || 'Не более 32 символов']"
                 label="Артикул"/>
               <v-textarea
                 v-model="item.short_description"
@@ -81,7 +81,7 @@
                 label="Акционный товар"/>
               <v-textarea
                 v-model="item.stock_text"
-                :rules="[(v)=> (v.length <= 150) || 'Не более 150 символов']"
+                :rules="[(v)=> (!v || v.length <= 150) || 'Не более 150 символов']"
                 label="Текст акции"/>
               <v-checkbox
                 v-model="item.is_discount_product"
