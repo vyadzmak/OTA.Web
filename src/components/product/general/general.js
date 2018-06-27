@@ -34,6 +34,8 @@ export default {
     compItem () {
       let result = _.get(this.$store, 'getters.products/item', {})
       this.item = _.cloneDeep(result)
+      this.item.brand_id = this.item.brand_id || 0
+      this.item.partner_id = this.item.partner_id || 0
       return result
     }
   },

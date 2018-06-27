@@ -24,7 +24,7 @@ const adminChildren = [
     name: 'bids.details',
     component: Details,
     beforeEnter (to, from, next) {
-      if (_.get(store, 'getters.bids/item.id')) {
+      if (_.get(store, 'getters.orders/item.id')) {
         next()
       } else {
         let routeName = from && from.name && from.name.indexOf('bids') !== -1 ? from.name : 'bids.inbox'

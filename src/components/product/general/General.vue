@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div
+      v-show="false"
+      v-text="compItem.id"/>
     <v-card>
       <v-card-actions><v-btn
         dark

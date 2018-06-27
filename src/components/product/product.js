@@ -33,7 +33,7 @@ export default {
   mounted () {
   },
   beforeRouteLeave (to, from, next) {
-    if (this.categoryTail.id.indexOf('product-') !== -1) {
+    if (('' + this.categoryTail.id).indexOf('product-') !== -1) {
       this.$store.commit('breadcrumbs/delete', this.breadcrumbs[this.breadcrumbs.length - 2].id)
     }
     if (catalogRoutes.indexOf(to.name) === -1) {
