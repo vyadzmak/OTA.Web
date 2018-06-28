@@ -68,7 +68,9 @@
               contain/>
           </div>
           <div class="text-xs-center pa-1">
-            <div class="subheading product-name">{{ item.name }}</div>
+            <div
+              v-line-clamp="2"
+              class="subheading product-name">{{ item.name }}</div>
         </div></v-card>
       </v-flex>
     </v-layout>
@@ -80,6 +82,6 @@
 <style scoped lang="scss">
 @import '../../../assets/styles/scss/mixins.scss';
 .product-name {
-  @include lineClamp(2, 45px);
+  height: 45px;
 }
 </style>

@@ -22,6 +22,7 @@
     "vue": "^2.5.16",
     "vue-eslint-parser": "^2.0.3",
     "vue-form-generator": "^2.2.2",
+    "vue-line-clamp": "^1.2.3",
     "vue-lodash": "^2.0.0",
     "vue-modal-dialog": "^0.2.2",
     "vue-moment": "^4.0.0-0",

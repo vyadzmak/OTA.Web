@@ -72,13 +72,13 @@
         <v-card class="hover-card">
           <div class="text-xs-center pa-2">
             <v-card-media
-              :key="index+'img'"
               :src="props.item.default_image_id?baseUrl+props.item.default_image_data.thumb_file_path:userData.no_image_url"
               height="125px"
               contain/>
           </div>
           <div class="text-xs-center">
             <div
+              v-line-clamp="2"
               class="subheading product-name"
               v-text="props.item.name"/>
             <div
@@ -124,19 +124,20 @@
                 @click.stop="openQDialog(props.item.id)"><v-icon color="error">mdi-delete-variant</v-icon></v-btn></div>
             </div>
             <v-card-media
-              :key="index+'img'"
               :src="props.item.default_image_id?baseUrl+props.item.default_image_data.thumb_file_path:userData.no_image_url"
               height="125px"
               contain/>
           </div>
           <div class="text-xs-center pa-1">
             <div
+              v-line-clamp="2"
               class="subheading product-name"
               v-text="props.item.name"/>
             <div
               class="grey--text"
               v-text="`Артикул: `+props.item.product_code"/>
             <div
+              v-line-clamp="3"
               class="grey--text product-description"
               v-text="props.item.short_description"/>
             <v-layout class="pa-1 white--text">
@@ -159,9 +160,9 @@
 @import '../../assets/styles/scss/mixins.scss';
 
 .product-description {
-  @include lineClamp(3, 60px);
+  height: 60px;
 }
 .product-name {
-  @include lineClamp(2, 50px);
+  height: 50px;
 }
 </style>

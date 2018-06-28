@@ -24,6 +24,7 @@
           <v-card-text
             class="text-xs-center">
             <div
+              v-line-clamp="2"
               class="subheading category-name"
               v-text="item.name"/>
         </v-card-text></v-card>
@@ -38,7 +39,6 @@
 @import '../../assets/styles/scss/mixins.scss';
 
 .category-name {
-  @include lineClamp(2, 45px);
-  // @include responsiveText(14px, 22px);
+  height: 45px;
 }
 </style>

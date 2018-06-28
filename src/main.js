@@ -6,6 +6,7 @@ import VueLodash from 'vue-lodash'
 import VueTransmit from 'vue-transmit'
 import Vue2Filters from 'vue2-filters'
 import VueMoment from 'vue-moment'
+import VueLineClamp from 'vue-line-clamp'
 import VeeValidate, { Validator } from 'vee-validate'
 import ruVeeValidate from 'vee-validate/dist/locale/ru'
 
@@ -44,6 +45,7 @@ Vue.use(VueTransmit)
 Vue.use(Vue2Filters)
 Vue.use(VueMoment)
 Vue.use(Object.defineProperty(Vue.prototype, '$http', { value: http }))
+Vue.use(VueLineClamp, { importCss: true })
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

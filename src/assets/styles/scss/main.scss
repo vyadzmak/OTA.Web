@@ -21,40 +21,12 @@
     padding: 10px 20px;
   }
 
-.modal--active > div > {
-  .v-menu__content--select, .v-menu__content, .v-dialog__content {
-    z-index: 1095 !important;
-  }
-}
-
-.modal--xlg {/* this is used for modal windows of "vue-modal-dialog": "^0.2.2" npm library */
-  width:900px;
-}
-
-.modal--full-width {/* this is used for modal windows of "vue-modal-dialog": "^0.2.2" npm library */
-  width:100%;
-}
-
 .v-datatable tbody td, .v-toolbar__content .v-toolbar__title {
   cursor: default;
 }
 
-.vue-form-generator {
-  >fieldset {
- border: none;
-  }
-}
-
 .field-wrap>.input-group {
   padding-top: 0;
-}
-
-.vue-form-generator .form-group {
-  &.field-vselect,
-  &.field-vtext,
-  &.field-vcheckbox{
-    margin-bottom: 0;
-  }
 }
 
 .card-top-action{

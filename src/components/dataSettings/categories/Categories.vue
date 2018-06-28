@@ -78,13 +78,13 @@
                 @click.stop="openQDialog(props.item.id)"><v-icon color="error">mdi-delete-variant</v-icon></v-btn></div>
             </div>
             <v-card-media
-              :key="index+'img'"
               :src="props.item.default_image_id?baseUrl+props.item.default_image_data.thumb_file_path:userData.no_image_url"
               height="125px"
               contain/>
           </div>
           <div class="text-xs-center pa-1">
             <div
+              v-line-clamp="2"
               class="subheading product-name"
               v-text="props.item.name"/>
             <div
@@ -103,6 +103,6 @@
 <style scoped lang="scss">
 @import '../../../assets/styles/scss/mixins.scss';
 .product-name {
-  @include lineClamp(2, 50px);
+  height: 50px;
 }
 </style>
