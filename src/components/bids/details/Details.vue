@@ -29,7 +29,7 @@
           <v-divider/>
           <v-list-tile>
             <v-list-tile-content class="body-2">№ Заявки:</v-list-tile-content>
-            <v-list-tile-content class="align-end">{{ item.id }}</v-list-tile-content>
+            <v-list-tile-content class="align-end">{{ item.number }}</v-list-tile-content>
           </v-list-tile>
           <v-divider/>
           <v-list-tile>

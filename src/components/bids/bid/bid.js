@@ -7,7 +7,7 @@ export default {
       search: '',
       headers: [
         { text: 'Id', align: 'left', value: 'id' },
-        // { text: '№ заявки', align: 'left', value: 'number' },
+        { text: '№ заявки', align: 'left', value: 'number' },
         { text: 'Заказчик', align: 'left', value: 'order_user_data.client_data.name' },
         { text: 'Адрес', align: 'left', value: 'client_address_data.address' },
         { text: 'Город/а.е.', align: 'left', value: 'client_address_data.city_data.name' },

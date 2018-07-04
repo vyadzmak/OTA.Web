@@ -89,6 +89,8 @@ export default {
     logOutDialog (confirmed) {
       this.questionDialogShow = false
       if (confirmed) {
+        this.$store.commit('catalogBack', false)
+        this.$store.commit('categoryBack', false)
         this.$store.dispatch('logout', null)
         this.$router.push({path: '/login'})
       }

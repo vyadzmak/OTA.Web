@@ -25,6 +25,7 @@
         slot-scope="props">
         <tr @click="goTo(props.item)">
           <td>{{ props.item.id }}</td>
+          <td>{{ props.item.number }}</td>
           <td>{{ props.item.order_user_data.client_data.name }}</td>
           <td>{{ props.item.client_address_data.address }}</td>
           <td>{{ props.item.client_address_data.city_data.name }}</td>
