@@ -1,9 +1,7 @@
-
 export default {
   name: 'userAgreement',
   data () {
-    return { settings: {}
-    }
+    return { settings: {} }
   },
   methods: {
     updateItem () {
@@ -11,9 +9,6 @@ export default {
     }
   },
   computed: {
-    userData () {
-      return this.$store.getters.userData
-    },
     compItem () {
       let result = this.$store.getters['adminSettings/item']
       this.settings = result ? _.cloneDeep(result) : {}

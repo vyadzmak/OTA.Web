@@ -26,7 +26,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({items: 'cityCatalog/items', userData: 'userData', item: 'areaCatalog/item'})
+    ...mapGetters({items: 'cityCatalog/items', item: 'areaCatalog/item'})
   },
   methods: {
     openQDialog: function (itemId) {

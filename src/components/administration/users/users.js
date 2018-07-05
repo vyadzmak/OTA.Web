@@ -30,7 +30,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({items: 'crudUsers/items', userData: 'userData', user: 'crudUsers/item'})
+    ...mapGetters({items: 'crudUsers/items', user: 'crudUsers/item'})
   },
   methods: {
     openQDialog (itemId) {

@@ -33,7 +33,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({userData: 'userData', item: 'productCategories/item', items: 'attachments/items'})
+    ...mapGetters({item: 'productCategories/item', items: 'attachments/items'})
   },
   methods: {
     openQDialog: function (itemId) {

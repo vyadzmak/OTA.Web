@@ -27,7 +27,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({userData: 'userData', items: 'settings/items'})
+    ...mapGetters({items: 'settings/items'})
   },
   methods: {
     openQDialog: function (itemId) {

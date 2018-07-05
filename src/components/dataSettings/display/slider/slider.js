@@ -33,7 +33,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({userData: 'userData', item: 'viewSettings/item', items: 'attachments/items'}),
+    ...mapGetters({item: 'viewSettings/item', items: 'attachments/items'}),
     sliderImages () {
       return this.item.slider_images || []
     }

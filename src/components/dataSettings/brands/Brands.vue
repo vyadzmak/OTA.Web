@@ -7,6 +7,7 @@
       row
       wrap>
       <v-flex
+        :disabled="!!$loading"
         tag="a"
         xs12
         sm4

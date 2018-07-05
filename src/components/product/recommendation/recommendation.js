@@ -13,7 +13,7 @@ export default {
         { text: 'Артикул', align: 'left', value: 'product_code' },
         {sortable: false}
       ],
-      tableRowsShown: [10, 20, 50, 100, {text: 'Все', value: -1}],
+      tableRowsShown: [10, 20, 50, 100],
       rowsPerPageText: 'Строк на странице',
       noDataText: 'Нет данных',
       noResultsText: 'Поиск не дал результатов',

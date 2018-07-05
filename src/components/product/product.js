@@ -14,7 +14,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({userData: 'userData',
+    ...mapGetters({
       breadcrumbs: 'breadcrumbs/items',
       breadcrumbsType: 'breadcrumbs/type'}),
     categoryTail () {

@@ -16,7 +16,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({userData: 'userData', client: 'clients/item'}),
+    ...mapGetters({ client: 'clients/item'}),
     compItem () {
       let result = _.get(this.$store.getters, 'clientInfo/item', {})
       if (!this.item.id) {

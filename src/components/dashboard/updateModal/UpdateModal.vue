@@ -59,9 +59,9 @@
           v-model="newPassword"
           :rules="passwordRules"
           :append-icon="'refresh'"
-          :append-icon-cb="generatePassword"
           label="Новый пароль"
           required
+          @click:append="generatePassword"
         />
         <v-text-field
           v-model="repeatPassword"

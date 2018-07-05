@@ -31,7 +31,7 @@ export default {
   },
   computed: {
     ...mapGetters({items: 'crudUsers/items',
-      userData: 'userData',
+
       user: 'crudUsers/item',
       client: 'clients/item'})
   },

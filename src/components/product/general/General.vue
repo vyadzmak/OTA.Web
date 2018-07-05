@@ -5,6 +5,7 @@
       v-text="compItem.id"/>
     <v-card>
       <v-card-actions><v-btn
+        :disabled="!!$loading"
         dark
         color="success"
         @click="updateItem()"
@@ -36,6 +37,14 @@
                 v-model="item.full_description"
                 :rules="descRules"
                 label="Полное описание"/>
+              <v-select
+                v-model="item.category_id"
+                :items="selectCategories"
+                item-value="id"
+                item-text="name"
+                label="Категория"
+                required
+              />
             </v-flex>
             <v-flex
               lg6

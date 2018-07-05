@@ -26,7 +26,6 @@ export default {
   },
   computed: {
     ...mapGetters({items: 'orderPositions/items',
-      userData: 'userData',
       usersInfo: 'userInfo/items',
       clientAddresses: 'clientAddresses/items'}),
     compItem () {

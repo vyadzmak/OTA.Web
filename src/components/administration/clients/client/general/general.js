@@ -8,7 +8,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({userData: 'userData', clientTypes: 'clientTypes/items'}),
+    ...mapGetters({ clientTypes: 'clientTypes/items'}),
     compItem () {
       let result = _.get(this.$store.getters, 'clients/item', {})
       this.item = _.cloneDeep(result)

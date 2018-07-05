@@ -29,7 +29,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({items: 'productComments/items', userData: 'userData', product: 'products/item'})
+    ...mapGetters({items: 'productComments/items', product: 'products/item'})
   },
   methods: {
     openQDialog: function (itemId) {

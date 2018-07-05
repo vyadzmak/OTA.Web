@@ -71,7 +71,7 @@ export default {
         let c = Math.floor(Math.random() * chars.length + 1)
         passwd += chars.charAt(c)
       }
-      this.data.item.user_login.password = passwd
+      this.newPassword = passwd
     },
     beforeSend (files, xhrRequest, formData) {
       xhrRequest.setRequestHeader('Access-Control-Allow-Origin', '*')

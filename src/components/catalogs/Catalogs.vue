@@ -25,6 +25,7 @@
     <v-card-actions class="pt-1">
       <v-btn
         v-show="productsShown"
+        :disabled="!!$loading"
         color="success"
         dark
         @click.stop="openDialog()">Добавить</v-btn>

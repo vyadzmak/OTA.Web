@@ -19,6 +19,19 @@
   </div>
 </template>
 
-<script src="./brand.js"></script>
+<script>
+export default {
+  name: 'Brand',
+  data () {
+    return {
+      items: [
+        {id: 1, icon: 'mdi-file-chart', name: 'Общее', route: '/brand/general'},
+        {id: 2, icon: 'fas fa-images', name: 'Галерея', route: '/brand/gallery/'}
+      ]
+    }
+  }
+}
+
+</script>
 
 <style scoped></style>

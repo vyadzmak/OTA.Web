@@ -6,11 +6,13 @@
     <v-card-title class="headline pb-0">Общая информация<v-spacer/>
       <v-btn
         v-show="item.order_state_id===1"
+        :disabled="!!$loading"
         color="primary"
         dark
         @click.stop="acceptBid()">Принять заявку</v-btn>
       <v-btn
         v-show="item.order_state_id===2"
+        :disabled="!!$loading"
         color="warning"
         dark
         @click.stop="closeBid()">Закрыть заявку</v-btn>
@@ -64,6 +66,7 @@
               v-show="item.order_state_id===2"><v-tooltip top>
                 <v-btn
                   slot="activator"
+                  :disabled="!!$loading"
                   icon
                   @click.stop="updateAddress()"><v-icon color="info">mdi-pen</v-icon></v-btn>
                 <span>Редактировать</span>

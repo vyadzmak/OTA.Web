@@ -2,6 +2,7 @@
   <v-card>
     <v-card-title>
       <v-btn
+        :disabled="!!$loading"
         color="success"
         dark
         @click.stop="openDialog()">Добавить</v-btn>

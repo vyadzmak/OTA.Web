@@ -5,6 +5,7 @@
       v-text="compItem"/>
     <v-card-title class="headline">Пользовательское соглашение</v-card-title>
     <v-card-actions><v-btn
+      :disabled="!!$loading"
       dark
       color="success"
       @click="updateItem()"
@@ -18,5 +19,4 @@
 
 <script src="./userAgreement.js"></script>
 
-<style scoped lang="scss">
-</style>
+<style></style>

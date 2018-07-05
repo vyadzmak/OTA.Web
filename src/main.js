@@ -15,6 +15,7 @@ import './assets/styles/scss/main.scss'
 import 'vue-form-generator/dist/vfg.css'
 
 import App from './App'
+import userDataMixin from './mixins/userData'
 import router from './router'
 import store from './store/index'
 import http from './httpClient/index'
@@ -47,6 +48,8 @@ Vue.use(VueMoment)
 Vue.use(Object.defineProperty(Vue.prototype, '$http', { value: http }))
 Vue.use(VueLineClamp, { importCss: true })
 Vue.config.productionTip = false
+
+Vue.mixin(userDataMixin)
 
 /* eslint-disable no-new */
 window.App = new Vue({

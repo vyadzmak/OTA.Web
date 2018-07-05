@@ -14,11 +14,12 @@ export default {
       numRules: [
         (v) => !!v || 'Стоимость должна быть заполнена',
         (v) => (!isNaN(parseFloat(v)) && isFinite(v)) || 'Введите число'
-      ]
+      ],
+      selectCategories: []
     }
   },
   computed: {
-    ...mapGetters({userData: 'userData',
+    ...mapGetters({
       currencyTypes: 'currencyCatalog/items',
       unitTypes: 'unitCatalog/items'}),
     brandTypes () {
@@ -34,8 +35,6 @@ export default {
     compItem () {
       let result = _.get(this.$store, 'getters.products/item', {})
       this.item = _.cloneDeep(result)
-      this.item.brand_id = this.item.brand_id || 0
-      this.item.partner_id = this.item.partner_id || 0
       return result
     }
   },
@@ -46,13 +45,20 @@ export default {
       }
     }
   },
-  created () {
+  async created () {
     if (this.compItem.id) {
       this.$store.dispatch('products/routeCatalogProductsGeneral', {user_id: this.userData.id, product_id: this.compItem.id})
       this.$store.dispatch('brandsCatalog/getItems')
       this.$store.dispatch('partnersCatalog/getItems')
       this.$store.dispatch('currencyCatalog/getItems')
       this.$store.dispatch('unitCatalog/getItems')
+      let selectCategories = await this.$http.get('productCategories')
+      if (selectCategories.status === 200) {
+        selectCategories = selectCategories.data
+        this.selectCategories = [{id: -1, name: 'Нет'}, ...selectCategories]
+      } else {
+        this.selectCategories = []
+      }
     }
   },
   mounted () {

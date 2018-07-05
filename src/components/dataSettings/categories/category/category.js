@@ -12,7 +12,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({userData: 'userData',
+    ...mapGetters({
       item: 'productCategories/item',
       breadcrumbs: 'breadcrumbs/items',
       breadcrumbsType: 'breadcrumbs/type'}),

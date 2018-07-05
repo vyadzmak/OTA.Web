@@ -28,7 +28,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({items: 'clientAddresses/items', userData: 'userData', item: 'clients/item'})
+    ...mapGetters({items: 'clientAddresses/items',  item: 'clients/item'})
   },
   methods: {
     openQDialog: function (itemId) {

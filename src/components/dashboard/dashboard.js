@@ -24,9 +24,6 @@ export default {
     }
   },
   computed: {
-    userData () {
-      return this.$store.getters.userData
-    },
     items () {
       return [
         { icon: 'mdi-worker',

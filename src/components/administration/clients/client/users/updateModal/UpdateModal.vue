@@ -61,9 +61,9 @@
                    (v) => (v.length > 3 || (data.isUpdate && !v)) || 'Пароль должен быть больше 3-х символов',
                    (v) => v.length <= 15 || 'Пароль должен быть не более 15-и символов']"
           :append-icon="'refresh'"
-          :append-icon-cb="generatePassword"
           label="Пароль"
           required
+          @click:append="generatePassword"
         />
         <v-checkbox
           v-model="data.item.lock_state"

@@ -61,7 +61,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({userData: 'userData', items: 'partnersCatalog/items'})
+    ...mapGetters({items: 'partnersCatalog/items'})
   },
   created () {
     this.$store.dispatch('partnersCatalog/getItems')

@@ -2,6 +2,7 @@
   <v-card>
     <div v-show="false">{{ item }}</div>
     <v-card-actions><v-btn
+      :disabled="!!$loading"
       dark
       color="success"
       @click="updateItem()"

@@ -2,6 +2,7 @@
   <div>
     <v-card>
       <v-card-actions><v-btn
+        :disabled="!!$loading"
         dark
         color="success"
         @click="updateItem()"
@@ -24,6 +25,14 @@
             v-model="item.full_description"
             :rules="descRules"
             label="Описание"/>
+          <v-select
+            v-model="item.parent_category_id"
+            :items="selectCategories"
+            item-value="id"
+            item-text="name"
+            label="Родительская категория"
+            required
+          />
         </v-form>
       </v-card-text>
     </v-card>

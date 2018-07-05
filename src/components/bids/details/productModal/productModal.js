@@ -10,7 +10,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({userData: 'userData',
+    ...mapGetters({
       item: 'products/item',
       units: 'unitCatalog/items',
       currencies: 'currencyCatalog/items'})

@@ -19,6 +19,19 @@
   </div>
 </template>
 
-<script src="./partner.js"></script>
+<script>
+
+export default {
+  name: 'Partner',
+  data () {
+    return {
+      items: [
+        {id: 1, icon: 'mdi-file-chart', name: 'Общее', route: '/partner/general'},
+        {id: 2, icon: 'fas fa-images', name: 'Галерея', route: '/partner/gallery/'}
+      ]
+    }
+  }
+}
+</script>
 
 <style scoped></style>

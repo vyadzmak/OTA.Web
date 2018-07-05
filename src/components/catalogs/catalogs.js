@@ -26,6 +26,9 @@ export default {
   },
   methods: {
     getNext (item) {
+      if (this.categoryTail.id === item.id) {
+        return
+      }
       this.$store.commit('breadcrumbs/add', {id: item.id, name: item.name, showProducts: !item.internal_categories_count})
       if (item.internal_categories_count > 0) {
         this.getCategories(item.id)
@@ -102,7 +105,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({userData: 'userData',
+    ...mapGetters({
       items: 'productCategories/items',
       products: 'products/items',
       units: 'unitCatalog/items',
