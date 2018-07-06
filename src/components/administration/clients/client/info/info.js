@@ -16,7 +16,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ client: 'clients/item'}),
+    ...mapGetters({client: 'clients/item'}),
     compItem () {
       let result = _.get(this.$store.getters, 'clientInfo/item', {})
       if (!this.item.id) {
@@ -30,7 +30,7 @@ export default {
       } else if (this.compItem.logo_attachment_id) {
         return baseUrl.slice(0, -1) + this.compItem.attachment_data.thumb_file_path
       } else {
-        return this.userData.no_avatar_url
+        return baseUrl.slice(0, -1) + this.userData.no_avatar_url
       }
     }
   },

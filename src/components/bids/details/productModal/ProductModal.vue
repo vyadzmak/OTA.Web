@@ -12,7 +12,7 @@
     <v-card-text style="height:80vh">
       <div class="text-xs-center pa-1">
         <v-card-media
-          :src="item.default_image_id?baseUrl+item.default_image_data.thumb_file_path:userData.no_image_url"
+          :src="baseUrl+(item.default_image_id?item.default_image_data.thumb_file_path:userData.no_image_url)"
           height="125px"
           contain/>
       </div>

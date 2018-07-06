@@ -41,7 +41,7 @@ export default {
       } else if (this.data.item.user_info_data.avatar_id) {
         return baseUrl.slice(0, -1) + this.data.item.user_info_data.avatar_data.thumb_file_path
       } else {
-        return this.userData.no_avatar_url
+        return baseUrl.slice(0, -1) + this.userData.no_avatar_url
       }
     },
     clients () {

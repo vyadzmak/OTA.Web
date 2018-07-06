@@ -64,7 +64,7 @@ export default {
       if (this.userData && this.userData.thumbs_avatar_path) {
         return baseUrl.slice(0, -1) + this.userData.thumbs_avatar_path
       } else {
-        return this.userData.no_avatar_url
+        return baseUrl.slice(0, -1) + this.userData.no_avatar_url
       }
     },
     badgeModel () {

@@ -52,7 +52,7 @@ export default {
       this.$store.dispatch('partnersCatalog/getItems')
       this.$store.dispatch('currencyCatalog/getItems')
       this.$store.dispatch('unitCatalog/getItems')
-      let selectCategories = await this.$http.get('productCategories')
+      let selectCategories = await this.$http.get('categoryListWithoutChildCategories')
       if (selectCategories.status === 200) {
         selectCategories = selectCategories.data
         this.selectCategories = [{id: -1, name: 'Нет'}, ...selectCategories]

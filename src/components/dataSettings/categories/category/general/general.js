@@ -30,7 +30,7 @@ export default {
   },
   async created () {
     this.$store.dispatch('productCategories/getItem', {id: _.get(this.$store, 'getters.productCategories/item.id')})
-    let selectCategories = await this.$http.get('productCategories')
+    let selectCategories = await this.$http.get('categoryListWithoutProducts')
     if (selectCategories.status === 200) {
       selectCategories = selectCategories.data
       let categoryIndex = _.findIndex(selectCategories, {id: this.compItem.id})

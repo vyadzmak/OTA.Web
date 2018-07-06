@@ -79,7 +79,7 @@
                 @click.stop="openQDialog(props.item.id)"><v-icon color="error">mdi-delete-variant</v-icon></v-btn></div>
             </div>
             <v-card-media
-              :src="props.item.default_image_id?baseUrl+props.item.default_image_data.thumb_file_path:userData.no_image_url"
+              :src="baseUrl+(props.item.default_image_id?props.item.default_image_data.thumb_file_path:userData.no_image_url)"
               height="125px"
               contain/>
           </div>

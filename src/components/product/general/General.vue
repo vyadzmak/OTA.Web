@@ -70,6 +70,10 @@
                 :rules="numRules"
                 required
                 label="Стоимость"/>
+              <v-text-field
+                v-model="item.recommended_amount"
+                :rules="[(v) => (!isNaN(parseFloat(v)) && isFinite(v)) || 'Введите число']"
+                label="Рекомендуемая цена"/>
               <v-select
                 v-model="item.currency_id"
                 :items="currencyTypes"
@@ -102,6 +106,10 @@
                 v-model="item.discount_amount"
                 :rules="[(v) => (!isNaN(parseFloat(v)) && isFinite(v)) || 'Введите число']"
                 label="Сумму с учетом скидки"/>
+              <v-text-field
+                v-model="item.bonus_percent"
+                :rules="[(v) => (!isNaN(parseFloat(v)) && isFinite(v)) || 'Введите число']"
+                label="Бонусы, (%)"/>
               <v-checkbox
                 v-model="item.not_available"
                 label="Нет в наличии"/>
