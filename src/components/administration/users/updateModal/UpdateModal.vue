@@ -50,9 +50,9 @@
         />
         <v-text-field
           v-model="data.item.user_login.login"
-          :rules="[(v) => !!v || 'Введите e-mail адрес',
-                   (v) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'Введите правильный e-mail адрес',
+          :rules="[(v) => !!v || 'Введите логин',
                    (v) => (!v || v.length <= 32) || 'Не более 32 символов']"
+          :disabled="data.isUpdate"
           label="Логин"
           required
         />
