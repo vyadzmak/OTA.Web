@@ -1,6 +1,7 @@
 import {mapGetters} from 'vuex'
 import questionDialog from '@/components/questionDialog/QuestionDialog.vue'
 import updateModal from './updateModal/UpdateModal.vue'
+import bonusDialog from './bonusModal/BonusModal.vue'
 
 export default {
   name: 'users',
@@ -16,6 +17,7 @@ export default {
         { text: 'Телефон', align: 'left', value: 'user_info_data.phone_number' },
         { text: 'Статус', align: 'left', value: 'lock_state' },
         {sortable: false},
+        {sortable: false},
         {sortable: false}
       ],
       tableRowsShown: [10, 20, 50, 100, {text: 'Все', value: -1}],
@@ -26,7 +28,9 @@ export default {
       dialog: false,
       dialogComponent: updateModal,
       qDialog: false,
-      qDialogComponent: questionDialog
+      qDialogComponent: questionDialog,
+      bDialog: false,
+      bDialogComponent: bonusDialog
     }
   },
   computed: {
@@ -44,6 +48,14 @@ export default {
         data: itemId
       }
       this.qDialog = true
+    },
+    openBDialog (itemId) {
+      this.dialogData = {
+        title: 'Бонусы',
+        isClosable: true,
+        itemId
+      }
+      this.bDialog = true
     },
     openDialog: async function (item) {
       let isUpdate = true

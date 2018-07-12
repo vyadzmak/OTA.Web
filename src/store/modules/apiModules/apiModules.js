@@ -30,6 +30,7 @@ export default [
   {link: 'userRoleRoutes'},
   {link: 'userRoles'},
   {link: 'users'},
-  {link: 'viewSettings', additional: [{link: 'routeViewSettings', requestParams: ['user_id']}]},
-  {link: 'routeCatalogProductsRecommendations', requestParams: ['user_id', 'product_id']}
+  {link: 'closeUserBonuses', additional: [{link: 'routeViewSettings', requestParams: ['user_id']}]},
+  {link: 'routeCatalogProductsRecommendations', requestParams: ['user_id', 'product_id']},
+  {link: 'userBonusesDetails', requestParams: ['user_id']}
 ]

@@ -125,7 +125,7 @@ export default {
       let updateInterval = this.adminSettings.data_refresh_interval
       if (!this.adminSettings || !this.adminSettings.data_refresh_interval) {
         updateInterval = await this.$store.dispatch('adminSettings/routeAdminGeneral', {'user_id': this.userData.id})
-        updateInterval = this.adminSettings.data_refresh_interval || 10000
+        updateInterval = this.adminSettings.data_refresh_interval || 1000000
       }
       this.$options.interval = setInterval(this.getOrders, updateInterval)
     },

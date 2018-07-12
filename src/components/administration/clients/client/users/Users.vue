@@ -48,6 +48,15 @@
               <v-btn
                 slot="activator"
                 icon
+                @click.stop="openBDialog(props.item.id)"><v-icon color="accent">mdi-eye</v-icon></v-btn>
+              <span>Просмотреть бонусы</span>
+            </v-tooltip>
+          </td>
+          <td class="px-1">
+            <v-tooltip top>
+              <v-btn
+                slot="activator"
+                icon
                 @click.stop="openDialog(props.item)"><v-icon color="info">mdi-pen</v-icon></v-btn>
               <span>Редактировать</span>
             </v-tooltip>
@@ -83,6 +92,16 @@
         :is="qDialogComponent"
         :data="dialogData"
         @dialog-close="qDialogClose"/>
+    </v-dialog>
+    <v-dialog
+      v-model="bDialog"
+      scrollable
+      fullscreen>
+      <component
+        v-if="bDialog"
+        :is="bDialogComponent"
+        :data="dialogData"
+        @dialog-close="bDialog=false"/>
     </v-dialog>
   </v-card>
 </template>
