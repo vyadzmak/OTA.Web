@@ -2,10 +2,12 @@ import {baseUrl} from '@/httpClient/index'
 import {mapGetters} from 'vuex'
 import questionDialog from '@/components/questionDialog/QuestionDialog.vue'
 import addDialogComponent from './addDialog/addDialog.vue'
+import ProductSearch from './ProductSearch'
 import {catalog as catalogRoutes} from '@/router/routerNames'
 
 export default {
   name: 'catalogs',
+  components: {'product-search': ProductSearch},
   data () {
     return {
       search: '',

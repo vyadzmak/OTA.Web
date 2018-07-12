@@ -39,7 +39,9 @@
         </v-breadcrumbs-item>
       </v-breadcrumbs>
       <v-spacer/>
+      <product-search v-if="!productsShown"/>
       <v-text-field
+        v-show="productsShown"
         v-model="search"
         append-icon="search"
         label="Поиск"
