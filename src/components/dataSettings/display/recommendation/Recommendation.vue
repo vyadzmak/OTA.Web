@@ -9,6 +9,10 @@
         @click="updateItem()"
       >Обновить</v-btn>
       <v-spacer/>
+      <v-checkbox
+        v-model="showRecommended"
+        label="Отображать рекомендованные"/>
+      <v-spacer/>
       <v-text-field
         v-model="search"
         append-icon="search"

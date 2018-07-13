@@ -19,7 +19,9 @@ export default [
   {link: 'productComments', additional: [{link: 'routeCatalogProductsComments', requestParams: ['user_id', 'product_id']}]},
   {link: 'products',
     additional: [{link: 'productsByProductCategory', requestParams: ['user_id', 'category_id']},
-      {link: 'routeCatalogProductsGeneral', requestParams: ['user_id', 'product_id']}]},
+      {link: 'routeCatalogProductsGeneral', requestParams: ['user_id', 'product_id']},
+      {link: 'productsRecommendationsCatalog', requestParams: ['user_id']}
+    ]},
   {link: 'settings', additional: [{link: 'routeAdminSettings', requestParams: ['user_id']}]},
   {link: 'unitCatalog'},
   {link: 'userCartPositions'},
@@ -30,7 +32,7 @@ export default [
   {link: 'userRoleRoutes'},
   {link: 'userRoles'},
   {link: 'users'},
-  {link: 'closeUserBonuses', additional: [{link: 'routeViewSettings', requestParams: ['user_id']}]},
+  {link: 'viewSettings', additional: [{link: 'routeViewSettings', requestParams: ['user_id']}]},
   {link: 'routeCatalogProductsRecommendations', requestParams: ['user_id', 'product_id']},
   {link: 'userBonusesDetails', requestParams: ['user_id']}
 ]

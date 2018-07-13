@@ -1,4 +1,3 @@
-import {mapGetters} from 'vuex'
 import productModal from './productModal/productModal.vue'
 
 export default {
@@ -13,7 +12,7 @@ export default {
         { text: 'Артикул', align: 'left', value: 'product_code' },
         {sortable: false}
       ],
-      tableRowsShown: [10, 20, 50, 100, {text: 'Все', value: -1}],
+      tableRowsShown: [10, 20, 50, 100, 200],
       rowsPerPageText: 'Строк на странице',
       noDataText: 'Нет данных',
       noResultsText: 'Поиск не дал результатов',
@@ -21,16 +20,25 @@ export default {
       selectedItems: [],
       dialogData: null,
       productDialog: false,
-      productDialogComponent: productModal
+      productDialogComponent: productModal,
+      showRecommended: false
     }
   },
   computed: {
-    ...mapGetters({items: 'products/items', userData: 'userData'}),
     compItem () {
       let result = this.$store.getters['viewSettings/item']
       this.item = result ? _.cloneDeep(result) : {}
       this.selectedItems = _.map(_.get(this.item, 'recomendation_elements', []), v => { return {id: v} })
       return result
+    },
+    items () {
+      if (this.showRecommended) {
+        let selectedMappedItems = this.selectedItems.map(v => { return v.id })
+        return this.$store.getters['products/items'].filter((val) => {
+          return selectedMappedItems.includes(val.id)
+        })
+      }
+      return this.$store.getters['products/items']
     }
   },
   methods: {
@@ -57,7 +65,7 @@ export default {
     }
   },
   created () {
-    this.$store.dispatch('products/getItems')
+    this.$store.dispatch('products/productsRecommendationsCatalog', {user_id: this.userData.id})
   },
   mounted () {
   }
