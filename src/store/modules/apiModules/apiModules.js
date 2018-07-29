@@ -22,6 +22,8 @@ export default [
       {link: 'routeCatalogProductsGeneral', requestParams: ['user_id', 'product_id']},
       {link: 'productsRecommendationsCatalog', requestParams: ['user_id']}
     ]},
+  {link: 'productCategoryPositions', additional: [{link: 'productCategoryPositionsByCategory', requestParams: ['user_id', 'category_id']}]},
+  {link: 'productsPositions', additional: [{link: 'productsPositionsByCategory', requestParams: ['user_id', 'category_id']}]},
   {link: 'settings', additional: [{link: 'routeAdminSettings', requestParams: ['user_id']}]},
   {link: 'unitCatalog'},
   {link: 'userCartPositions'},

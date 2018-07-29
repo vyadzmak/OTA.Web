@@ -45,6 +45,11 @@
           </v-list-tile>
           <v-divider/>
           <v-list-tile>
+            <v-list-tile-content class="body-2">Телефон:</v-list-tile-content>
+            <v-list-tile-content class="align-end">{{ ldsh.get(compItem, 'client_address_data.phone_nubmer') }}</v-list-tile-content>
+          </v-list-tile>
+          <v-divider/>
+          <v-list-tile>
             <v-list-tile-content
               class="body-2"
               style="display:-webkit-box">Адрес:
@@ -103,21 +108,6 @@
             </v-icon></v-list-tile-content>
           </v-list-tile>
           <v-divider/>
-          <v-list-tile>
-            <v-list-tile-content class="body-2">Контакт:</v-list-tile-content>
-            <v-list-tile-content class="align-end">{{ ldsh.get(item, 'order_user_data.name') }}</v-list-tile-content>
-          </v-list-tile>
-          <v-divider/>
-          <v-list-tile>
-            <v-list-tile-content class="body-2">E-mail:</v-list-tile-content>
-            <v-list-tile-content class="align-end">{{ ldsh.get(userDetails, 'user_info_data.email') }}</v-list-tile-content>
-          </v-list-tile>
-          <v-divider/>
-          <v-list-tile>
-            <v-list-tile-content class="body-2">Телефон:</v-list-tile-content>
-            <v-list-tile-content class="align-end">{{ ldsh.get(userDetails, 'user_info_data.phone_number') }}</v-list-tile-content>
-          </v-list-tile>
-          <v-divider/>
         </v-list>
         </v-flex>
         <v-flex
@@ -146,6 +136,21 @@
             <v-list-tile>
               <v-list-tile-content class="body-2">Количество:</v-list-tile-content>
               <v-list-tile-content class="align-end">{{ items.length }}</v-list-tile-content>
+            </v-list-tile>
+            <v-divider/>
+            <v-list-tile>
+              <v-list-tile-content class="body-2">Контакт:</v-list-tile-content>
+              <v-list-tile-content class="align-end">{{ ldsh.get(item, 'order_user_data.name') }}</v-list-tile-content>
+            </v-list-tile>
+            <v-divider/>
+            <v-list-tile>
+              <v-list-tile-content class="body-2">E-mail:</v-list-tile-content>
+              <v-list-tile-content class="align-end">{{ ldsh.get(userDetails, 'user_info_data.email') }}</v-list-tile-content>
+            </v-list-tile>
+            <v-divider/>
+            <v-list-tile>
+              <v-list-tile-content class="body-2">Телефон:</v-list-tile-content>
+              <v-list-tile-content class="align-end">{{ ldsh.get(userDetails, 'user_info_data.phone_number') }}</v-list-tile-content>
             </v-list-tile>
             <v-divider/>
           </v-list>

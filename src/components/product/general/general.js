@@ -21,17 +21,9 @@ export default {
   computed: {
     ...mapGetters({
       currencyTypes: 'currencyCatalog/items',
-      unitTypes: 'unitCatalog/items'}),
-    brandTypes () {
-      let result = _.get(this.$store, 'getters.brandsCatalog/items', [])
-      result.unshift({id: 0, name: 'Нет'})
-      return result
-    },
-    partnerTypes () {
-      let result = _.get(this.$store, 'getters.partnersCatalog/items', [])
-      result.unshift({id: 0, name: 'Нет'})
-      return result
-    },
+      unitTypes: 'unitCatalog/items',
+      brandTypes: 'brandsCatalog/items',
+      partnerTypes: 'partnersCatalog/items'}),
     compItem () {
       let result = _.get(this.$store, 'getters.products/item', {})
       this.item = _.cloneDeep(result)

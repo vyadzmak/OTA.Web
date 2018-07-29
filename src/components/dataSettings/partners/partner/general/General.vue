@@ -14,6 +14,10 @@
             :rules="sNameRules"
             required
             label="Наименование"/>
+          <v-text-field
+            v-model.number="item.minimum_order_amount"
+            :rules="[(v) => (!isNaN(parseFloat(v)) && isFinite(v)) || 'Введите число']"
+            label="Минимальная сумма заказа"/>
           <v-textarea
             v-model="item.short_description"
             :rules="sDescRules"
@@ -24,12 +28,6 @@
             label="Описание"/>
         </v-form>
       </v-card-text>
-      <v-card-actions><v-btn
-        :disabled="!!$loading"
-        dark
-        color="success"
-        @click="updateItem()"
-      >Обновить</v-btn></v-card-actions>
     </v-card>
   </div>
 </template>

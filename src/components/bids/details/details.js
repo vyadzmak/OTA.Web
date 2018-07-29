@@ -118,6 +118,7 @@ export default {
       if (_.get(this.compItem, 'client_address_data.confirmed')) {
         this.item.order_state_id = 2
         this.item.executor_id = this.userData.id
+        this.item.processed_date = this.$moment()._d
         this.$store.dispatch('orders/updateItem', {item: this.item, isUpdate: true})
       } else {
         this.$store.commit('showSnackbar', {text: 'Адрес заявки не был подтвержден, поэтому невозможно принять заявку в работу. Подтвердите адрес и повторите', snackbar: true, context: 'error'})
@@ -125,6 +126,7 @@ export default {
     },
     closeBid () {
       this.item.order_state_id = 3
+      this.item.execute_date = this.$moment()._d
       this.$store.dispatch('orders/updateItem', {item: this.item, isUpdate: true})
     },
     updateAddress () {

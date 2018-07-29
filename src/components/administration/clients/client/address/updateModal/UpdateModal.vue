@@ -30,6 +30,11 @@
           :rules="sNameRules"
           label="Код"
         />
+        <v-text-field
+          v-model="data.item.phone_number"
+          :rules="[(v) => (!v || v.length <= 50) || 'Не более 50 символов']"
+          label="Телефон"
+        />
         <v-select
           v-model="areaId"
           :items="areaTypes"

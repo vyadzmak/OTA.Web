@@ -10,6 +10,7 @@ export default {
       headers: [
         { text: 'Id', align: 'left', value: 'id' },
         { text: 'Название', align: 'left', value: 'name' },
+        { text: 'Телефон', align: 'left', value: 'phone_number' },
         { text: 'Адрес', align: 'left', value: 'address' },
         { text: 'Город/а.е.', align: 'left', value: 'city_data.name' },
         { text: 'Регион/Область', align: 'left', value: 'city_data.area_data.name' },

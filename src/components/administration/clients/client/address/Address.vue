@@ -30,6 +30,7 @@
         <tr>
           <td>{{ props.item.id }}</td>
           <td>{{ props.item.name }}</td>
+          <td>{{ props.item.phone_number }}</td>
           <td>{{ props.item.address }}</td>
           <td>{{ ldsh.get(props.item, 'city_data.name') }}</td>
           <td>{{ ldsh.get(props.item, 'city_data.area_data.name') }}</td>

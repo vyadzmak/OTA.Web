@@ -22,7 +22,22 @@
         :data="dialogData"
         @dialog-close="qDialogClose"/>
     </v-dialog>
+    <v-dialog
+      v-model="pDialog"
+      max-width="900px"
+      scrollable>
+      <component
+        v-if="pDialog"
+        :is="pDialogComponent"
+        :data="dialogData"
+        @dialog-close="pDialogClose"/>
+    </v-dialog>
     <v-card-actions class="pt-1">
+      <v-btn
+        :disabled="!!$loading"
+        color="info"
+        dark
+        @click.stop="openPDialog()">Изменить порядок</v-btn>
       <v-btn
         v-show="productsShown"
         :disabled="!!$loading"
