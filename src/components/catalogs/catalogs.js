@@ -108,7 +108,7 @@ export default {
         title: 'Изменение порядка отображения ' + (this.productsShown ? 'товаров' : 'категорий'),
         isClosable: true,
         productsShown: this.productsShown,
-        items: this.productsShown ? this.products : this.items
+        items: (this.productsShown ? this.products : this.items).map(v => { return {id: v.id, name: v.name} })
       }
       this.pDialog = true
     },

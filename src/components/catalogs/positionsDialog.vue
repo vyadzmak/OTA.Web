@@ -9,53 +9,46 @@
         dark
         @click="cancel"><v-icon>clear</v-icon></v-btn>
     </v-card-title>
-    <v-card-text style="height:80vh;">
+    <v-card-text style="height:90vh;">
       <v-layout
         row
         wrap>
         <v-flex
           xs6
           pa-1><v-subheader>Неупорядоченные</v-subheader>
-          <drop
+          <draggable
+            v-model="filteredItems"
+            :options="{group:'1s'}"
+            element="v-list"
             class="dragArea"
-            @drop="handleDrop(...arguments)">
-            <v-list>
-              <v-divider/>
-              <template v-for="(item, index) in filteredItems">
-                <v-list-tile
-                  :key="item.id">
-                  <drag
-                    :transfer-data="{ item: item, list: 1}"
-                    class="drag">
-                    {{ item.name }}
-                  </drag>
-                </v-list-tile>
-                <v-divider :key="index"/>
-              </template>
-            </v-list>
-          </drop>
+            @start="drag=true"
+            @end="drag=false">
+            <list-item-with-divider
+              v-for="(item,index) in filteredItems"
+              :key="item.id"
+              :item="item"
+              :index="index+1"
+              :is-first="index===0"/>
+          </draggable>
         </v-flex>
         <v-flex
           xs6
           pa-1><v-subheader>Упорядоченные</v-subheader>
-          <drop
+          <draggable
+            v-model="selectedItems"
+            :options="{group:'1s'}"
+            element="v-list"
             class="dragArea"
-            @drop="handleSelectedDrop(...arguments)">
-            <v-list>
-              <v-divider/>
-              <template v-for="(item, index) in selectedItems">
-                <v-list-tile
-                  :key="item.id">
-                  <drag
-                    :transfer-data="{ item: item, list: 2}"
-                    class="drag">
-                    {{ item.name }}
-                  </drag>
-                </v-list-tile>
-                <v-divider :key="index"/>
-              </template>
-            </v-list>
-          </drop>
+            @start="drag=true"
+            @end="drag=false">
+            <list-item-with-divider
+              v-for="(item,index) in selectedItems"
+              :key="item.id"
+              :item="item"
+              :index="index+1"
+              :is-first="index===0"
+              :has-number="true"/>
+          </draggable>
         </v-flex>
       </v-layout>
     </v-card-text>
@@ -76,43 +69,38 @@
 </template>
 
 <script>
-import { Drag, Drop } from 'vue-drag-drop'
+import draggable from 'vuedraggable'
+import ListItemWithDivider from './ListItemWithDivider'
 
 export default {
   name: 'PositionsDialog',
-  components: {
-    'drag': Drag,
-    'drop': Drop
-  },
+  components: { draggable, 'list-item-with-divider': ListItemWithDivider },
   props: {'data': {
     type: Object,
     default: {}
   }},
   data () {
-    return {
-      item: {},
+    return {item: {},
       selectedItems: [],
-      selectedIds: []
+      selectedIds: [],
+      filteredItems: []
     }
   },
   computed: {
     compItem () {
       return this.$store
         .getters[((this.data.productsShown ? 'productsPositions' : 'productCategoryPositions') + '/item')]
-    },
-    items () {
-      return this.$store
-        .getters[((this.data.productsShown ? 'products' : 'productCategories') + '/items')]
-    },
-    filteredItems () {
-      return this.items.filter(v => { return this.selectedIds.indexOf(v.id) === -1 })
     }
   },
   created () {
     this.item = _.cloneDeep(this.compItem)
-    this.selectedIds = _.get(this.compItem, (this.data.productsShown ? 'products_positions' : 'child_category_positions'), [])
-    this.selectedItems = this.items.filter((v) => {
-      return this.selectedIds.indexOf(v.id) !== -1
+    this.selectedIds = _.get(this.item, (this.data.productsShown ? 'products_positions' : 'child_category_positions'), [])
+    this.data.items.forEach((v) => {
+      if (this.selectedIds.indexOf(v.id) === -1) {
+        this.filteredItems.push(v)
+      } else {
+        this.selectedItems.push(v)
+      }
     })
   },
   beforeDestroy () {
@@ -152,5 +140,6 @@ export default {
 .dragArea {
   height: 100%;
   border: dashed 2px #546E7A;
+  border-radius: 1em;
 }
 </style>
