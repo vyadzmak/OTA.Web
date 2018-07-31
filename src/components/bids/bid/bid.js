@@ -5,7 +5,7 @@ export default {
   data () {
     return {
       search: '',
-      headers: [
+      headers1: [
         { text: 'Id', align: 'left', value: 'id' },
         { text: '№ заявки', align: 'left', value: 'number' },
         { text: 'Заказчик', align: 'left', value: 'order_user_data.client_data.name' },
@@ -16,8 +16,12 @@ export default {
         { text: 'Время заказа',
           align: 'left',
           value: this.$route.name === 'bids.inbox' ? 'creation_date'
-            : this.$route.name === 'bids.active' ? 'processed_date' : 'execute_date'},
-        { text: 'Исполнитель', align: 'left', value: 'order_executor_data.name' },
+            : this.$route.name === 'bids.active' ? 'processed_date' : 'execute_date'}
+      ],
+      headers2: [
+        { text: 'Исполнитель', align: 'left', value: 'order_executor_data.name' }
+      ],
+      headers3: [
         { text: 'Статус', align: 'left', value: 'order_state_data.title' },
         { text: 'Адрес подтвержден', align: 'left', value: 'client_address_data.confirmed' }
       ],
@@ -35,6 +39,13 @@ export default {
         case 'bids.active': return 2
         case 'bids.history': return 3
         default: return 0
+      }
+    },
+    headers () {
+      if (this.currentStateFilter === 1) {
+        return [...this.headers1, ...this.headers3]
+      } else {
+        return [...this.headers1, ...this.headers2, ...this.headers3]
       }
     }
   },

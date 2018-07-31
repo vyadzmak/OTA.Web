@@ -1,7 +1,8 @@
 import questionDialog from '@/components/questionDialog/QuestionDialog.vue'
 import updateDialog from './updateModal/UpdateModal.vue'
 import {admin as adminRoutes, bids as bidRoutes,
-  settings as settingRoutes, catalog as catalogRoutes} from '@/router/routerNames'
+  settings as settingRoutes, catalog as catalogRoutes,
+  messageRoutes, eventRoutes} from '@/router/routerNames'
 import {baseUrl} from '@/httpClient/index'
 
 export default {
@@ -50,6 +51,18 @@ export default {
           path: '/dataSettings',
           visible: _.includes(this.userData.user_role_data.user_role_route_access, 'dataSettings'),
           isActive: this.isActive(settingRoutes)
+        },
+        { icon: 'fas fa-envelope',
+          title: 'Сообщения',
+          path: '/messages',
+          visible: _.includes(this.userData.user_role_data.user_role_route_access, 'messages'),
+          isActive: this.isActive(messageRoutes)
+        },
+        { icon: 'fas fa-calendar',
+          title: 'События',
+          path: '/events',
+          visible: _.includes(this.userData.user_role_data.user_role_route_access, 'events'),
+          isActive: this.isActive(eventRoutes)
         }
       ]
     },

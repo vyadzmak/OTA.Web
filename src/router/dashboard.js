@@ -4,6 +4,8 @@ import DataSettings from '@/components/dataSettings/DataSettings.vue'
 import Catalogs from '@/components/catalogs/Catalogs.vue'
 import Product from '@/components/product/Product.vue'
 import Administration from '@/components/administration/Administration.vue'
+import Messages from '@/components/messages/Messages.vue'
+import Events from '@/components/events/Events.vue'
 
 import Categories from '@/components/dataSettings/categories/Categories.vue'
 import Category from '@/components/dataSettings/categories/category/Category.vue'
@@ -171,6 +173,16 @@ const dashboard = {
       return {name: 'administration.users'}
     },
     children: adminChildren
+  },
+  {
+    path: 'messages',
+    name: 'messages',
+    component: Messages
+  },
+  {
+    path: 'events',
+    name: 'events',
+    component: Events
   }]
 }
 

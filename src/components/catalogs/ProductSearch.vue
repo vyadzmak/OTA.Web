@@ -9,6 +9,7 @@
     single-line
     item-text="name"
     item-value="id"
+    cached-items="true"
     return-object
     label="Введите название продукта"
     @change="modelChanged"
@@ -46,20 +47,29 @@ export default {
     baseUrl: baseUrl.slice(0, -1)
   }),
   watch: {
-    search (val, oldVal) {
+    search: _.debounce(function (val, oldVal) {
       if (val && val.length < 4) {
         this.items = []
         return
       }
       // Items have already been loaded
-      if (this.items.length > 0) return
+      if ((this.items.length > 0 && oldVal.indexOf(val) !== -1) || !val) return
 
+      this.searchData(val)
+    }, 400)
+  },
+  methods: {
+    modelChanged (item) {
+      this.$store.commit('catalogBack', false)
+      this.$store.commit('products/item', item)
+      this.$router.push({name: 'product'})
+    },
+    searchData (val) {
       this.isLoading = true
-
       // Lazily load input items
       this.$http.get('filterProducts', {params: {
         user_id: this.userData.id,
-        filter_parameter: 5,
+        filter_parameter: 10,
         filter_value: val}})
         .then(res => {
           this.items = res.data
@@ -68,13 +78,6 @@ export default {
           console.log(err)
         })
         .finally(() => (this.isLoading = false))
-    }
-  },
-  methods: {
-    modelChanged (item) {
-      this.$store.commit('catalogBack', false)
-      this.$store.commit('products/item', item)
-      this.$router.push({name: 'product'})
     }
   }
 }

@@ -19,6 +19,7 @@
       :rows-per-page-text="rowsPerPageText"
       :no-results-text="noResultsText"
       :no-data-text="noDataText"
+      class="word-wrap"
     >
       <template
         slot="items"
@@ -33,7 +34,7 @@
           <td>{{ props.item.total_amount }}</td>
           <td>{{ props.item[$route.name === 'bids.inbox' ? 'creation_date'
           : $route.name === 'bids.active' ? 'processed_date' : 'execute_date'] | moment("DD.MM.YYYY HH:mm") }}</td>
-          <td>{{ ldsh.get(props.item, 'order_executor_data.name', 'Нет') }}</td>
+          <td v-if="currentStateFilter !== 1">{{ ldsh.get(props.item, 'order_executor_data.name', 'Нет') }}</td>
           <td>{{ props.item.order_state_data.title }}</td>
           <td><v-icon
             slot="activator"

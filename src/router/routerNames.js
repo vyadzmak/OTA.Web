@@ -10,6 +10,8 @@ export const settings = ['dataSettings',
   'userAgreement', 'currencies', 'units', 'display', 'areas', 'area']
 export const catalog = ['catalogs',
   'product', 'product.general', 'product.gallery', 'product.recommendation', 'product.reviews']
+export const messageRoutes = ['messages']
+export const eventRoutes = ['events']
 
 export const getRoutes = function (types) {
   let names = []
@@ -23,8 +25,9 @@ export const getRoutes = function (types) {
     names = names.concat(admin)
   }
   if (types.data_settings_route_access) {
-    names = names.concat(settings)
+    names = names.concat(settings, messageRoutes)
   }
+  names = [...names, ...eventRoutes]
   names.push('dashboard')
   return names
 }
