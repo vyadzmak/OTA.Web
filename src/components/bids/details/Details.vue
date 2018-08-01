@@ -179,9 +179,12 @@
           <td>{{ props.item.id }}</td>
           <td>{{ props.item.product_data.name }}</td>
           <td>{{ props.item.product_data.product_code }}</td>
-          <td>{{ props.item.count }}</td>
-          <td>{{ props.item.amount_per_item }}</td>
-          <td>{{ props.item.amount_per_item_discount }}</td>
+          <td>{{ props.item.count+' '+props.item.product_data.unit_display_value
+          + (props.item.alt_count? ' / '+props.item.alt_count+' '+props.item.product_data.alt_unit_display_value:'') }}</td>
+          <td>{{ props.item.amount_per_item+''+props.item.product_data.currency_display_value
+          + (props.item.alt_amount_per_item? ' / '+props.item.alt_amount_per_item+''+props.item.product_data.currency_display_value:'') }}</td>
+          <td>{{ props.item.amount_per_item_discount+''+props.item.product_data.currency_display_value
+          + (props.item.alt_amount_per_item_discount? ' / '+props.item.alt_amount_per_item_discount+''+props.item.product_data.currency_display_value:'') }}</td>
           <td>{{ props.item.total_amount }}</td>
           <td><v-icon
             slot="activator"

@@ -103,6 +103,13 @@ export default {
     this.$refs.dataTable.defaultPagination.descending = true
   },
   beforeDestroy () {
+    let eventsCount = 0
+    this.items.forEach(v => {
+      if (v.type !== 'success') {
+        eventsCount++
+      }
+    })
+    this.$store.commit('updateByPath', {path: 'loginUser.userData.events', value: eventsCount})
     this.$store.commit('events/items', [])
   },
   methods: {

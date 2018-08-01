@@ -45,10 +45,12 @@ export default {
     items: [],
     model: null,
     search: null,
-    baseUrl: baseUrl.slice(0, -1)
+    baseUrl: baseUrl.slice(0, -1),
+    foundText: 'not found'
   }),
   watch: {
     search: _.debounce(function (val, oldVal) {
+      if (val === this.foundText) { return }
       if (val && val.length < 4) {
         this.items = []
         return
@@ -61,6 +63,7 @@ export default {
   },
   methods: {
     modelChanged (item) {
+      this.foundText = item.name
       this.$emit('change', item)
     },
     searchData (val) {

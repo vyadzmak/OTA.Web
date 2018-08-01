@@ -162,7 +162,7 @@ export default {
   },
   created () {
     this.createInterval()
-    this.$options.intervalEvents = setInterval(this.getEventsCount, 5000)
+    this.$options.intervalEvents = setInterval(this.getEventsCount, 120000)
     this.getEventsCount()
   },
   beforeDestroy () {

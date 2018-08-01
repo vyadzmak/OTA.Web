@@ -163,10 +163,12 @@
             <v-layout class="pa-1 white--text">
               <v-flex
                 style="background: green"
-                v-text="props.item.unit_value+' '+ldsh(units).filter({id: props.item.unit_id}).get('[0].display_value', '')"/>
+                v-text="props.item.unit_value+' '+ldsh(units).filter({id: props.item.unit_id}).get('[0].display_value', '')
+                +(props.item.alt_unit_id?' / '+props.item.alt_unit_value+' '+ldsh(units).filter({id: props.item.alt_unit_id}).get('[0].display_value', ''):'')"/>
               <v-flex
                 style="background: purple"
-                v-text="props.item.amount+' '+ldsh(currencies).filter({id: props.item.currency_id}).get('[0].display_value', '')"/>
+                v-text="props.item.amount+' '+ldsh(currencies).filter({id: props.item.currency_id}).get('[0].display_value', '')
+                +(props.item.alt_unit_id?' / '+props.item.alt_amount+' '+ldsh(currencies).filter({id: props.item.currency_id}).get('[0].display_value', ''):'')"/>
             </v-layout>
         </div></v-card>
       </v-flex>

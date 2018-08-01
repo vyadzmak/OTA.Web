@@ -12,6 +12,8 @@
     <v-card-text style="height: 100%;">
       <v-subheader>Продукт {{ data.item.product_code }}</v-subheader>
       <div>{{ data.item.product }}</div>
+      <v-subheader>Дата окончания (показывать предупреждение за {{ data.item.count_days_notifications }} дней)</v-subheader>
+      <div>{{ data.item.end_date | moment("DD.MM.YYYY") }}</div>
       <v-subheader>Сообщение</v-subheader>
       <div>{{ data.item.message }}</div>
     </v-card-text>
