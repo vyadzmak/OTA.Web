@@ -54,7 +54,9 @@
         </v-breadcrumbs-item>
       </v-breadcrumbs>
       <v-spacer/>
-      <product-search v-if="!productsShown"/>
+      <product-search
+        v-if="!productsShown"
+        @change="goTo"/>
       <v-text-field
         v-show="productsShown"
         v-model="search"

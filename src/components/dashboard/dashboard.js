@@ -38,7 +38,7 @@ export default {
           path: '/bids',
           visible: _.includes(this.userData.user_role_data.user_role_route_access, 'bids'),
           isActive: this.isActive(bidRoutes),
-          hasBadge: true
+          hasBadge: 'bid'
         },
         { icon: 'dashboard',
           title: 'Каталог',
@@ -62,7 +62,8 @@ export default {
           title: 'События',
           path: '/events',
           visible: _.includes(this.userData.user_role_data.user_role_route_access, 'events'),
-          isActive: this.isActive(eventRoutes)
+          isActive: this.isActive(eventRoutes),
+          hasBadge: 'events'
         }
       ]
     },
@@ -81,7 +82,8 @@ export default {
       }
     },
     badgeModel () {
-      return this.$route.name !== 'bids.inbox'
+      return {bid: this.$route.name !== 'bids.inbox' && this.userData.bid > 0,
+        events: this.$route.name !== 'events' && this.userData.events > 0}
     },
     adminSettings () {
       return this.$store.getters['adminSettings/item']
@@ -140,23 +142,31 @@ export default {
         updateInterval = await this.$store.dispatch('adminSettings/routeAdminGeneral', {'user_id': this.userData.id})
         updateInterval = this.adminSettings.data_refresh_interval || 10000
       }
-      this.$options.interval = setInterval(this.getOrders, updateInterval)
+      this.$options.intervalBid = setInterval(this.getOrders, updateInterval)
     },
-    getOrders: async function () {
+    async getOrders () {
       let response = await this.$http.get('routeOrders', {params: {user_id: this.userData.id, state_id: 1}})
       if (response.status === 200) {
-        if (this.badgeModel) {
-          this.$store.commit('updateByPath', {path: 'loginUser.userData.orders_count', value: response.data.length})
-        } else {
+        this.$store.commit('updateByPath', {path: 'loginUser.userData.bid', value: response.data.length})
+        if (!this.badgeModel.bid) {
           this.$store.commit('orders/items', response.data)
         }
+      }
+    },
+    async getEventsCount () {
+      let response = await this.$http.get('eventsByUser', {params: {user_id: this.userData.id}})
+      if (response.status === 200) {
+        this.$store.commit('updateByPath', {path: 'loginUser.userData.events', value: response.data})
       }
     }
   },
   created () {
     this.createInterval()
+    this.$options.intervalEvents = setInterval(this.getEventsCount, 5000)
+    this.getEventsCount()
   },
   beforeDestroy () {
-    clearInterval(this.$options.interval)
+    clearInterval(this.$options.intervalBid)
+    clearInterval(this.$options.intervalEvents)
   }
 }

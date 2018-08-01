@@ -2,6 +2,7 @@
   <v-autocomplete
     v-model="model"
     :items="items"
+    :filter="customFilter"
     :loading="isLoading"
     :search-input.sync="search"
     hide-details
@@ -60,9 +61,7 @@ export default {
   },
   methods: {
     modelChanged (item) {
-      this.$store.commit('catalogBack', false)
-      this.$store.commit('products/item', item)
-      this.$router.push({name: 'product'})
+      this.$emit('change', item)
     },
     searchData (val) {
       this.isLoading = true
@@ -78,7 +77,8 @@ export default {
           console.log(err)
         })
         .finally(() => (this.isLoading = false))
-    }
+    },
+    customFilter () { return true }
   }
 }
 </script>

@@ -19,11 +19,11 @@
               right>
               <v-badge
                 slot="activator"
-                v-model="badgeModel"
+                v-model="badgeModel[item.hasBadge]"
                 left
                 color="purple"
                 overlap>
-                <span slot="badge">{{ userData.orders_count }}</span>
+                <span slot="badge">{{ userData[item.hasBadge] }}</span>
                 <v-icon
                   :class="item.isActive?'active-icon':''"
                   light
