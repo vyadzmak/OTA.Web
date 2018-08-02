@@ -25,9 +25,15 @@ export const getRoutes = function (types) {
     names = names.concat(admin)
   }
   if (types.data_settings_route_access) {
-    names = names.concat(settings, messageRoutes)
+    names = names.concat(settings)
   }
-  names = [...names, ...eventRoutes]
+  if (types.messages_route_access) {
+    names = names.concat(messageRoutes)
+  }
+  if (types.events_route_access) {
+    names = names.concat(eventRoutes)
+  }
+  names = [...names]
   names.push('dashboard')
   return names
 }
