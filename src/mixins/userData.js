@@ -5,6 +5,7 @@ export default {
     ...mapGetters({
       userData: 'userData',
       $loading: 'loading'
-    })
+    }),
+    $deleteDisabled () { return this.userData.user_role_data.id !== 1 }
   }
 }

@@ -57,6 +57,7 @@
             <v-tooltip top>
               <v-btn
                 slot="activator"
+                :disabled="$deleteDisabled"
                 icon
                 @click.stop="openQDialog(props.item.id)"><v-icon color="error">mdi-delete-variant</v-icon></v-btn>
               <span>Удалить</span>

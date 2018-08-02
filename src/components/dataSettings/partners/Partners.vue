@@ -57,7 +57,7 @@
           >
             <div class="card-top-action">
               <div><v-btn icon><v-icon color="info">mdi-pen</v-icon></v-btn></div>
-              <div><v-btn
+              <div v-if="!$deleteDisabled"><v-btn
                 icon
                 @click.stop="openQDialog(item.id)"><v-icon color="error">mdi-delete-variant</v-icon></v-btn></div>
             </div>
