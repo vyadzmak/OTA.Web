@@ -61,11 +61,13 @@ export default {
         this.getCategories(this.categoryTail.id)
       }
     },
-    getCategories (categoryId) {
-      this.$store.dispatch('productCategories/productsCategoriesByProductCategory', {user_id: this.userData.id, category_id: categoryId})
+    async getCategories (categoryId) {
+      await this.$store.dispatch('productCategories/productsCategoriesByProductCategory', {user_id: this.userData.id, category_id: categoryId})
+      this.pagination.page = 1
     },
-    getProducts (categoryId) {
-      this.$store.dispatch('products/productsByProductCategory', {user_id: this.userData.id, category_id: categoryId})
+    async getProducts (categoryId) {
+      await this.$store.dispatch('products/productsByProductCategory', {user_id: this.userData.id, category_id: categoryId})
+      this.pagination.page = 1
     },
     openQDialog: function (itemId) {
       this.dialogData = {

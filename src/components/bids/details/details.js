@@ -52,13 +52,18 @@ export default {
         { text: 'Скидка', align: 'left', value: 'amount_per_item_discount' },
         { text: 'Итого', align: 'left', value: 'total_amount' },
         { text: 'Накладная', align: 'left', value: 'need_invoice' },
-        { text: 'Примечание', align: 'left', value: 'description' }
+        { text: 'Примечание', align: 'left', value: 'description' },
+        { text: 'Партнер', align: 'left', value: 'product_data.partner_name' },
+        { text: 'Акция', align: 'left', value: 'product_data.is_stock_product' }
       ]
       if (this.compItem.order_state_id === 2) {
         result = result.concat([
           {sortable: false},
           {sortable: false},
           {sortable: false}])
+      }
+      if (this.compItem.order_state_id === 3) {
+        result = result.concat([{sortable: false}, {sortable: false}])
       }
       return result
     }
@@ -87,13 +92,38 @@ export default {
       }
       this.dialog = true
     },
-    dialogClose (confirmed, item, isUpdate) {
+    async dialogClose (confirmed, item, isUpdate) {
       if (confirmed) {
         item.order_position_state_id = 3
-        this.$store.dispatch('orderPositions/updateItem', {item, isUpdate})
+        item.amount_per_item_discount = item.count ? item.product_data.discount_amount : 0
+        item.alt_amount_per_item_discount = item.alt_count ? item.product_data.alt_discount_amount : 0
+        let {totalSum, totalAltDiscount, totalDiscount} = this.countProductAmounts(item)
+
+        item.total_amount = totalSum - totalAltDiscount - totalDiscount
+        await this.$store.dispatch('orderPositions/updateItem', {item, isUpdate})
+        this.item.amount = 0
+        this.item.discount_amount = 0
+        this.item.total_amount = 0
+
+        this.items.forEach(element => {
+          let {totalSum, totalAltDiscount, totalDiscount} = this.countProductAmounts(element)
+          this.item.amount += totalSum
+          this.item.discount_amount += totalAltDiscount + totalDiscount
+          this.item.total_amount += totalSum - totalAltDiscount - totalDiscount
+        })
+
+        this.$store.dispatch('orders/updateItem', {item: this.item, isUpdate: true})
       }
       this.dialog = false
     },
+    countProductAmounts (item) {
+      let totalDiscount = item.count * item.product_data.discount_amount
+      let totalAltDiscount = item.alt_count * item.product_data.alt_discount_amount
+      let totalSum = item.alt_count * item.product_data.alt_amount +
+        item.count * item.product_data.amount
+      return {totalSum, totalAltDiscount, totalDiscount}
+    },
+
     qDialogClose (confirmed, data) {
       if (confirmed) {
         let item = _.cloneDeep(_.find(this.items, {'id': data}))

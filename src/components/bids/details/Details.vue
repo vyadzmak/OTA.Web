@@ -185,15 +185,21 @@
           + (props.item.alt_amount_per_item? ' / '+props.item.alt_amount_per_item+''+props.item.product_data.currency_display_value:'') }}</td>
           <td>{{ props.item.amount_per_item_discount+''+props.item.product_data.currency_display_value
           + (props.item.alt_amount_per_item_discount? ' / '+props.item.alt_amount_per_item_discount+''+props.item.product_data.currency_display_value:'') }}</td>
-          <td>{{ props.item.total_amount }}</td>
+          <td>{{ props.item.total_amount+''+props.item.product_data.currency_display_value }}</td>
+          <td><v-icon
+            slot="activator"
+            :color="props.item.product_data.is_stock_product?'success':'error'">
+            {{ 'fas fa-'+(props.item.product_data.is_stock_product?'check':'times') }}
+          </v-icon></td>
+          <td>{{ props.item.description }}</td>
+          <td>{{ props.item.product_data.partner_name }}</td>
           <td><v-icon
             slot="activator"
             :color="props.item.need_invoice?'success':'error'">
             {{ 'fas fa-'+(props.item.need_invoice?'check':'times') }}
           </v-icon></td>
-          <td>{{ props.item.description }}</td>
           <td
-            v-show="item.order_state_id===2"
+            v-show="item.order_state_id===2 || item.order_state_id===3"
             class="px-1">
             <v-tooltip top>
               <v-btn
@@ -208,11 +214,12 @@
             </v-tooltip>
           </td>
           <td
-            v-show="item.order_state_id===2"
+            v-show="item.order_state_id===2 || item.order_state_id===3"
             class="px-1">
             <v-tooltip top>
               <v-btn
                 slot="activator"
+                :disabled="item.executor_id !== userData.id"
                 icon
                 @click.stop="openDialog(props.item)"><v-icon color="info">mdi-pen</v-icon></v-btn>
               <span>Редактировать</span>

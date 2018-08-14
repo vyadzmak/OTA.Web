@@ -17,7 +17,7 @@ export const routeAdminUsers = ({ commit, getters }, payload) => {
       .catch(e => {
         commit('showSnackbar', {text: 'Не удалось загрузить данные. Обратитесь к администратору', snackbar: true, context: 'error'}, {root: true})
         commit('showSpinner', false, {root: true})
-        reject(new Error())
+        reject(e)
       })
   })
 }
@@ -39,7 +39,7 @@ export const usersByClient = ({ commit, getters }, payload) => {
       .catch(e => {
         commit('showSnackbar', {text: 'Не удалось загрузить данные. Обратитесь к администратору', snackbar: true, context: 'error'}, {root: true})
         commit('showSpinner', false, {root: true})
-        reject(new Error())
+        reject(e)
       })
   })
 }
@@ -61,7 +61,7 @@ export const userDetails = ({ commit, getters }, payload) => {
       .catch(e => {
         commit('showSnackbar', {text: 'Не удалось загрузить данные. Обратитесь к администратору', snackbar: true, context: 'error'}, {root: true})
         commit('showSpinner', false, {root: true})
-        reject(new Error())
+        reject(e)
       })
   })
 }
@@ -113,7 +113,7 @@ export const updateItem = ({ commit, getters }, {item, isUpdate, fromDashboard})
       .catch(e => {
         commit('showSnackbar', {text: 'Не удалось загрузить данные. Обратитесь к администратору', snackbar: true, context: 'error'}, {root: true})
         commit('showSpinner', false, {root: true})
-        reject(new Error())
+        reject(e)
       })
   })
 }
@@ -135,7 +135,7 @@ export const deleteItem = ({ commit, getters }, id) => {
       .catch(e => {
         commit('showSpinner', false, {root: true})
         commit('showSnackbar', {text: 'Удаление данных не удалось. Обратитесь к администратору', snackbar: true, context: 'error'}, {root: true})
-        reject(new Error())
+        reject(e)
       })
   })
 }

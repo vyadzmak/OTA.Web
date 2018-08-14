@@ -20,6 +20,13 @@
         required
       />
       <v-text-field
+        v-if="data.item.product_data.alt_amount>0"
+        v-model="data.item.alt_count"
+        :rules="numRules"
+        label="Количество"
+        required
+      />
+      <v-text-field
         v-model="data.item.description"
         :rules="nameRules"
         label="Примечания"
