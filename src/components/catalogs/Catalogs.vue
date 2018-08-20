@@ -138,6 +138,9 @@
             <div class="card-top-action">
               <div><v-btn
                 icon
+                @click.stop="goToNewWindow(props.item)"><v-icon color="warning">mdi-tab</v-icon></v-btn></div>
+              <div><v-btn
+                icon
                 @click.stop="goTo(props.item)"><v-icon color="info">mdi-pen</v-icon></v-btn></div>
               <div v-if="!$deleteDisabled"><v-btn
                 icon

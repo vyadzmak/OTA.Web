@@ -51,6 +51,11 @@ export default {
       this.$store.commit('products/item', item)
       this.$router.push({name: 'product'})
     },
+    goToNewWindow (item) {
+      this.$store.commit('products/item', item)
+      let route = this.$router.resolve({name: 'product'})
+      window.open(route.href, '_blank')
+    },
     goBack (id) {
       if (id !== this.categoryTail.id) {
         this.$store.commit('breadcrumbs/delete', id)

@@ -148,7 +148,7 @@ export default {
       let response = await this.$http.get('routeOrders', {params: {user_id: this.userData.id, state_id: 1}})
       if (response.status === 200) {
         this.$store.commit('updateByPath', {path: 'loginUser.userData.bid', value: response.data.length})
-        if (!this.badgeModel.bid) {
+        if (this.$route.name === 'bids.inbox') {
           this.$store.commit('orders/items', response.data)
         }
       }
