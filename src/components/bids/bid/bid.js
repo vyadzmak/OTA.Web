@@ -1,4 +1,5 @@
 import {mapGetters} from 'vuex'
+import {baseUrl} from '@/httpClient/index'
 
 export default {
   name: 'bids',
@@ -28,7 +29,8 @@ export default {
       tableRowsShown: [10, 20, 50, 100, {text: 'Все', value: -1}],
       rowsPerPageText: 'Строк на странице',
       noDataText: 'Нет данных',
-      noResultsText: 'Поиск не дал результатов'
+      noResultsText: 'Поиск не дал результатов',
+      selected: []
     }
   },
   computed: {
@@ -42,20 +44,31 @@ export default {
       }
     },
     headers () {
-      if (this.currentStateFilter === 1) {
-        return [...this.headers1, ...this.headers3]
-      } else {
-        return [...this.headers1, ...this.headers2, ...this.headers3]
+      switch (this.currentStateFilter) {
+        case 1: return [...this.headers1, ...this.headers3]
+        case 3: return [{sortable: false}, ...this.headers1, ...this.headers2, ...this.headers3]
+        default: return [...this.headers1, ...this.headers2, ...this.headers3]
       }
     }
   },
   methods: {
-    goTo (item) {
-      this.$store.commit('orders/item', item)
-      this.$router.push({name: 'bids.details'})
+    goTo (item, event) {
+      console.log(event)
+      if (event.target.className.indexOf('v-input--selection-controls__ripple') === -1) {
+        this.$store.commit('orders/item', item)
+        this.$router.push({name: 'bids.details'})
+      }
     },
     getOrders () {
       this.$store.dispatch('orders/routeOrders', {user_id: this.userData.id, state_id: this.currentStateFilter})
+    },
+    async exportOrders () {
+      let ordersIds = this.selected.map(x => { return x.id })
+      try {
+        window.open(baseUrl + 'exportOrders' + '?user_id=' + this.userData.id + '&orders_ids=' + ordersIds)
+      } catch (e) {
+        this.$store.commit('showSnackbar', {text: 'Экспорт данных не удался. Обратитесь к администратору ' + e, snackbar: true, context: 'error'}, {root: true})
+      }
     }
   },
   created () {

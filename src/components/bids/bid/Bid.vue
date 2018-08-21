@@ -1,6 +1,12 @@
 <template>
   <v-card>
     <v-card-title>
+      <v-btn
+        v-show="selected.length>0"
+        :disabled="!!$loading"
+        color="success"
+        dark
+        @click.stop="exportOrders()">Экспорт</v-btn>
       <v-spacer/>
       <v-text-field
         v-model="search"
@@ -19,12 +25,21 @@
       :rows-per-page-text="rowsPerPageText"
       :no-results-text="noResultsText"
       :no-data-text="noDataText"
+      v-model="selected"
+      item-key="id"
       class="word-wrap"
     >
       <template
         slot="items"
         slot-scope="props">
-        <tr @click="goTo(props.item)">
+        <tr @click="goTo(props.item, $event)">
+          <td v-if="currentStateFilter===3">
+            <v-checkbox
+              v-model="props.selected"
+              primary
+              hide-details
+            />
+          </td>
           <td>{{ props.item.id }}</td>
           <td>{{ props.item.number }}</td>
           <td>{{ props.item.order_user_data.client_data.name }}</td>
