@@ -20,6 +20,11 @@ const adminChildren = [
     component: Bid
   },
   {
+    path: 'cancelled',
+    name: 'bids.cancelled',
+    component: Bid
+  },
+  {
     path: 'details',
     name: 'bids.details',
     component: Details,

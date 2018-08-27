@@ -11,6 +11,12 @@
         dark
         @click.stop="acceptBid()">Принять заявку</v-btn>
       <v-btn
+        v-show="userData.user_role_data.id===1 && item.order_state_id!==4"
+        :disabled="!!$loading"
+        color="error"
+        dark
+        @click.stop="cancelBid()">Отменить заявку</v-btn>
+      <v-btn
         v-show="item.order_state_id===2"
         :disabled="!!$loading"
         color="warning"
@@ -46,7 +52,7 @@
           <v-divider/>
           <v-list-tile>
             <v-list-tile-content class="body-2">Телефон:</v-list-tile-content>
-            <v-list-tile-content class="align-end">{{ ldsh.get(compItem, 'client_address_data.phone_nubmer') }}</v-list-tile-content>
+            <v-list-tile-content class="align-end">{{ ldsh.get(compItem, 'client_address_data.phone_number') }}</v-list-tile-content>
           </v-list-tile>
           <v-divider/>
           <v-list-tile>
@@ -145,12 +151,12 @@
             <v-divider/>
             <v-list-tile>
               <v-list-tile-content class="body-2">E-mail:</v-list-tile-content>
-              <v-list-tile-content class="align-end">{{ ldsh.get(userDetails, 'user_info_data.email') }}</v-list-tile-content>
+              <v-list-tile-content class="align-end">{{ userInfoEmail }}</v-list-tile-content>
             </v-list-tile>
             <v-divider/>
             <v-list-tile>
               <v-list-tile-content class="body-2">Телефон:</v-list-tile-content>
-              <v-list-tile-content class="align-end">{{ ldsh.get(userDetails, 'user_info_data.phone_number') }}</v-list-tile-content>
+              <v-list-tile-content class="align-end">{{ userInfoPhoneNumber }}</v-list-tile-content>
             </v-list-tile>
             <v-divider/>
           </v-list>

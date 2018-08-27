@@ -40,6 +40,7 @@ export default {
         case 'bids.inbox': return 1
         case 'bids.active': return 2
         case 'bids.history': return 3
+        case 'bids.cancelled': return 4
         default: return 0
       }
     },

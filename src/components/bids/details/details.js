@@ -42,6 +42,12 @@ export default {
       }
       return result
     },
+    userInfoPhoneNumber () {
+      return _.get(this.$store.getters, 'crudUsers/item.user_info_data.phone_number')
+    },
+    userInfoEmail () {
+      return _.get(this.$store.getters, 'crudUsers/item.user_info_data.email')
+    },
     headers () {
       let result = [
         { text: 'Id', align: 'left', value: 'id' },
@@ -159,6 +165,10 @@ export default {
       this.item.execute_date = this.$moment()._d
       this.$store.dispatch('orders/updateItem', {item: this.item, isUpdate: true})
     },
+    cancelBid () {
+      this.item.order_state_id = 4
+      this.$store.dispatch('orders/updateItem', {item: this.item, isUpdate: true})
+    },
     updateAddress () {
       this.$store.dispatch('orders/updateItem', {item: this.item, isUpdate: true})
     }
@@ -170,5 +180,10 @@ export default {
   },
   mounted () {
     this.$refs.dataTable.defaultPagination.descending = true
+  },
+  beforeDestroy () {
+    this.$store.commit('orderPositions/items', [])
+    this.$store.commit('clientAddresses/items', [])
+    this.$store.commit('crudUsers/item', {})
   }
 }
