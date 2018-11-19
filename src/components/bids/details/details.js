@@ -57,10 +57,10 @@ export default {
         { text: 'Сумма за ед.', align: 'left', value: 'amount_per_item' },
         { text: 'Скидка', align: 'left', value: 'amount_per_item_discount' },
         { text: 'Итого', align: 'left', value: 'total_amount' },
-        { text: 'Накладная', align: 'left', value: 'need_invoice' },
+        { text: 'Акция', align: 'left', value: 'product_data.is_stock_product' },
         { text: 'Примечание', align: 'left', value: 'description' },
         { text: 'Партнер', align: 'left', value: 'product_data.partner_name' },
-        { text: 'Акция', align: 'left', value: 'product_data.is_stock_product' }
+        { text: 'Накладная', align: 'left', value: 'need_invoice' }
       ]
       if (this.compItem.order_state_id === 2) {
         result = result.concat([
@@ -154,7 +154,7 @@ export default {
       if (_.get(this.compItem, 'client_address_data.confirmed')) {
         this.item.order_state_id = 2
         this.item.executor_id = this.userData.id
-        this.item.processed_date = this.$moment()._d
+        this.item.processed_date = this.$moment().utc().format()
         this.$store.dispatch('orders/updateItem', {item: this.item, isUpdate: true})
       } else {
         this.$store.commit('showSnackbar', {text: 'Адрес заявки не был подтвержден, поэтому невозможно принять заявку в работу. Подтвердите адрес и повторите', snackbar: true, context: 'error'})
@@ -162,7 +162,7 @@ export default {
     },
     closeBid () {
       this.item.order_state_id = 3
-      this.item.execute_date = this.$moment()._d
+      this.item.execute_date = this.$moment.utc().format()
       this.$store.dispatch('orders/updateItem', {item: this.item, isUpdate: true})
     },
     cancelBid () {

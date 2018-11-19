@@ -27,7 +27,7 @@
             <v-text-field
               v-model="item.registration_number"
               :rules="[(v) => (!v || v.length <= 25) || 'Не более 25 символов']"
-              label="Регистрационный номер"/>
+              label="ИИН/БИН"/>
           </v-flex>
           <v-flex
             md6

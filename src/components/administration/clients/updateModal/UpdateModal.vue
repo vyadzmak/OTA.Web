@@ -22,7 +22,7 @@
       <v-text-field
         v-model="data.item.registration_number"
         :rules="sNameRules"
-        label="Регистрационный номер"
+        label="ИИН/БИН"
       />
       <v-select
         v-model="data.item.client_type_id"

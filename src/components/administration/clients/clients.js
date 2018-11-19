@@ -11,7 +11,7 @@ export default {
         { text: 'Id', align: 'left', value: 'id' },
         { text: 'Имя', align: 'left', value: 'name' },
         { text: 'Адрес', align: 'left', value: 'client_addresses_data[0].address' },
-        { text: 'Email', align: 'left', value: 'client_info_data[0].email' },
+        { text: 'Регистрация', align: 'left', value: 'client_info_data[0].email' },
         { text: 'Телефон', align: 'left', value: 'client_info_data[0].phone_number' },
         {sortable: false}
       ],

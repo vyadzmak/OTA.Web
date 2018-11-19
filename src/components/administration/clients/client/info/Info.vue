@@ -19,10 +19,8 @@
             pa-1>
             <v-text-field
               v-model="item.email"
-              :rules="[(v) => !!v || 'Введите e-mail адрес',
-                       (v) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'Введите правильный e-mail адрес',
-                       (v) => (!v || v.length <= 32) || 'Не более 32 символов']"
-              label="Email"
+              :rules="[(v) => (!v || v.length <= 32) || 'Не более 32 символов']"
+              label="Регистрация"
             />
             <v-text-field
               v-model="item.phone_number"
