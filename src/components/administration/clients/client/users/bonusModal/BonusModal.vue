@@ -51,10 +51,58 @@
                 <span>{{ props.item.state?'Активен':'Заблокирован' }}</span>
               </v-tooltip>
             </td>
+            <td class="px-1">
+              <v-tooltip top>
+                <v-btn
+                  slot="activator"
+                  :disabled="!props.item.state"
+                  icon
+                  @click="updateBonus(props.item)"
+                >
+                  <v-icon
+                    color="info">
+                    edit</v-icon>
+                </v-btn>
+                <span>Редактировать</span>
+              </v-tooltip>
+            </td>
           </tr>
         </template>
       </v-data-table>
     </v-card-text>
+    <v-dialog
+      v-model="showModal"
+      scrollable
+      max-width="300px"
+      @close="showModal=false">
+      <v-card>
+        <v-card-title class="info white--text">Измените сумму бонусов</v-card-title>
+        <v-card-text>
+          <v-form
+            ref="form"
+            v-model="valid"
+            class="v-card-form">
+            <v-text-field
+              v-model.number="modalBonus.amount"
+              :rules="[(v) => (!isNaN(parseFloat(v)) && isFinite(v)) || 'Введите число']"
+              label="Сумма бонусов"/>
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer/>
+          <v-btn @click="modalBonus.amount=0">Очистить</v-btn>
+          <v-btn
+            :class="{ green: valid, red: !valid }"
+            color="success"
+            dark
+            @click="editBonus">Сохранить</v-btn>
+          <v-btn
+            color="error"
+            dark
+            @click="showModal=false">Отмена</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
@@ -74,25 +122,29 @@ export default {
   },
   data () {
     return {
+      valid: false,
       search: '',
       headers: [
         { text: 'Id', align: 'left', value: 'id' },
         { text: 'Id заказа', align: 'left', value: 'order_id' },
         { text: 'Дата создания', align: 'left', value: 'creation_date' },
         { text: 'Сумма', align: 'left', value: 'amount' },
-        { text: 'Статус', align: 'left', value: 'state' }
+        { text: 'Статус', align: 'left', value: 'state' },
+        { sortable: false }
       ],
       tableRowsShown: [10, 20, 50, 100, {text: 'Все', value: -1}],
       rowsPerPageText: 'Строк на странице',
       noDataText: 'Нет данных',
-      noResultsText: 'Поиск не дал результатов'
+      noResultsText: 'Поиск не дал результатов',
+      showModal: false,
+      modalBonus: { amount: 0 }
     }
   },
   computed: {
-    ...mapGetters({items: 'userBonusesDetails/items'})
+    ...mapGetters({items: 'userBonuses/items'})
   },
   created () {
-    this.$store.dispatch('userBonusesDetails/getItems', {user_id: this.data.itemId})
+    this.$store.dispatch('userBonuses/userBonusesDetails', {user_id: this.data.itemId})
   },
   methods: {
     cancel () {
@@ -106,6 +158,14 @@ export default {
       } else {
         this.$store.commit('showSnackbar', {text: 'Списание бонусов не удалось. Обратитесь к администратору', snackbar: true, context: 'error'})
       }
+    },
+    updateBonus (item) {
+      this.showModal = true
+      this.modalBonus = _.cloneDeep(item)
+    },
+    editBonus () {
+      this.$store.dispatch('userBonuses/updateItem', {item: this.modalBonus, isUpdate: true})
+      this.showModal = false
     }
   }
 }

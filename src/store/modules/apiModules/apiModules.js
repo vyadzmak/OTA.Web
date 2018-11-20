@@ -39,5 +39,5 @@ export default [
   {link: 'users'},
   {link: 'viewSettings', additional: [{link: 'routeViewSettings', requestParams: ['user_id']}]},
   {link: 'routeCatalogProductsRecommendations', requestParams: ['user_id', 'product_id']},
-  {link: 'userBonusesDetails', requestParams: ['user_id']}
+  {link: 'userBonuses', additional: [{link: 'userBonusesDetails', requestParams: ['user_id']}]}
 ]
