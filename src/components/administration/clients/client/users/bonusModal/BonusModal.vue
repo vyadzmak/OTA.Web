@@ -76,7 +76,7 @@
       max-width="300px"
       @close="showModal=false">
       <v-card>
-        <v-card-title class="info white--text">Измените сумму бонусов</v-card-title>
+        <v-card-title class="info white--text"><div class="headline">Измените сумму бонусов</div></v-card-title>
         <v-card-text>
           <v-form
             ref="form"

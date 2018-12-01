@@ -113,7 +113,7 @@ export default {
     }
   },
   created () {
-    if (this.item.images.length > 0) {
+    if (this.item.images && this.item.images.length > 0) {
       this.$store.dispatch('attachments/attachmentsInfo', {attachments_ids: this.item.images.join()})
     }
   },

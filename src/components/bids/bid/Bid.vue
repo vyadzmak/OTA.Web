@@ -6,8 +6,16 @@
         :disabled="!!$loading"
         color="success"
         dark
-        @click.stop="exportOrders()">Экспорт</v-btn>
-      <v-spacer/>
+        @click.stop="exportOrders()"
+      >Экспорт</v-btn>
+      <v-spacer />
+      <v-btn
+        :disabled="!!$loading"
+        color="warning"
+        dark
+        @click.stop="dialog=true"
+      >Экспорт по дате</v-btn>
+      <v-spacer />
       <v-text-field
         v-model="search"
         append-icon="search"
@@ -31,7 +39,8 @@
     >
       <template
         slot="items"
-        slot-scope="props">
+        slot-scope="props"
+      >
         <tr @click="goTo(props.item, $event)">
           <td v-if="currentStateFilter===3">
             <v-checkbox
@@ -51,14 +60,133 @@
           : $route.name === 'bids.active' ? 'processed_date' : 'execute_date'] | moment("DD.MM.YYYY HH:mm") }}</td>
           <td v-if="currentStateFilter !== 1">{{ ldsh.get(props.item, 'order_executor_data.name', 'Нет') }}</td>
           <td>{{ props.item.order_state_data.title }}</td>
-          <td><v-icon
-            slot="activator"
-            :color="ldsh.get(props.item, 'client_address_data.confirmed')?'success':'error'">
-            {{ 'fas fa-'+(ldsh.get(props.item, 'client_address_data.confirmed')?'check':'times') }}
-          </v-icon></td>
+          <td>
+            <v-icon
+              slot="activator"
+              :color="ldsh.get(props.item, 'client_address_data.confirmed')?'success':'error'"
+            >
+              {{ 'fas fa-'+(ldsh.get(props.item, 'client_address_data.confirmed')?'check':'times') }}
+            </v-icon>
+          </td>
         </tr>
       </template>
     </v-data-table>
+    <v-dialog
+      v-model="dialog"
+      max-width="350"
+      @close="dialog=false"
+    >
+      <v-card>
+        <v-card-title class="info white--text">
+          <div class="headline">Данные экспорта по дате</div>
+        </v-card-title>
+
+        <v-card-text>
+          <v-form
+            ref="form"
+            v-model="exportFormValid"
+            class="v-card-form"
+          >
+            <v-menu
+              :close-on-content-click="false"
+              v-model="datePickerFrom"
+              :nudge-right="40"
+              lazy
+              transition="scale-transition"
+              offset-y
+              full-width
+              max-width="290px"
+              min-width="290px"
+            >
+              <v-text-field
+                slot="activator"
+                v-model="dateFrom"
+                :rules="[(v) => (v.length>0) || 'Выберите дату']"
+                label="Дата начала"
+                prepend-icon="event"
+                readonly
+              />
+              <v-date-picker
+                v-model="dateFrom"
+                no-title
+                @input="datePickerFrom = false"
+              />
+            </v-menu>
+            <v-menu
+              :close-on-content-click="false"
+              v-model="datePickerTo"
+              :nudge-right="40"
+              lazy
+              transition="scale-transition"
+              offset-y
+              full-width
+              max-width="290px"
+              min-width="290px"
+            >
+              <v-text-field
+                slot="activator"
+                v-model="dateTo"
+                :rules="[(v) => (v.length>0) || 'Выберите дату', (v)=>(v > dateFrom) || 'Дата окончания меньше даты начала']"
+                label="Дата окончания"
+                prepend-icon="event"
+                readonly
+              />
+              <v-date-picker
+                v-model="dateTo"
+                no-title
+                @input="datePickerTo = false"
+              />
+            </v-menu>
+            <v-checkbox
+              v-model="orderStateIds"
+              :rules="[(v)=>(v.length>0)||'']"
+              primary
+              hide-details
+              label="Входящие"
+              value="1"
+            />
+            <v-checkbox
+              v-model="orderStateIds"
+              :rules="[(v)=>(v.length>0)||'']"
+              primary
+              hide-details
+              label="В обработке"
+              value="2"
+            />
+            <v-checkbox
+              v-model="orderStateIds"
+              :rules="[(v)=>(v.length>0)||'']"
+              primary
+              hide-details
+              label="История"
+              value="3"
+            />
+            <v-checkbox
+              v-model="orderStateIds"
+              :rules="[(v)=>(v.length>0)||'Выберите состояние заказа']"
+              primary
+              label="Отмененные"
+              value="4"
+            />
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn @click="clearForm()">Очистить</v-btn>
+          <v-btn
+            :class="{ green: exportFormValid, red: !exportFormValid }"
+            color="success"
+            dark
+            @click="exportDateOrders()"
+          >Экспорт</v-btn>
+          <v-btn
+            color="error"
+            dark
+            @click="dialog=false"
+          >Отмена</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 

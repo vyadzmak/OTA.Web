@@ -1,6 +1,11 @@
-import {mapGetters} from 'vuex'
+import {
+  mapGetters
+} from 'vuex'
 import questionDialog from '@/components/questionDialog/QuestionDialog.vue'
-import {baseUrl} from '@/httpClient/index'
+import {
+  baseUrl,
+  baseIp
+} from '@/httpClient/index'
 
 export default {
   name: 'gallery',
@@ -33,7 +38,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({item: 'products/item', items: 'attachments/items'})
+    ...mapGetters({
+      item: 'products/item',
+      items: 'attachments/items'
+    })
   },
   methods: {
     openQDialog: function (itemId) {
@@ -52,7 +60,10 @@ export default {
         if (updateItem.default_image_id === data) {
           updateItem.default_image_id = _.get(updateItem.gallery_images, '[0]', 0)
         }
-        this.dialogData = await this.$store.dispatch('products/updateItem', {item: updateItem, isUpdate: true})
+        this.dialogData = await this.$store.dispatch('products/updateItem', {
+          item: updateItem,
+          isUpdate: true
+        })
         this.dialogData = await this.$store.dispatch('attachments/deleteItem', data)
       }
       this.qDialog = false
@@ -60,7 +71,10 @@ export default {
     updateImage (itemId) {
       let updateItem = _.cloneDeep(this.item)
       updateItem.default_image_id = itemId
-      this.$store.dispatch('products/updateItem', {item: updateItem, isUpdate: true})
+      this.$store.dispatch('products/updateItem', {
+        item: updateItem,
+        isUpdate: true
+      })
     },
     uploadFiles (file) {
       this.$refs.uploader.processQueue()
@@ -92,13 +106,22 @@ export default {
           updateItem.default_image_id = imagesArray[0]
         }
         updateItem.gallery_images = updateItem.gallery_images ? updateItem.gallery_images.concat(imagesArray) : imagesArray
-        this.dialogData = await this.$store.dispatch('products/updateItem', {item: updateItem, isUpdate: true})
-        this.dialogData = await this.$store.dispatch('attachments/attachmentsInfo', {attachments_ids: updateItem.gallery_images.join()})
+        this.dialogData = await this.$store.dispatch('products/updateItem', {
+          item: updateItem,
+          isUpdate: true
+        })
+        this.dialogData = await this.$store.dispatch('attachments/attachmentsInfo', {
+          attachments_ids: updateItem.gallery_images.join()
+        })
       } else {
         text = 'Загрузка файлов не удалась. Обратитесь к администратору'
         context = 'error'
       }
-      this.$store.commit('showSnackbar', {text, snackbar: true, context})
+      this.$store.commit('showSnackbar', {
+        text,
+        snackbar: true,
+        context
+      })
     },
     totalProgressChanged (file) {
       this.totalProgress = file.totalProgress
@@ -110,15 +133,19 @@ export default {
       if (file.accepted) {
         this.filesCount -= 1
       }
+    },
+    downloadFullImage (path) {
+      window.open(baseIp + path)
     }
   },
   created () {
-    if (this.item.gallery_images.length > 0) {
-      this.$store.dispatch('attachments/attachmentsInfo', {attachments_ids: this.item.gallery_images.join()})
+    if (this.item.gallery_images && this.item.gallery_images.length > 0) {
+      this.$store.dispatch('attachments/attachmentsInfo', {
+        attachments_ids: this.item.gallery_images.join()
+      })
     }
   },
-  mounted () {
-  },
+  mounted () {},
   beforeDestroy () {
     this.$store.commit('attachments/items', [])
   }
