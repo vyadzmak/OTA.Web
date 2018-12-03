@@ -110,7 +110,12 @@ export default {
         case 3:
           return [{
             sortable: false
-          }, ...this.headers1, ...this.headers2, ...this.headers3]
+          }, ...this.headers1,
+          {
+            text: 'Менеджер',
+            align: 'left',
+            value: 'client_address_data.code'
+          }, ...this.headers2, ...this.headers3]
         default:
           return [...this.headers1, ...this.headers2, ...this.headers3]
       }

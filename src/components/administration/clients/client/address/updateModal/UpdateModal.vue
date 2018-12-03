@@ -28,7 +28,7 @@
         <v-text-field
           v-model="data.item.code"
           :rules="sNameRules"
-          label="Код"
+          label="Менеджер"
         />
         <v-text-field
           v-model="data.item.phone_number"

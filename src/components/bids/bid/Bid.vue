@@ -58,6 +58,7 @@
           <td>{{ props.item.total_amount }}</td>
           <td>{{ props.item[$route.name === 'bids.inbox' ? 'creation_date'
           : $route.name === 'bids.active' ? 'processed_date' : 'execute_date'] | moment("DD.MM.YYYY HH:mm") }}</td>
+          <td v-if="$route.name === 'bids.history'">{{ props.item.client_address_data.code }}</td>
           <td v-if="currentStateFilter !== 1">{{ ldsh.get(props.item, 'order_executor_data.name', 'Нет') }}</td>
           <td>{{ props.item.order_state_data.title }}</td>
           <td>
