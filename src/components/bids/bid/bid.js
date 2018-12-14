@@ -115,7 +115,8 @@ export default {
             text: 'Менеджер',
             align: 'left',
             value: 'client_address_data.code'
-          }, ...this.headers2, ...this.headers3]
+          }, ...this.headers2, ...this.headers3
+          ]
         default:
           return [...this.headers1, ...this.headers2, ...this.headers3]
       }
@@ -143,6 +144,22 @@ export default {
       })
       try {
         window.open(baseUrl + 'exportOrders' + '?user_id=' + this.userData.id + '&orders_ids=' + ordersIds)
+      } catch (e) {
+        this.$store.commit('showSnackbar', {
+          text: 'Экспорт данных не удался. Обратитесь к администратору ' + e,
+          snackbar: true,
+          context: 'error'
+        }, {
+          root: true
+        })
+      }
+    },
+    async exportShippingDocs () {
+      let ordersIds = this.selected.map(x => {
+        return x.id
+      })
+      try {
+        window.open(baseUrl + 'exportShippingDocs' + '?user_id=' + this.userData.id + '&orders_ids=' + ordersIds)
       } catch (e) {
         this.$store.commit('showSnackbar', {
           text: 'Экспорт данных не удался. Обратитесь к администратору ' + e,

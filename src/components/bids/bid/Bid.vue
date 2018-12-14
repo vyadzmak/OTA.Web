@@ -7,8 +7,16 @@
         color="success"
         dark
         @click.stop="exportOrders()"
-      >Экспорт</v-btn>
-      <v-spacer />
+      >Экспорт заказов</v-btn>
+      <v-btn
+        v-show="selected.length>0"
+        :disabled="!!$loading"
+        color="primary"
+        dark
+        @click.stop="exportShippingDocs()"
+      >Экспорт погрузочных листов</v-btn>
+      <!-- <v-spacer
+        v-show="selected.length>0"/> -->
       <v-btn
         :disabled="!!$loading"
         color="warning"
